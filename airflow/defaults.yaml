@@ -1,0 +1,120 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+airflow:
+  pkg:
+    airflow:
+      version: 1.10.13
+      use_upstream: pip
+      name: apache-airflow     # or archive
+      commands:
+        - airflow
+      uri_a: https://github.com/apache/airflow/releases/download
+      uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-PYVER.txt
+      archive:
+        options: '--strip-components=1'
+      suffix: tar.gz
+      deps: []
+      extras:
+        - postgres
+        - google
+        - azure
+      pips:
+        # from airflow's setup.py
+        - alembic
+        - argcomplete
+        - attrs
+        - cached_property
+        - # cattrs
+        - cattrs
+        - cattrs
+        - colorlog
+        - configparser
+        - croniter
+        - dill
+        - email-validator
+        - enum34
+        - flask
+        - flask-admin
+        - flask-appbuilder
+        - flask-appbuilder
+        - flask-caching
+        - flask-login
+        - flask-swagger
+        - flask-wtf
+        - funcsigs
+        - future
+        - graphviz
+        - gunicorn
+        - importlib-metadata
+        - iso8601
+        - jinja2
+        - json-merge-patch
+        - jsonschema
+        - lazy_object_proxy
+        - markdown
+        - marshmallow-sqlalchemy
+        - marshmallow-sqlalchemy
+        - packaging
+        - pandas
+        - pendulum
+        - pep562
+        - psutil
+        - pygments
+        - python-daemon
+        - python-dateutil
+        - python-nvd3
+        - python-slugify
+        - requests
+        - setproctitle
+        - sqlalchemy
+        - sqlalchemy_jsonfield
+        - sqlalchemy_jsonfield
+        - tabulate
+        - tenacity
+        - thrift
+        - typing;python_version
+        - typing-extensions
+        - tzlocal
+        - unicodecsv
+        - werkzeug
+        - zope.deprecation
+  config:
+    airflow:
+      file: /etc/airflow
+      content: {}
+  service:
+    airflow:
+      names:
+        - airflow-flower
+        - airflow-kerberos
+        - airflow-scheduler
+        - airflow-webserver
+        - airflow-worker
+      wanted:
+        - airflow-flower
+        - airflow-kerberos
+        - airflow-scheduler
+        - airflow-webserver
+        - airflow-worker
+  identity:
+    airflow:
+      rootuser: root
+      rootgroup: root
+  dir:
+    airflow:
+      base: /opt
+      lib: /var/lib/airflow
+      service: /lib/systemd/system
+      tmp: /tmp/airflow
+
+  misc:
+    refresh: true
+    reload: true
+
+  linux:
+    altpriority: 0   # zero disables alternatives
+
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults

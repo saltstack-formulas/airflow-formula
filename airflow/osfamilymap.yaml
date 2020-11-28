@@ -10,13 +10,25 @@
 # you will need to provide at least an empty dict in this file, e.g.
 # osfamilymap: {}
 ---
+{%- if grains.os == 'MacOS' %}
+    {%- set rootuser = salt['cmd.run']("stat -f '%Su' /dev/console") %}
+    {%- set rootgroup = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
+{%- elif grains.os == 'Windows' %}
+    {%- set rootuser = salt['cmd.run']("id -un") %}
+{%- endif %}
+
+
 Debian:
   pkg:
     airflow:
       deps:
+        - python3-pip
         - python3-distutils-extra 
+        - python3-dev
+        - libpq-dev
+        - sqlite3
         # from https://airflow.apache.org/docs/stable/installation.html
-        - build-essential
+        - build-essential       # for c++
         - freetds-bin
         - krb5-user
         - ldap-utils
@@ -84,7 +96,7 @@ Debian:
         # python3-tabulate
         # python3-tenacity
         # python3-thrift
-        # python3-typing;python_version
+        # python3-typing
         # python3-typing-extensions
         # python3-tzlocal
         # python3-unicodecsv
@@ -98,6 +110,8 @@ RedHat:
         - epel-release
         - python3
         - python3-devel
+        - gcc-c++
+        - python3-pip
 
 Suse:
   pkg:

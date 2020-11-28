@@ -4,5 +4,6 @@
 include:
   - .package
   - .archive
+  - .alternatives
   - .config
   - .service

@@ -1,33 +1,91 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 ---
+postgres:
+  users:
+    airflow:
+      ensure: present
+      password: airflow
+      createdb: true
+      inherit: true
+      createroles: true
+      replication: true
+  databases:
+    airflow:
+      owner: airflow
+  acls:
+    - ['local', 'airflow', 'airflow', 'md5']
+    - ['local', 'all', 'all', 'peer']
+    - ['host', 'all', 'all', '127.0.0.1/32', 'md5']
+    - ['host', 'all', 'all', '::1/128', 'md5']
+    - ['local', 'replication', 'all', 'peer']
+    - ['host', 'replication', 'all', '127.0.0.1/32', 'md5']
+    - ['host', 'replication', 'all', '::1/128', 'md5']
+
 airflow:
+  config:
+    airflow:
+      file: airflow.cfg
+      content:
+        dags_folder: /home/airflow/airflow/dags
+        base_log_folder: /home/airflow/airflow/logs
+        executor: LocalExecutor
+        # Localhost services
+        # https://stackoverflow.com/questions/45455342
+        sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@localhost/airflow
+        # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
+        broker_url: redis://localhost:6379/0
+        result_backend: postgresql+psycopg2://airflow:airflow@localhost/airflow
+        default_timezone: system
+  environ:
+    airflow:
+      file: airflow
+      content:
+        PATH=$PATH:~/.local/bin
+        export PATH
+  service:
+    airflow:
+      names:
+        - airflow-flower
+        - airflow-scheduler
+        - airflow-webserver
+        - airflow-worker
+      enabled:
+        - airflow-flower
+        - airflow-scheduler
+        - airflow-webserver
+        - airflow-worker
   pkg:
     airflow:
       version: 1.10.13
       use_upstream: pip
-      name: apache-airflow     # or archive
+      name: apache-airflow
       commands:
         - airflow
       uri_a: https://github.com/apache/airflow/releases/download
       uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-PYVER.txt
+      path: /home/airflow/.local
       archive:
         options: '--strip-components=1'
       suffix: tar.gz
       deps: []
       extras:
+        - celery
         - postgres
         - google
-        - azure
+        - microsoft.azure
       pips:
         # from airflow's setup.py
         - alembic
         - argcomplete
         - attrs
         - cached_property
-        - # cattrs
         - cattrs
-        - cattrs
+
+        # https://github.com/mher/flower/issues/1029
+        # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
+        - celery[redis,sqs]==4.4.7
+
         - colorlog
         - configparser
         - croniter
@@ -42,6 +100,7 @@ airflow:
         - flask-login
         - flask-swagger
         - flask-wtf
+        - flower
         - funcsigs
         - future
         - graphviz
@@ -73,48 +132,50 @@ airflow:
         - tabulate
         - tenacity
         - thrift
-        - typing;python_version
+        - typing
         - typing-extensions
         - tzlocal
         - unicodecsv
         - werkzeug
         - zope.deprecation
-  config:
-    airflow:
-      file: /etc/airflow
-      content: {}
-  service:
-    airflow:
-      names:
-        - airflow-flower
-        - airflow-kerberos
-        - airflow-scheduler
-        - airflow-webserver
-        - airflow-worker
-      wanted:
-        - airflow-flower
-        - airflow-kerberos
-        - airflow-scheduler
-        - airflow-webserver
-        - airflow-worker
-  identity:
-    airflow:
-      rootuser: root
-      rootgroup: root
   dir:
     airflow:
       base: /opt
       lib: /var/lib/airflow
-      service: /lib/systemd/system
       tmp: /tmp/airflow
-
+      service: /lib/systemd/system
+      environ: /etc/sysconfig
+      config: /home/airflow/airflow
+      log: /home/airflow/airflow/logs
+  identity:
+    rootuser: root
+    rootgroup: root
+    airflow:
+      user: airflow
+      group: airflow
   misc:
     refresh: true
     reload: true
-
+    clean: false
   linux:
     altpriority: 0   # zero disables alternatives
+  retry_option:
+    # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
+    attempts: 3
+    until: true
+    interval: 60
+    splay: 10
+  div: '/'
 
   # Just here for testing
   added_in_defaults: defaults_value
   winner: defaults
+
+  # Just here as experiemnt/documentation
+  supported:
+    - airflow
+  wanted:
+    - airflow
+  depends:
+    - postgresql
+    - redis

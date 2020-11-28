@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
-{#- Get the `tplroot` from `tpldir` #}
 {%- set tplroot = tpldir.split('/')[0] %}
-{#- Start imports as #}
 {%- import_yaml tplroot ~ "/defaults.yaml" as default_settings %}
 {%- import_yaml tplroot ~ "/osfamilymap.yaml" as osfamilymap %}
 
-{#- Retrieve the config dict only once #}
 {%- set _config = salt['config.get'](tplroot, default={}) %}
 
 {%- set defaults = salt['grains.filter_by'](
@@ -31,35 +28,16 @@
     )
 %}
 
-{# pip constraint file #}
-{%- set ver = salt['cmd.run']('python --version | cut -d " " -f 2 | cut -d "." -f 1-2') %}
-{%- set url = config.pkg.airflow.uri_c|replace('VERSION', config.pkg.airflow.version)|replace('PYVER', ver) %}
+{%- set p = config.pkg.airflow %}
+{%- set pyver = '%s.%s.%s'|format(grains.pythonversion[0], grains.pythonversion[1], grains.pythonversion[2]) %}
+{%- set url = p.uri_c|replace('VERSION', p.version)|replace('PYVER', pyver) %}
 {%- do config.pkg.airflow.update({'constraint_file': url}) %}
 
-{# archive handling #}
-{%- if config.pkg.use_upstream|lower == 'archive' and 'archive' in config.pkg %}
-
-    {# path is C:\airflow\bin or /opt/airflow-n.n.n/bin #}
-    {%- if grains.os == 'Windows' %}
-        {%- do config.pkg.update({'path': config.dir.base ~ "\\bin\\"}) %}
-    {%- else %}
-        {%- do config.pkg.update({ 'path': '%s/airflow-%s/bin/'|format(config.dir.base, config.pkg.version) }) %}
-    {%- endif %}
-
-    {# github releases url is uri/v1.0.0 or variants; source_hash is explict or online as xxx.sha256 #}
-    {%- set url = '%s/v%s.%s'|format(config.pkg.uri_a, config.pkg.version, config.pkg.suffix) %}
-    {%- if 'source_hash' in config.pkg.archive and config.pkg.archive.source_hash %}
-        {%- do config.pkg.archive.update({'name': config.pkg.path, 'source': url, 'source_hash': config.pkg.archive.source_hash}) %}
-    {%- else %}
-        {%- do config.pkg.archive.update({'name': config.pkg.path, 'source': url, 'source_hash': url ~ '.sha256'}) %}
-    {%- endif %}
+{%- if grains.kernel|lower == 'linux' and p.use_upstream|lower == 'archive' %}
+    {%- set path = '%s/%s-%s/bin/'|format(config.dir.airflow.base, p.name, p.version) %}
+    {%- set url = '%s/%s/%s-%s-bin.%s'|format(p.uri_a, p.version, p.name, p.version, p.suffix) %}
+    {%- do config.pkg.airfow.update({ 'path': path }) %}
+    {%- do config.pkg.ariflow.archive.update({'name': path, 'source': url, 'source_hash': url ~ '.sha512'}) %}
 {%- endif %}
-
 
 {%- set airflow = config %}
-
-{#- Post-processing for specific non-YAML customisations #}
-{%- if grains.os == 'MacOS' %}
-{%-   set macos_group = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
-{%-   do airflow.update({'rootgroup': macos_group}) %}
-{%- endif %}

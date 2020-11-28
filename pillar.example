@@ -1,60 +1,59 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 ---
+postgres:
+  users:
+    airflow:
+      ensure: present
+      password: airflow
+      createdb: true
+      inherit: true
+      createroles: true
+      replication: true
+  databases:
+    airflow:
+      owner: airflow
+  acls:
+    - ['local', 'airflow', 'airflow', 'md5']
+    - ['local', 'all', 'all', 'peer']
+    - ['host', 'all', 'all', '127.0.0.1/32', 'md5']
+    - ['host', 'all', 'all', '::1/128', 'md5']
+    - ['local', 'replication', 'all', 'peer']
+    - ['host', 'replication', 'all', '127.0.0.1/32', 'md5']
+    - ['host', 'replication', 'all', '::1/128', 'md5']
+
 airflow:
-  lookup:
-    master: template-master
-    # Just for testing purposes
-    winner: lookup
-    added_in_lookup: lookup_value
-
-  # Using bash package and udev service as an example. This allows us to
-  # test the template formula itself. You should set these parameters to
-  # examples that make sense in the contexto of the formula you're writing.
-  pkg:
-    name: bash
-    use_upstream: package
-    version: 4.3.2
-    archive:
-      source_hash: b388f72c306507d4e59615b6c917a90e5486b0eea6511c5ea09d3ff2b3cfaf89
+  config:
+    airflow:
+      content:
+        dags_folder: /home/airflow/airflow/dags
+        base_log_folder: /home/airflow/airflow/logs
+        executor: LocalExecutor
+        sql_alchemy_conn: 'postgresql+psycopg2://airflow:airflow@localhost/airflow'
+        default_timezone: system
   service:
-    name: systemd-journald
-  config: /etc/template-formula.conf
-
-  tofs:
-    # The files_switch key serves as a selector for alternative
-    # directories under the formula files directory. See TOFS pattern
-    # doc for more info.
-    # Note: Any value not evaluated by `config.get` will be used literally.
-    # This can be used to set custom paths, as many levels deep as required.
-    files_switch:
-      - any/path/can/be/used/here
-      - id
-      - roles
-      - osfinger
-      - os
-      - os_family
-    # All aspects of path/file resolution are customisable using the options below.
-    # This is unnecessary in most cases; there are sensible defaults.
-    # Default path: salt://< path_prefix >/< dirs.files >/< dirs.default >
-    #         I.e.: salt://airflow/files/default
-    # path_prefix: template_alt
-    # dirs:
-    #   files: files_alt
-    #   default: default_alt
-    # The entries under `source_files` are prepended to the default source files
-    # given for the state
-    # source_files:
-    #   airflow-config-file-file-managed:
-    #     - 'example_alt.tmpl'
-    #     - 'example_alt.tmpl.jinja'
-
-    # For testing purposes
-    source_files:
-      airflow-config-file-file-managed:
-        - 'example.tmpl.jinja'
-      airflow-subcomponent-config-file-file-managed:
-        - 'subcomponent-example.tmpl.jinja'
+    airflow:
+      enabled:
+        - airflow-flower
+        - airflow-scheduler
+        - airflow-webserver
+        - airflow-worker
+  pkg:
+    airflow:
+      version: 1.10.13
+      use_upstream: pip
+      uri_a: https://github.com/apache/airflow/releases/download
+      uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-PYVER.txt
+      path: /home/airflow/.local
+      extras:
+        - postgres
+        - google
+  dir:
+    airflow:
+      config: /home/airflow/airflow
+      log: /home/airflow/airflow/logs
+  linux:
+    altpriority: 0   # zero disables alternatives
 
   # Just for testing purposes
   winner: pillar

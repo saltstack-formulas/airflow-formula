@@ -3,17 +3,19 @@
 #########################################################
 [Unit]
 Description={{ desc }}
-Wants=network-online.target
-After=
+Wants=network-online.target {{ wants }}
+After=netwrok-online.target {{ after }}
 Documentation={{ doc }}
 
 [Service]
+Type={{ type }}
 User={{ user }}
 Group={{ group }}
 WorkingDirectory={{ workdir }}
 ExecStart={{ start }}
 ExecStop={{ stop }}
 PIDFile=/var/run/{{ name }}.pid
+Environment="PATH=$PATH:{{ workdir }}/.local/bin"
 
 [Install]
 WantedBy=multi-user.target

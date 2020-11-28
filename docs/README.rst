@@ -18,8 +18,7 @@ airflow-formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-A SaltStack formula that is empty. It has dummy content to help with a quick
-start on a new formula and it serves as a style guide.
+A SaltStack formula to manage apache-airflow (https://airflow.apache.org).
 
 .. contents:: **Table of Contents**
    :depth: 1
@@ -64,7 +63,14 @@ now ``pre-commit`` will run automatically on each ``git commit``. ::
 Special notes
 -------------
 
-None
+The following `top.sls` is an example for Saltstack-formulas community::
+
+  base:
+  '*':
+    - postgres     # .clean
+    - kerberos     # .clean
+    - airflow      # .clean
+
 
 Available states
 ----------------
@@ -84,7 +90,7 @@ starts the associated airflow service.
 ``airflow.package``
 ^^^^^^^^^^^^^^^^^^^^
 
-This state will install the airflow package only.
+This state will install the airflow pip package only.
 
 ``airflow.archive``
 ^^^^^^^^^^^^^^^^^^^^
@@ -111,7 +117,7 @@ via include list.
 this state will undo everything performed in the ``airflow`` meta-state in reverse order, i.e.
 stops the service,
 removes the configuration file and
-then uninstalls the package.
+then uninstalls the package/archive.
 
 ``airflow.service.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -135,28 +141,6 @@ This state will remove the airflow package and has a depency on
 
 This state will remove the airflow archive and has a depency on
 ``airflow.config.clean`` via include list.
-
-``airflow.subcomponent``
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-*Meta-state (This is a state that includes other states)*.
-
-This state installs a subcomponent configuration file before
-configuring and starting the airflow service.
-
-``airflow.subcomponent.config``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This state will configure the airflow subcomponent and has a
-dependency on ``airflow.config`` via include list.
-
-``airflow.subcomponent.config.clean``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This state will remove the configuration of the airflow subcomponent
-and reload the airflow service by a dependency on
-``airflow.service.running`` via include list and ``watch_in``
-requisite.
 
 Testing
 -------

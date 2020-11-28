@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+FreeBSD:
+  # https://reviews.freebsd.org/D21570
+  pkg:
+    airflow:
+      deps:
+        - devel/py-pip
+
+Centos:
+  pkg:
+    airflow:
+      deps:
+        - procps
+        - yum-utils
+
+Fedora:
+  pkg:
+    airflow:
+      deps:
+        - selinux-policy-minimum
+        - python3-dnf-plugin-versionlock

@@ -4,5 +4,6 @@
 include:
   - .service.clean
   - .config.clean
+  - .alternatives.clean
   - .archive.clean
   - .package.clean

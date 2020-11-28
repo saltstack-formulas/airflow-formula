@@ -10,11 +10,25 @@
 # you will need to provide at least an empty dict in this file, e.g.
 # osfamilymap: {}
 ---
+{%- if grains.os == 'MacOS' %}
+    {%- set rootuser = salt['cmd.run']("stat -f '%Su' /dev/console") %}
+    {%- set rootgroup = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
+{%- elif grains.os == 'Windows' %}
+    {%- set rootuser = salt['cmd.run']("id -un") %}
+{%- endif %}
+
+
 Debian:
   pkg:
     airflow:
       deps:
+        - libpq-dev
+        - libcurl4-openssl-dev
+        - libssl-dev
+        - python3-pip
         - python3-distutils-extra 
+        - python3-dev
+        - virtualenv
         # from https://airflow.apache.org/docs/stable/installation.html
         - build-essential
         - freetds-bin
@@ -30,75 +44,57 @@ Debian:
         - sqlite3
         - unixodbc
         # from airflow/setup.py
-        # python3-alembic
-        # python3-argcomplete
-        # python3-attrs
-        # python3-cached_property
-        # python3-cattrs
-        # python3-colorlog
-        # python3-configparser
-        # python3-croniter
-        # python3-dill
-        # python3-email-validator
-        # python3-enum34
-        # python3-flask
-        # python3-flask-admin
-        # python3-flask-appbuilder
-        # python3-flask-appbuilder
-        # python3-flask-caching
-        # python3-flask-admin
-        # python3-flask-appbuilder
-        # python3-flask-appbuilder
-        # python3-flask-caching
-        # python3-flask-login
-        # python3-flask-swagger
-        # python3-flask-wtf
-        # python3-funcsigs
-        # python3-future
-        # python3-graphviz
-        # python3-gunicorn
-        # python3-importlib-metadata
-        # python3-iso8601
-        # python3-jinja2
-        # python3-json-merge-patch
-        # python3-jsonschema
-        # python3-lazy_object_proxy
-        # python3-markdown
-        # python3-marshmallow-sqlalchemy
-        # python3-marshmallow-sqlalchemy
-        # python3-packaging
-        # python3-pandas
-        # python3-pendulum
-        # python3-pep562
-        # python3-psutil
-        # python3-pygments
-        # python3-daemon
-        # python3-dateutil
-        # python3-nvd3
-        # python3-slugify
-        # python3-requests
-        # python3-setproctitle
-        # python3-sqlalchemy
-        # python3-sqlalchemy_jsonfield
-        # python3-sqlalchemy_jsonfield
-        # python3-tabulate
-        # python3-tenacity
-        # python3-thrift
-        # python3-typing;python_version
-        # python3-typing-extensions
-        # python3-tzlocal
-        # python3-unicodecsv
-        # python3-werkzeug
-        # python3-zope.deprecation
+        - python3-alembic
+        - python3-argcomplete
+        - python3-attr
+        # python3-celery   # https://stackoverflow.com/questions/64180054
+        - python3-colorlog
+        - python3-croniter
+        - python3-dill
+        - python-enum34
+        - python3-flask-api
+        - python3-flask-security
+        - python3-flask-sqlalchemy
+        - python3-funcsigs
+        - python3-future
+        - python3-graphviz
+        - python3-gunicorn
+        - python3-iso8601
+        - python3-jinja2
+        - python3-jsonschema
+        - python3-markdown
+        - python3-packaging
+        - python3-pandas
+        - python3-psutil
+        - python3-pygments
+        - python3-daemon
+        - python3-dateutil
+        - python3-slugify
+        - python3-requests
+        - python3-setproctitle
+        - python3-sqlalchemy
+        - python3-tabulate
+        - python3-tenacity
+        - python3-tzlocal
+        - python3-unicodecsv
+        - python3-werkzeug
+        - python3-zope.deprecation
+      pips:
+        - flower
+        - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
 
 RedHat:
   pkg:
     airflow:
       deps:
         - epel-release
+        - centos-release-scl
         - python3
+        - python36-virtualenv
         - python3-devel
-
+        - gcc-c++
+        - python3-pip
+        - libcurl-devel
 Suse:
   pkg:
     airflow:
@@ -117,4 +113,7 @@ FreeBSD: {}
 OpenBSD: {}
 Solaris: {}
 Windows: {}
-MacOS: {}
+MacOS:
+  dir:
+    airflow:
+      home: /Users

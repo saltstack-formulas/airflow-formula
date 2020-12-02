@@ -15,7 +15,7 @@ WorkingDirectory={{ workdir }}
 ExecStart={{ start }}
 ExecStop={{ stop }}
 PIDFile=/var/run/{{ name }}.pid
-Environment="PATH=$PATH:{{ workdir }}/.local/bin"
+Environment="PATH=$PATH:{{ workdir }}/bin"
 
 [Install]
 WantedBy=multi-user.target

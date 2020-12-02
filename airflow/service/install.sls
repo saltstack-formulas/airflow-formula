@@ -40,8 +40,8 @@ airflow-service-install-managed-{{ svcname }}:
         type: simple
         user: {{ d.identity.airflow.user }}
         group: {{ d.identity.airflow.group }}
-        workdir: /home/{{ d.identity.airflow.user }}
-        start: {{ d.pkg.airflow.path }}/bin/{{ svcname|replace('-',' ') }}
+        workdir: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+        start: {{ d.pkg.airflow.path }}{{ d.div }}bin{{ d.div }}{{ svcname|replace('-',' ') }}
         stop: ''
         name: {{ svcname }}
     - require_in:

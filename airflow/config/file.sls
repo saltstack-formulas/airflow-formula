@@ -14,7 +14,7 @@ include:
 
 airflow-config-file-managed:
   file.managed:
-    - name: {{ d.dir.airflow.config }}{{ d.div }}{{ d.config.airflow.file }}
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow{{ d.div }}{{ d.config.airflow.file }}
     - source: {{ files_switch(['airflow.cfg.jinja'],
                               lookup='airflow-config-file-managed'
                  )

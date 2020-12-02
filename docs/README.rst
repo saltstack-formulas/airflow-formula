@@ -68,7 +68,7 @@ The following `top.sls` is an example for Saltstack-formulas community::
   base:
   '*':
     - postgres     # .clean
-    - kerberos     # .clean
+    - redis        # .clean
     - airflow      # .clean
 
 

@@ -22,3 +22,5 @@ airflow-package-clean-pip:
       - sls: {{ sls_service_clean }}
     - require_in:
       - sls: {{ sls_config_clean }}
+  file.absent:
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow

@@ -32,17 +32,15 @@ airflow:
         executor: LocalExecutor
         # Localhost services
         # https://stackoverflow.com/questions/45455342
-        sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@localhost/airflow
+        sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
-        broker_url: redis://localhost:6379/0
-        result_backend: postgresql+psycopg2://airflow:airflow@localhost/airflow
+        broker_url: redis://127.0.0.1:6379/0
+        result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
         default_timezone: system
   environ:
     airflow:
       file: airflow
-      content:
-        PATH=$PATH:~/.local/bin
-        export PATH
+      content: {}
   service:
     airflow:
       names:
@@ -64,7 +62,7 @@ airflow:
         - airflow
       uri_a: https://github.com/apache/airflow/releases/download
       uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-PYVER.txt
-      path: /home/airflow/.local
+      path: /home/airflow/airflow
       archive:
         options: '--strip-components=1'
       suffix: tar.gz
@@ -85,7 +83,6 @@ airflow:
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
         - celery[redis,sqs]==4.4.7
-
         - colorlog
         - configparser
         - croniter
@@ -145,8 +142,7 @@ airflow:
       tmp: /tmp/airflow
       service: /lib/systemd/system
       environ: /etc/sysconfig
-      config: /home/airflow/airflow
-      log: /home/airflow/airflow/logs
+      home: /home
   identity:
     rootuser: root
     rootgroup: root

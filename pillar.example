@@ -26,11 +26,7 @@ airflow:
   config:
     airflow:
       content:
-        dags_folder: /home/airflow/airflow/dags
-        base_log_folder: /home/airflow/airflow/logs
         executor: LocalExecutor
-        sql_alchemy_conn: 'postgresql+psycopg2://airflow:airflow@localhost/airflow'
-        default_timezone: system
   service:
     airflow:
       enabled:
@@ -42,16 +38,12 @@ airflow:
     airflow:
       version: 1.10.13
       use_upstream: pip
-      uri_a: https://github.com/apache/airflow/releases/download
-      uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-PYVER.txt
-      path: /home/airflow/.local
       extras:
         - postgres
         - google
   dir:
     airflow:
       config: /home/airflow/airflow
-      log: /home/airflow/airflow/logs
   linux:
     altpriority: 0   # zero disables alternatives
 

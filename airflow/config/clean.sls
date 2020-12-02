@@ -12,13 +12,13 @@ airflow-config-clean:
   file.absent:
     - names:
       - {{ d.dir.airflow.environ }}{{ d.div }}{{ d.environ.airflow.file }}
-      - {{ d.dir.airflow.config }}{{ d.div }}{{ d.config.airflow.file }}
+      - {{ d.dir.airflow.home }}{{ d.dir }}{{ d.identity.airflow.user }}{{ d.div }}airflow{{ d.div }}{{ d.config.airflow.file }}
     - require:
       - sls: {{ sls_service_clean }}
   user.absent:
     - name: {{ d.identity.airflow.user }}
       {%- if grains.os_family == 'MacOS' %}
-    - onlyif: /usr/bin/dscl . list /Users | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
+    - onlyif: /usr/bin/dscl . list {{ d.dir.airflow.home }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
       {%- endif %}
   group.absent:
     - name: {{ d.identity.airflow.group }}

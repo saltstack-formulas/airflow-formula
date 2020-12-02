@@ -21,19 +21,27 @@ airflow-package-install-pkg-deps:
       - pip: airflow-package-install-pip-installed
 
     {%- endif %}
-    {%- if d.pkg.airflow.pips %}
 
-airflow-package-install-pips:
-  pip.installed:
-    - names: {{ d.pkg.airflow.pips|json }}
-    - reload_modules: {{ d.misc.reload }}
+airflow-package-install-virtualenv:
+  cmd.run:
+    - name: rm -fr {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+    - onlyif: test -d {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+  file.directory:
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - user: {{ d.identity.airflow.user }}
-    - require_in:
-      - pip: airflow-package-install-pip-installed
+    - group: {{ d.identity.airflow.group }}
+    - mode: '0755'
+  virtualenv.managed:
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+    - user: {{ d.identity.airflow.user }}
+    - python: python3
     - require:
       - sls: {{ sls_config_users }}
-
-    {%- endif %}
+    - require_in:
+      - pip: airflow-package-install-pip-installed
+        {%- if d.pkg.airflow.pips %}
+    - pip_pkgs: {{ d.pkg.airflow.pips|json }}
+        {%- endif %}
 
 airflow-package-install-pip-installed:
   pip.installed:
@@ -42,6 +50,7 @@ airflow-package-install-pip-installed:
         {%- else %}
     - name: {{ d.pkg.airflow.name }}
         {%- endif %}
+    - bin_env: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - reload_modules: {{ d.misc.reload }}
     - user: {{ d.identity.airflow.user }}
         {%- if d.pkg.airflow.pips %}

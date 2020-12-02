@@ -40,7 +40,7 @@ airflow-archive-install:
     - require:
       - sls: {{ sls_config_users }}
   archive.extracted:
-    {{- format_kwargs(d.pkg.airflow['archive']) }}
+    {{- format_kwargs(d.pkg.airflow.archive) }}
     - retry: {{ d.retry_option|json }}
     - enforce_toplevel: false
     - trim_output: true

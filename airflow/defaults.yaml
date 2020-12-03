@@ -75,12 +75,14 @@ airflow:
       pips:
         # for functionality
         - cryptography
+        - mysqlclient
+        - mysql-python
         # from airflow's setup.py
         - alembic
         - argcomplete
         - attrs
         - cached_property
-        - cattrs:1.0.0
+        - cattrs==1.0.0
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers

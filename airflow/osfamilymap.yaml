@@ -79,10 +79,11 @@ Debian:
         - python3-unicodecsv
         - python3-werkzeug
         - python3-zope.deprecation
+        # for functionality
         - python3-cryptography
-      pips:
-        - flower
-        - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
+        - python3-mysqldb
+        - libmysqlclient-dev
+        - default-libmysqlclient-dev
 
 RedHat:
   pkg:
@@ -96,6 +97,10 @@ RedHat:
         - gcc-c++
         - python3-pip
         - libcurl-devel
+        # for funtionality
+        - mariadb-devel
+      pips:
+        - mysql-connector
 Suse:
   pkg:
     airflow:
@@ -111,9 +116,7 @@ Suse:
         - python-cached-property
         # for functionality
         - python-cryptography
-      pips:
-        - flower
-        - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
+        - python3-mysqlclient
 
 Arch:
   pkg:
@@ -127,10 +130,9 @@ Arch:
         - python-wtforms
         # for functionality
         - python-cryptography
+        - python-mysqlclient
       pips:
         - attr
-        - flower
-        - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
 
 Gentoo: {}
 Alpine: {}
@@ -142,3 +144,6 @@ MacOS:
   dir:
     airflow:
       home: /Users
+      deps:
+        - mysql-connector-c
+        - openssl

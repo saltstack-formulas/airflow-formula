@@ -47,7 +47,8 @@ CentOS Linux-7:
       # python36-setproctitle
       # python36-sqlalchemy
       # python36-tzlocal
-      - python36-cryptography
+      # python36-cryptography
+      # python36-mysql
 
 CentOS-6:
   pkg:

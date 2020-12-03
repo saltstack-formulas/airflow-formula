@@ -73,6 +73,8 @@ airflow:
         - google
         - microsoft.azure
       pips:
+        # for functionality
+        - cryptography
         # from airflow's setup.py
         - alembic
         - argcomplete

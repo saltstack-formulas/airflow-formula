@@ -79,6 +79,7 @@ Debian:
         - python3-unicodecsv
         - python3-werkzeug
         - python3-zope.deprecation
+        - python3-cryptography
       pips:
         - flower
         - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
@@ -108,6 +109,8 @@ Suse:
         - python-argcomplete
         - python-attrs
         - python-cached-property
+        # for functionality
+        - python-cryptography
       pips:
         - flower
         - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
@@ -122,6 +125,8 @@ Arch:
         - python-argcomplete
         - python-cached-property
         - python-wtforms
+        # for functionality
+        - python-cryptography
       pips:
         - attr
         - flower

@@ -73,12 +73,14 @@ airflow:
         - google
         - microsoft.azure
       pips:
+        # for functionality
+        - cryptography
         # from airflow's setup.py
         - alembic
         - argcomplete
         - attrs
         - cached_property
-        - cattrs
+        - cattrs:1.0.0
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers

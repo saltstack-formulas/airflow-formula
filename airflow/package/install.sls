@@ -11,6 +11,14 @@ include:
   - {{ sls_config_users }}
   - {{ sls_service_running }}
 
+    {%- if grains.os_family|lower == 'arch' %}
+
+airflow-package-install-base-devel:
+  pkg.group_installed:
+    - name: base-devel
+    - refresh: {{ d.misc.refresh }}
+
+    {%- endif %}
     {%- if d.pkg.airflow.deps %}
 
 airflow-package-install-pkg-deps:

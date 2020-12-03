@@ -95,20 +95,39 @@ RedHat:
         - gcc-c++
         - python3-pip
         - libcurl-devel
-
 Suse:
   pkg:
     airflow:
-      conflicts:
-        - python3-greenlet
-        - python3-paramiko
       deps:
         - python3
         - python3-devel
-      pips: []
+        - python3-virtualenv
+        - libcurl-devel
+        - libopenssl-devel
+        - python-alembic
+        - python-argcomplete
+        - python-attrs
+        - python-cached-property
+      pips:
+        - flower
+        - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
+
+Arch:
+  pkg:
+    airflow:
+      deps:
+        - python-virtualenv
+        - python-pip
+        - python-alembic
+        - python-argcomplete
+        - python-cached-property
+        - python-wtforms
+      pips:
+        - attr
+        - flower
+        - celery[redis,sqs]==4.4.7  # https://stackoverflow.com/questions/64180054
 
 Gentoo: {}
-Arch: {}
 Alpine: {}
 FreeBSD: {}
 OpenBSD: {}

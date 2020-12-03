@@ -63,7 +63,11 @@ now ``pre-commit`` will run automatically on each ``git commit``. ::
 Special notes
 -------------
 
-The following `top.sls` is an example for Saltstack-formulas community::
+Archlinux: You need Salt python3 installed:
+
+    pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
+
+Everybody: The following `top.sls` works using Saltstack-formulas community::
 
   base:
   '*':

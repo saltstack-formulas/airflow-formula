@@ -17,6 +17,8 @@ airflow-service-install-database:
   cmd.run:
     - name: {{ d.pkg.airflow.path }}{{ d.div }}bin{{ d.div }}airflow initdb
     - runas: {{ d.identity.airflow.user }}
+    - env:
+        - PATH: '${PATH}:/{{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow/bin'
 
         {%- for svcname in d.service.airflow.names %}
 

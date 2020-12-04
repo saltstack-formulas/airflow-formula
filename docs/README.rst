@@ -63,7 +63,7 @@ now ``pre-commit`` will run automatically on each ``git commit``. ::
 Special notes
 -------------
 
-Archlinux: You need Salt python3 installed:
+Archlinux: You need Salt python3 installed::
 
     pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
 
@@ -71,10 +71,12 @@ Everybody: The following `top.sls` works using Saltstack-formulas community::
 
   base:
   '*':
+    - mysql        # .clean
     - postgres     # .clean
     - redis        # .clean
     - airflow      # .clean
 
+Apache-Airflow[all] (i.e. everything) is verified on Ubuntu, CentOS7, OpenSUSE15, and Archlinux (MacOS/Windows is planned).
 
 Available states
 ----------------

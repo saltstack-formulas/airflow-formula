@@ -108,13 +108,14 @@ Suse:
         - python3-virtualenv
         - libcurl-devel
         - libopenssl-devel
-        - python-alembic
-        - python-argcomplete
-        - python-attrs
-        - python-cached-property
+        - python3-alembic
+        - python3-argcomplete
+        - python3-attrs
+        - python3-cached-property
         # for functionality
-        - python-cryptography
+        - python3-cryptography
         - python3-mysqlclient
+        - libmariadb-devel
 
 Arch:
   pkg:

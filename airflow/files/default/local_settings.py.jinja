@@ -1,0 +1,12 @@
+# https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
+STATE_COLORS = {
+  "queued": '{{ "darkgray" if 'queued' not in color else color.queued }}',
+  "running": '{{ "#01FF70" if 'running' not in color else color.running }}',
+  "success": '{{ "#2ECC40" if 'success' not in color else color.success }}',
+  "failed": '{{ "firebrick" if 'failed' not in color else color.failed }}',
+  "up_for_retry": '{{ "yellow" if 'up_for_retry' not in color else color.up_for_retry }}',
+  "up_for_reschedule": '{{ "turquoise" if 'up_for_reschedule' not in color else color.up_for_reschedule }}',
+  "upstream_failed": '{{ "orange" if 'upstream_failed' not in color else color.upstream_failed }}',
+  "skipped": '{{ "darkorchid" if 'skipped' not in color else color.skipped }}',
+  "scheduled": '{{ "tan" if 'skipped' not in color else color.skipped }}',
+}

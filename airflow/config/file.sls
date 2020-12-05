@@ -31,6 +31,25 @@ airflow-config-file-managed:
     - require:
       - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
 
+airflow-config-config-managed:
+  file.managed:
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow{{ d.div }}config{{ d.div }}airflow_local_settings.py
+    - source: {{ files_switch(['local_settings.py.jinja'],
+                              lookup='airflow-config-config-managed'
+                 )
+              }}
+    - makedirs: True
+    - template: jinja
+        {%- if grains.os != 'Windows' %}
+    - mode: '0644'
+    - user: {{ d.identity.airflow.user }}
+    - group: {{ d.identity.airflow.group }}
+        {%- endif %}
+    - context:
+        color: {{ d.config.airflow.state_colors|json }}
+    - require:
+      - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
+
     {%- else %}
 
 airflow-config-install-none:

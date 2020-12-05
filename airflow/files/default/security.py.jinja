@@ -1,0 +1,21 @@
+#!{{ python }}
+
+from airflow import models, settings
+from airflow.contrib.auth.backends.password_auth import PasswordUser
+
+user = PasswordUser(models.User())
+user.username = '{{ user }}'
+user.email = '{{ email }}'
+user.password = '{{ pass }}'
+user.superuser = True
+
+session = settings.Session()
+try:
+    session.add(user)
+    session.commit()
+except Exception:
+    # user probably already exists
+    pass
+
+session.close()
+exit()

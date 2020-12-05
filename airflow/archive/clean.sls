@@ -20,7 +20,7 @@ airflow-airflow-archive-absent:
       - {{ d.dir.airflow.tmp }}
       - {{ d.dir.airflow.lib }}
         {%- if 'path' in d.pkg.airflow %}
-      - {{ d.pkg.airflow.path }}
+      - {{ d.config.airflow.path }}
         {%- endif %}
         {%- if d.linux.altpriority|int == 0 or grains.os_family in ('Arch', 'MacOS') %}
             {%- for cmd in d.pkg.airflow.commands|unique %}

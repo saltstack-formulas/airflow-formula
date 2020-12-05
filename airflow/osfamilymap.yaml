@@ -99,8 +99,6 @@ RedHat:
         - libcurl-devel
         # for funtionality
         - mariadb-devel
-      pips:
-        - mysql-connector
 Suse:
   pkg:
     airflow:
@@ -131,8 +129,6 @@ Arch:
         # for functionality
         - python-cryptography
         - python-mysqlclient
-      pips:
-        - attr
 
 Gentoo: {}
 Alpine: {}

@@ -23,10 +23,27 @@ postgres:
     - ['host', 'replication', 'all', '::1/128', 'md5']
 
 airflow:
+  security:
+    airflow:
+      user: airflow
+      pass: airflow
+      email: airflow@localhost
   config:
     airflow:
       content:
+        authentication: True
         executor: LocalExecutor
+      state_colors:
+        # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
+        queued: 'darkgray'
+        running: '#01FF70'
+        success: '#2ECC40'
+        failed: 'firebrick'
+        up_for_retry: 'yellow'
+        up_for_reschedule: 'turquoise'
+        upstream_failed: 'orange'
+        skipped: 'darkorchid'
+        scheduled: 'tan'
   service:
     airflow:
       enabled:
@@ -39,8 +56,12 @@ airflow:
       version: 1.10.13
       use_upstream: pip
       extras:
+        - celery
         - postgres
+        - mysql
         - google
+        - password
+
   dir:
     airflow:
       config: /home/airflow/airflow

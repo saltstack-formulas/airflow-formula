@@ -10,7 +10,7 @@
 airflow-archive-alternatives-clean-{{ cmd }}:
   alternatives.remove:
     - name: link-airflow-{{ cmd }}
-    - path: {{ d.pkg.airflow.path }}/bin/{{ cmd }}
+    - path: {{ d.config.airflow.path }}/bin/{{ cmd }}
     - onlyif: update-alternatives --list |grep ^link-airflow-{{ cmd }}
 
         {%- endfor %}

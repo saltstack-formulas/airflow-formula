@@ -37,7 +37,7 @@ airflow-archive-alternatives-set-bin-{{ cmd }}:
   alternatives.set:
     - unless: {{ grains.os_family in ('Suse', 'Arch') }} || false
     - name: link-airflow-{{ cmd }}
-    - path: {{ d.pkg.airflow.path }}/{{ cmd }}
+    - path: {{ d.config.airflow.path }}/{{ cmd }}
     - onlyif: test -f {{ d.pkg.airflow['path'] }}/{{ cmd }}
 
         {%- endfor %}

@@ -148,6 +148,11 @@ This state will remove the airflow package and has a depency on
 This state will remove the airflow archive and has a depency on
 ``airflow.config.clean`` via include list.
 
+Available sub-states
+--------------------
+
+Various sub-states are available.
+
 Testing
 -------
 

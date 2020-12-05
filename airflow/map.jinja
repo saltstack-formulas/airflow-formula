@@ -25,23 +25,24 @@
     )
 %}
 
-{%- set config = salt['grains.filter_by'](
+{%- set data = salt['grains.filter_by'](
       {'defaults': defaults},
       default='defaults',
       merge=_config
     )
 %}
 
-{%- set p = config.pkg.airflow %}
-{%- set pyver = '%s.%s.%s'|format(grains.pythonversion[0], grains.pythonversion[1], grains.pythonversion[2]) %}
+{%- set p = data.pkg.airflow %}
+{%- set pyver = '%s.%s'|format(grains.pythonversion[0], grains.pythonversion[1]) %}
 {%- set url = p.uri_c|replace('VERSION', p.version)|replace('PYVER', pyver) %}
-{%- do config.pkg.airflow.update({'constraint_file': url}) %}
+{%- do data.pkg.airflow.update({'constraint_file': url}) %}
 
 {%- if grains.kernel|lower == 'linux' and p.use_upstream|lower == 'archive' %}
-    {%- set path = '%s/%s-%s/bin/'|format(config.dir.airflow.base, p.name, p.version) %}
+    {%- set path = '%s/%s-%s/bin/'|format(data.dir.airflow.base, p.name, p.version) %}
+    {%- do data.config.airflow.update({ 'path': path }) %}
+
     {%- set url = '%s/%s/%s-%s-bin.%s'|format(p.uri_a, p.version, p.name, p.version, p.suffix) %}
-    {%- do config.pkg.airfow.update({ 'path': path }) %}
-    {%- do config.pkg.ariflow.archive.update({'name': path, 'source': url, 'source_hash': url ~ '.sha512'}) %}
+    {%- do data.pkg.airflow.archive.update({'name': path, 'source': url, 'source_hash': url ~ '.sha512'}) %}
 {%- endif %}
 
-{%- set airflow = config %}
+{%- set airflow = data %}

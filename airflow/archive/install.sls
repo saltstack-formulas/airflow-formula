@@ -25,7 +25,7 @@ airflow-archive-install-deps:
 
 airflow-archive-install:
   file.directory:
-    - name: {{ d.pkg.airflow.path }}
+    - name: {{ d.config.airflow.path }}
     - makedirs: True
     - clean: {{ d.misc.clean }}
     - require_in:
@@ -60,7 +60,7 @@ airflow-archive-install:
 airflow-archive-install-symlink-{{ cmd }}:
   file.symlink:
     - name: /usr/local/bin/{{ cmd }}
-    - target: {{ d.pkg.airflow.path }}/bin/{{ cmd }}
+    - target: {{ d.config.airflow.path }}/bin/{{ cmd }}
     - force: True
     - onchanges:
       - archive: airflow-archive-install

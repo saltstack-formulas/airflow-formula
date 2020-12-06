@@ -51,7 +51,6 @@ Debian:
         - python3-colorlog
         - python3-croniter
         - python3-dill
-        - python-enum34
         - python3-flask-api
         - python3-flask-security
         - python3-flask-sqlalchemy

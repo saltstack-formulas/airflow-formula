@@ -56,11 +56,78 @@ airflow:
       version: 1.10.13
       use_upstream: pip
       extras:
-        - celery
-        - postgres
-        - mysql
-        - google
-        - password
+        ## over-the-top
+        - all            # All Airflow features known to man
+        - all_dbs        # All databases integrations
+        - devel_all      # All dev tools requirements
+
+        # other
+        - devel_azure    # Azure development requirements
+        - devel_ci       # Development requirements used in CI
+        - devel_hadoop   # Airflow + dependencies on the Hadoop stack
+        - doc            # Packages needed to build docs
+        - devel          # Minimum dev tools requirements
+        - password       # Password authentication for users
+        
+        ## Apache
+        - apache.atlas      # Apache Atlas to use Data Lineage feature
+        - apache.cassandra  # Cassandra related operators & hook
+        - apache.druid      # Druid related operators & hooks
+        - apache.hdfs       # HDFS hooks and operators
+        - apache.hive       # All Hive related operators
+        - apache.presto     # All Presto related operators & hooks
+        - webhdfs           # HDFS hooks and operators
+        
+        ## Services
+        - amazon               # aws
+        - microsoft.azure      # azure
+        - azure_blob_storage
+        - azure_cosmos
+        - azure_container_instances
+        - azure_data_lake
+        - azure_secrets
+        - cloudant
+        - databricks           # Databricks hooks and operators
+        - datadog              # Datadog hooks and sensors
+        - gcp                  # Google Cloud
+        - github_enterprise    # GitHub Enterprise auth backend
+        - google_auth          # Google auth backend
+        - hashicorp            # Hashicorp Services (Vault)
+        - jira                 # Jira hooks and operators
+        - qds                  # Enable QDS (Qubole Data Service) support
+        - salesforce           # Salesforce hook
+        - sendgrid             # Send email using sendgrid
+        - segment              # Segment hooks and sensors
+        - sentry
+        - slack                # airflow.providers.slack.operators.slack.SlackAPIOperator
+        - snowflake            # Snowflake hooks and operators
+        - vertica              # Vertica hook support as an Airflow backend
+        ## Software
+        - async                # Async worker classes for Gunicorn
+        - celery               # CeleryExecutor
+        - dask                 # DaskExecutor
+        - docker               # Docker hooks and operators
+        - elasticsearch        # Elasticsearch hooks and Log Handler
+        - kubernetes           # Kubernetes Executor and operator
+        - mongo                # Mongo hooks and operators
+        - mysql                # MySQL operators and hook, support as Airflow backend (mysql 5.6.4+)
+        - oracle               # Oracle hooks and operators
+        - pinot                # Pinot DB hook
+        - postgres             # PostgreSQL operators and hook, support as an Airflow backend
+        - rabbitmq             # RabbitMQ support as a Celery backend
+        - redis                # Redis hooks and sensors
+        - samba                # airflow.providers.apache.hive.transfers.hive_to_samba.HiveToSambaOperator
+        - statsd               # Needed by StatsD metrics
+        - virtualenv
+        - cgroups              # Needed To use CgroupTaskRunner
+        - crypto               # Cryptography libraries
+        - grpc                 # Grpc hooks and operators
+        - jdbc                 # JDBC hooks and operators
+        - kerberos             # Kerberos integration for Kerberized Hadoop
+        - ldap                 # LDAP authentication for users
+        - papermill            # Papermill hooks and operators
+        - ssh                  # SSH hooks and Operator
+        - winrm                # WinRM hooks and operators
 
   dir:
     airflow:

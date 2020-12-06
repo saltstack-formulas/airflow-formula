@@ -18,7 +18,7 @@ airflow-formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-A SaltStack formula to manage apache-airflow (https://airflow.apache.org).
+A SaltStack formula to manage apache-airflow (https://airflow.apache.org) on GNU/Linux.
 
 .. contents:: **Table of Contents**
    :depth: 1

@@ -112,7 +112,6 @@ airflow:
         - croniter
         - dill
         - email-validator
-        - enum34
         - flask
         - flask-admin
         - flask-appbuilder

@@ -18,15 +18,15 @@ airflow-archive-alternatives-install-bin-{{ cmd }}:
     - name: link-airflow-{{ cmd }}
     - link: /usr/local/bin/{{ cmd }}
     - order: 10
-    - path: {{ d.pkg.airflow['path'] }}/{{ cmd }}
+    - path: {{ d.config.airflow.path }}/{{ cmd }}
     - priority: {{ d.linux.altpriority }}
             {%- else %}
   cmd.run:
-    - name: update-alternatives --install /usr/local/bin/{{ cmd }} link-airflow-{{ cmd }} {{ d.pkg.airflow['path'] }}/{{ cmd }} {{ d.linux.altpriority }} # noqa 204
+    - name: update-alternatives --install /usr/local/bin/{{ cmd }} link-airflow-{{ cmd }} {{ d.config.airflow.path }}/{{ cmd }} {{ d.linux.altpriority }} # noqa 204
             {%- endif %}
 
     - onlyif:
-      - test -f {{ d.pkg.airflow['path'] }}/{{ cmd }}
+      - test -f {{ d.config.airflow.path }}/{{ cmd }}
     - unless: update-alternatives --list |grep ^link-airflow-{{ cmd }} || false
     - require:
       - sls: {{ sls_archive_install }}
@@ -38,7 +38,7 @@ airflow-archive-alternatives-set-bin-{{ cmd }}:
     - unless: {{ grains.os_family in ('Suse', 'Arch') }} || false
     - name: link-airflow-{{ cmd }}
     - path: {{ d.config.airflow.path }}/{{ cmd }}
-    - onlyif: test -f {{ d.pkg.airflow['path'] }}/{{ cmd }}
+    - onlyif: test -f {{ d.config.airflow.path }}/{{ cmd }}
 
         {%- endfor %}
     {%- endif %}

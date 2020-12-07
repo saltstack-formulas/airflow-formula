@@ -76,7 +76,7 @@ Everybody: The following `top.sls` works using Saltstack-formulas community::
     - redis        # .clean
     - airflow      # .clean
 
-Apache-Airflow[all] (i.e. everything) is verified on Ubuntu, CentOS7, OpenSUSE15, and Archlinux (MacOS/Windows is planned).
+Apache-Airflow (most extras) is verified on Ubuntu, CentOS7, OpenSUSE15; (Archlinux, k8s, MacOS/Windows is planned).
 
 Available states
 ----------------

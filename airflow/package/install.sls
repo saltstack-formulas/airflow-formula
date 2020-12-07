@@ -26,16 +26,19 @@ airflow-package-install-pkg-deps:
     - names: {{ d.pkg.airflow.deps|json }}
     - refresh: {{ d.misc.refresh }}
     - require_in:
-      - pip: airflow-package-install-pip-installed
+      - file: airflow-package-install-virtualenv-clean
 
     {%- endif %}
 
-airflow-package-install-virtualenv:
-  cmd.run:
-    - name: rm -fr {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+airflow-package-install-virtualenv-clean:
+  file.absent:
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+    - force: True
     - onlyif: test -d {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - require_in:
       - file: airflow-package-install-virtualenv
+
+airflow-package-install-virtualenv:
   file.directory:
     - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - user: {{ d.identity.airflow.user }}

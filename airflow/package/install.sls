@@ -34,11 +34,16 @@ airflow-package-install-virtualenv:
   cmd.run:
     - name: rm -fr {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - onlyif: test -d {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+    - require_in:
+      - file: airflow-package-install-virtualenv
   file.directory:
     - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - user: {{ d.identity.airflow.user }}
     - group: {{ d.identity.airflow.group }}
     - mode: '0755'
+    - require_in:
+      - virtualenv: airflow-package-install-virtualenv
+      - pip: airflow-package-install-pip-installed
   virtualenv.managed:
     - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - user: {{ d.identity.airflow.user }}

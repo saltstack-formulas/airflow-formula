@@ -91,7 +91,6 @@ airflow:
         # for functionality
         - cryptography
         - mysqlclient
-        - snowflake-connector-python>=2.3.6
         - password
         - mysql-connector
         - attr

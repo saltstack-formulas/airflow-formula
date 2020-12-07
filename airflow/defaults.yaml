@@ -97,6 +97,7 @@ airflow:
         - attr
         - flask_oauthlib
         - great_expectations
+        - psycopg2
         # from airflow's setup.py
         - alembic
         - argcomplete

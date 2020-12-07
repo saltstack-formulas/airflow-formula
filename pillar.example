@@ -58,15 +58,15 @@ airflow:
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages
         ## over-the-top
-        # all            # All Airflow features known to man
-        # all_dbs        # All databases integrations
-        # devel_all      # All dev tools requirements
+        # all            # All Airflow features known to man    # NOT VERIFIED
+        # all_dbs        # All databases integrations    # NOT VERIFIED
+        # devel_all      # All dev tools requirements    # NOT VERIFIED
         ## Other
         # devel_azure    # Azure development requirements
-        # devel_ci       # Development requirements used in CI
-        # devel_hadoop   # Airflow + dependencies on the Hadoop stack
-        # doc            # Packages needed to build docs
-        # devel          # Minimum dev tools requirements
+        # devel_ci       # Development requirements used in CI    # NOT VERIFIED
+        # devel_hadoop   # Airflow + dependencies on the Hadoop stack    # NOT VERIFIED
+        # doc            # Packages needed to build docs    # NOT VERIFIED
+        # devel          # Minimum dev tools requirements    # NOT VERIFIED
         - password       # Password authentication for users
         ## Apache
         # apache.atlas      # Apache Atlas to use Data Lineage feature
@@ -108,21 +108,21 @@ airflow:
         - elasticsearch        # Elasticsearch hooks and Log Handler
         - kubernetes           # Kubernetes Executor and operator
         - mongo                # Mongo hooks and operators
-        # mysql                # MySQL operators and hook, support as Airflow backend (mysql 5.6.4+)
+        - mysql                # MySQL operators and hook, support as Airflow backend (mysql 5.6.4+)
         # oracle               # Oracle hooks and operators
         # pinot                # Pinot DB hook
-        # postgres             # PostgreSQL operators and hook, support as an Airflow backend
+        - postgres             # PostgreSQL operators and hook, support as an Airflow backend
         # rabbitmq             # RabbitMQ support as a Celery backend
         - redis                # Redis hooks and sensors
-        # samba                # airflow.providers.apache.hive.transfers.hive_to_samba.HiveToSambaOperator
+        - samba                # airflow.providers.apache.hive.transfers.hive_to_samba.HiveToSambaOperator
         # statsd               # Needed by StatsD metrics
-        # virtualenv
+        - virtualenv
         # cgroups              # Needed To use CgroupTaskRunner
-        # crypto               # Cryptography libraries
+        - crypto               # Cryptography libraries
         # grpc                 # Grpc hooks and operators
         # jdbc                 # JDBC hooks and operators
-        # kerberos             # Kerberos integration for Kerberized Hadoop
-        # ldap                 # LDAP authentication for users
+        - kerberos             # Kerberos integration for Kerberized Hadoop
+        - ldap                 # LDAP authentication for users
         # papermill            # Papermill hooks and operators
         - ssh                  # SSH hooks and Operator
         - winrm                # WinRM hooks and operators

@@ -5,6 +5,7 @@
 {%- from tplroot ~ "/map.jinja" import airflow as d with context %}
 {%- set sls_config_users = tplroot ~ '.config.users' %}
 {%- set sls_service_running = tplroot ~ '.service.install' %}
+{%- set sls_service_running = tplroot ~ '.service.install' %}
 {%- set sls_alternatives_install = tplroot ~ '.alternatives.install' %}
 
 include:

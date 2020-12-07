@@ -83,6 +83,7 @@ Debian:
         - python3-mysqldb
         - libmysqlclient-dev
         - default-libmysqlclient-dev
+        - libkrb5-dev
 
 RedHat:
   pkg:
@@ -98,6 +99,7 @@ RedHat:
         - libcurl-devel
         # for funtionality
         - mariadb-devel
+        - krb5-devel
 Suse:
   pkg:
     airflow:

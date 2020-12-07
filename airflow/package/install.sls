@@ -35,6 +35,7 @@ airflow-package-install-virtualenv-clean:
   file.absent:
     - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - force: True
+    - retry: {{ d.retry_option|json }}   # weird; removal (root rm -fr) fails intermittently?
     - onlyif: test -d {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
     - require_in:
       - file: airflow-package-install-virtualenv

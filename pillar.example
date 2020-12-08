@@ -31,8 +31,10 @@ airflow:
   config:
     airflow:
       content:
-        authentication: True
-        executor: LocalExecutor
+        core:
+          authentication: True
+          executor: LocalExecutor
+          load_examples: True
       state_colors:
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
         queued: 'darkgray'

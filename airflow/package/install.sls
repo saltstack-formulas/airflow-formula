@@ -69,6 +69,8 @@ airflow-package-install-pip-installed:
     - name: {{ d.pkg.airflow.name }}
         {%- endif %}
     - bin_env: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow
+    - env_vars:
+      AIRFLOW_GPL_UNIDECODE: 'yes'
     - reload_modules: {{ d.misc.reload }}
     - user: {{ d.identity.airflow.user }}
         {%- if d.pkg.airflow.pips %}

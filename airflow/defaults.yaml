@@ -68,6 +68,7 @@ airflow:
         - password
         - devel_ci
         - devel_azure
+        - apache-airflow-backport-providers-microsoft-winrm
       pips:
         # for functionality
         - cryptography
@@ -85,7 +86,6 @@ airflow:
         - cached_property
         - cattrs==1.0.0
         - pywinrm
-        - apache-airflow-backport-providers-microsoft-winrm
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers

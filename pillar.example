@@ -55,7 +55,7 @@ airflow:
         - airflow-worker
   pkg:
     airflow:
-      version: 1.10.13
+      version: 2.0.0rc1  # 1.10.14
       use_upstream: pip
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages

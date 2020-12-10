@@ -84,7 +84,7 @@ airflow:
         - attrs
         - cached_property
         - cattrs==1.0.0
-        - pwinrm
+        - pywinrm
         - apache-airflow-backport-providers-microsoft-winrm
 
         # https://github.com/mher/flower/issues/1029

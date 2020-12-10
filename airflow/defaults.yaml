@@ -12,6 +12,7 @@ airflow:
     airflow:
       path: /home/airflow/airflow
       file: airflow.cfg
+      initcmd: 'db init'
       content:
         core:
           dags_folder: /home/airflow/airflow/dags

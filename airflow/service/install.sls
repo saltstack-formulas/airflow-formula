@@ -15,7 +15,7 @@ include:
 
 airflow-service-install-database:
   cmd.run:
-    - name: {{ d.config.airflow.path }}{{ d.div }}bin{{ d.div }}airflow initdb
+    - name: {{ d.config.airflow.path }}{{ d.div }}bin{{ d.div }}airflow {{ d.config.airflow.initcmd }}
     - runas: {{ d.identity.airflow.user }}
     - env:
         - PATH: '${PATH}:/{{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow/bin'

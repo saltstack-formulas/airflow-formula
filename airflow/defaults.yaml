@@ -1,27 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 ---
-postgres:
-  users:
-    airflow:
-      ensure: present
-      password: airflow
-      createdb: true
-      inherit: true
-      createroles: true
-      replication: true
-  databases:
-    airflow:
-      owner: airflow
-  acls:
-    - ['local', 'airflow', 'airflow', 'md5']
-    - ['local', 'all', 'all', 'peer']
-    - ['host', 'all', 'all', '127.0.0.1/32', 'md5']
-    - ['host', 'all', 'all', '::1/128', 'md5']
-    - ['local', 'replication', 'all', 'peer']
-    - ['host', 'replication', 'all', '127.0.0.1/32', 'md5']
-    - ['host', 'replication', 'all', '::1/128', 'md5']
-
 airflow:
   security:
     airflow:
@@ -44,6 +23,7 @@ airflow:
           load_examples: False
         webserver:
           authenticate: true
+          secret_key: {{ range(1,200000) | random }}
           auth_backend: airflow.contrib.auth.backends.password_auth  # airflow.api.auth.backend.deny_all
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
@@ -70,7 +50,7 @@ airflow:
         - airflow-worker
   pkg:
     airflow:
-      version: 1.10.13
+      version: 2.0.0rc1  # 1.10.14
       use_upstream: pip
       name: apache-airflow
       commands:
@@ -104,6 +84,8 @@ airflow:
         - attrs
         - cached_property
         - cattrs==1.0.0
+        - pwinrm
+        - apache-airflow-backport-providers-microsoft-winrm
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers

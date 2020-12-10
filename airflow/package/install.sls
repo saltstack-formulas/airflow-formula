@@ -64,7 +64,7 @@ airflow-package-install-virtualenv:
 airflow-package-install-pip-installed:
   pip.installed:
         {%- if d.pkg.airflow.extras is iterable %}
-    - name: {{ d.pkg.airflow.name }}=={{ d.pkg.airflow.version or '1.10.14' }} {{ d.pkg.airflow.extras|list|replace("'","") }}
+    - name: {{ d.pkg.airflow.name }}{{ d.pkg.airflow.extras|list|replace("'","") }}=={{ d.pkg.airflow.version or '1.10.14' }}
         {%- else %}
     - name: {{ d.pkg.airflow.name }}
         {%- endif %}

@@ -40,15 +40,15 @@ airflow:
   service:
     airflow:
       names:
-        - airflow-flower
+        - airflow-celery-flower
         - airflow-scheduler
         - airflow-webserver
-        - airflow-worker
+        - airflow-celery-worker
       enabled:
-        - airflow-flower
+        - airflow-celery-flower
         - airflow-scheduler
         - airflow-webserver
-        - airflow-worker
+        - airflow-celery-worker
   pkg:
     airflow:
       version: 2.0.0rc1  # 1.10.14

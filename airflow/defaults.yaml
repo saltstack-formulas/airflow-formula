@@ -24,9 +24,9 @@ airflow:
           load_examples: False
         webserver:
           authenticate: true
-          secret_key: {{ range(1,200000) | random }}
+          secret_key: {{ range(1,20000000000) | random }}
           auth_backend: airflow.contrib.auth.backends.password_auth
-          cookie_samesite: None
+          cookie_samesite: Lax
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           broker_url: redis://127.0.0.1:6379/0

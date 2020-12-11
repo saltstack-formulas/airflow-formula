@@ -445,7 +445,7 @@ proxy_fix_x_prefix = 1
 cookie_secure = False
 
 # Set samesite policy on session cookie
-cookie_samesite =
+cookie_samesite = {{ config.webserver.cookie_samesite or 'Lax' }}
 
 # Default setting for wrap toggle on DAG code and TI log views.
 default_wrap = False

@@ -74,13 +74,17 @@ airflow:
       pips:
         # for functionality
         - cryptography
+            {%- if grains.os_family == 'RedHat' %}
+        - psycopg2-binary
+            {%- else %}
+        - psycopg2
         - mysqlclient
+            {%- endif %}
         - password
         - mysql-connector
         - attr
         - flask_oauthlib
         - great_expectations
-        - psycopg2
         - flask-bcrypt
         # from airflow's setup.py
         - alembic

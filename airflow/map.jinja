@@ -38,7 +38,7 @@
 {%- do data.pkg.airflow.update({'constraint_file': url}) %}
 
 {%- if p.version.split('.')[0] == 1 %}
-    {% do data.config.airflow.update({ 'initcmd': 'initdb'} %}
+    {% do data.config.airflow.update({ 'initcmd': 'initdb'}) %}
 {%- endif %}
 
 {%- if grains.kernel|lower == 'linux' and p.use_upstream|lower == 'archive' %}

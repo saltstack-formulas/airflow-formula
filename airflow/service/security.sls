@@ -4,14 +4,14 @@
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import airflow as d with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
-
-    {%- if d.config.airflow.content %}
-        {%- set sls_service_running = tplroot ~ '.service.running' %}
+{%- set sls_service_running = tplroot ~ '.service.running' %}
 
 include:
   - {{ sls_service_running }}
 
-airflow-service-security-managed:
+    {%- if d.pkg.airflow.version.split('.')[0]|int == 1 %}
+
+airflow-v1-service-security-managed:
   file.managed:
     - name: {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
     - source: {{ files_switch(['security.py.jinja'],
@@ -43,9 +43,11 @@ airflow-service-security-managed:
 
     {%- else %}
 
-airflow-service-install-none:
-  test.show_notification:
-    - text: |
-        No security configuration was provided for {{ salt['grains.get']('finger', grains.os_family) }}
+airflow-v2-service-security-managed:
+  cmd.run:
+    - name: {{ d.config.airflow.path }}{{ d.div }}bin{{ d.div }}airflow users create --username {{ d.security.airflow.user }} --firstname first --lastname last --role Admin --email {{ d.security.airflow.email }} --password {{ d.security.airflow.pass }}
+        {%- if grains.os != 'Windows' %}
+    - runas: {{ d.identity.airflow.user }}
+        {%- endif %}
 
     {%- endif %}

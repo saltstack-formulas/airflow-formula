@@ -16,7 +16,7 @@ airflow-config-users-install-user:
     - groups:
       - {{ d.identity.airflow.group }}
         {%- if grains.os != 'Windows' %}
-    - shell: /bin/false
+    - shell: /bin/bash
             {%- if grains.os_family == 'MacOS' %}
     - unless: /usr/bin/dscl . list {{ d.dir.airflow.home }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
             {%- endif %}

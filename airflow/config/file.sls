@@ -27,6 +27,7 @@ airflow-config-file-managed:
     - group: {{ d.identity.airflow.group }}
         {%- endif %}
     - context:
+        airversion: {{ d.pkg.airflow.version.split('.')[0]|int }}
         config: {{ d.config.airflow.content|json }}
     - require:
       - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}

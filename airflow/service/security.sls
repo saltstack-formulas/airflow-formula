@@ -10,7 +10,7 @@ include:
   - {{ sls_service_running }}
 
 airflow-service-security-managed:
-    {%- if d.pkg.airflow.version.split('.')[0]|int == 10 %}
+    {%- if d.pkg.airflow.version.split('.')[0]|int == 1 %}
   file.managed:
     - name: {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
     - source: {{ files_switch(['security.py.jinja'],

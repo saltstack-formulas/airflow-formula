@@ -3,10 +3,7 @@
 # Your changes may be overwritten.
 ########################################################################
 
-[core]
-# The folder where your airflow pipelines live, most likely a
-# subfolder in a code repository. This path must be absolute.
-dags_folder = {{ config.core.dags_folder or '/home/airflow/airflow/dags' }}
+[{{ 'logging' if airversion|int == 2 else 'core' }}]
 
 # The folder where airflow should store its log files
 # This path must be absolute
@@ -60,6 +57,13 @@ dag_processor_manager_log_location = /home/airflow/airflow/logs/dag_processor_ma
 # Default to use task handler.
 task_log_reader = task
 
+{{ '[core]   # airflow 2.0' if airversion|int == 2 else '' }}
+
+# The folder where your airflow pipelines live, most likely a
+# subfolder in a code repository. This path must be absolute.
+dags_folder = {{ config.core.dags_folder or '/home/airflow/airflow/dags' }}
+
+
 # Hostname by providing a path to a callable, which will resolve the hostname.
 # The format is "package:function".
 #
@@ -68,7 +72,7 @@ task_log_reader = task
 #
 # No argument should be required in the function specified.
 # If using IP address as hostname is preferred, use value ``airflow.utils.net:get_host_ip_address``
-hostname_callable = socket:getfqdn
+hostname_callable = {{ 'socket.getfqdn' if airversion|int == 2 else 'socket:getfqdn' }}
 
 # Default timezone in case supplied date times are naive
 # can be utc (default), system, or any IANA timezone string (e.g. Europe/Amsterdam)
@@ -417,7 +421,7 @@ page_size = 100
 rbac = False
 
 # Define the color of navigation bar
-navbar_color = #007A87
+navbar_color = {{ '#007A87' if airversion|int == 1 else '#fff' }}
 
 # Default dagrun to show in UI
 default_dag_run_display_number = 25
@@ -664,17 +668,6 @@ catchup_by_default = True
 # Set this to 0 for no limit (not advised)
 max_tis_per_query = 512
 
-# Statsd (https://github.com/etsy/statsd) integration settings
-statsd_on = False
-statsd_host = localhost
-statsd_port = 8125
-statsd_prefix = airflow
-
-# If you want to avoid send all the available metrics to StatsD,
-# you can configure an allow list of prefixes to send only the metrics that
-# start with the elements of the list (e.g: scheduler,executor,dagrun)
-statsd_allow_list =
-
 # The scheduler can run multiple threads in parallel to schedule dags.
 # This defines how many threads will run.
 max_threads = 2
@@ -687,6 +680,20 @@ use_job_schedule = True
 # Allow externally triggered DagRuns for Execution Dates in the future
 # Only has effect if schedule_interval is set to None in DAG
 allow_trigger_in_future = False
+
+    {%- if airversion|int == 2 %}
+[metrics]
+    {%- endif %}
+# Statsd (https://github.com/etsy/statsd) integration settings
+statsd_on = False
+statsd_host = localhost
+statsd_port = 8125
+statsd_prefix = airflow
+
+# If you want to avoid send all the available metrics to StatsD,
+# you can configure an allow list of prefixes to send only the metrics that
+# start with the elements of the list (e.g: scheduler,executor,dagrun)
+statsd_allow_list =
 
 [ldap]
 # set this to ldaps://<your.ldap.server>:<port>

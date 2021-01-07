@@ -37,7 +37,7 @@
 {%- set url = p.uri_c|replace('VERSION', p.version)|replace('PYVER', pyver) %}
 {%- do data.pkg.airflow.update({'constraint_file': url}) %}
 
-{%- if p.version.split('.')[0] == 10 %}
+{%- if p.version.split('.')[0]|int == 1 %}
     {% do data.config.airflow.update({ 'initcmd': 'initdb'}) %}
 {%- endif %}
 

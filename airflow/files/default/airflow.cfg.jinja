@@ -682,6 +682,14 @@ use_job_schedule = True
 allow_trigger_in_future = False
 
     {%- if airversion|int == 2 %}
+[smart_sensor]
+use_smart_sensor = true
+shard_code_upper_limit = 10000
+
+# Users can change the following config based on their requirements
+shards = 5
+sensors_enabled = NamedHivePartitionSensor, MetastorePartitionSensor
+
 [metrics]
     {%- endif %}
 # Statsd (https://github.com/etsy/statsd) integration settings

@@ -60,7 +60,7 @@ airflow-archive-install:
 airflow-archive-install-symlink-{{ cmd }}:
   file.symlink:
     - name: /usr/local/bin/{{ cmd }}
-    - target: {{ d.config.airflow.path }}/bin/{{ cmd }}
+    - target: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/{{ cmd }}
     - force: True
     - onchanges:
       - archive: airflow-archive-install

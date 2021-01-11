@@ -51,6 +51,26 @@ airflow-config-config-managed:
     - require:
       - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
 
+airflow-config-bash-profile-managed:
+  file.replace:
+    # fix userpath
+    - name: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.bash_profile
+    - pattern: '"^PATH=(.*):$HOME/.local/bin(.*)"'
+    - repl: 'PATH=$HOME/.local/bin:\1:\2'
+    - append_if_not_found: True
+    - not_found_content: 'export PATH=$HOME/.local/bin:$PATH'
+    - onlyif: test -f {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.bash_profile
+
+airflow-config-dags-directory:
+  file.directory:
+    - name: {{ d.config.airflow.content.core.dags_folder }}
+    - makedirs: True
+        {%- if grains.os != 'Windows' %}
+    - mode: '0644'
+    - user: {{ d.identity.airflow.user }}
+    - group: {{ d.identity.airflow.group }}
+        {%- endif %}
+
     {%- else %}
 
 airflow-config-install-none:

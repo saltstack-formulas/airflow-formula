@@ -12,7 +12,7 @@ include:
 airflow-service-security-managed:
     {%- if d.pkg.airflow.version.split('.')[0]|int == 1 %}
   file.managed:
-    - name: {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
+    - name: {{ d.dir.airflow.tmp }}/{{ d.security.airflow.script }}
     - source: {{ files_switch(['security.py.jinja'],
                               lookup='airflow-service-security-managed'
                  )
@@ -24,7 +24,7 @@ airflow-service-security-managed:
     - user: {{ d.identity.airflow.user }}
         {%- endif %}
     - context:
-        python: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow{{ d.div }}bin{{ d.div }}python
+        python: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/python
         user: {{ d.security.airflow.user }}
         email: {{ d.security.airflow.email }}
         pass: {{ d.security.airflow.pass }}
@@ -32,8 +32,8 @@ airflow-service-security-managed:
       - sls: {{ sls_service_running }}
   cmd.run:
     - names:
-      - {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
-      - rm {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
+      - {{ d.dir.airflow.tmp }}/{{ d.security.airflow.script }}
+      - rm {{ d.dir.airflow.tmp }}/{{ d.security.airflow.script }}
         {%- if grains.os != 'Windows' %}
     - runas: {{ d.identity.airflow.user }}
         {%- endif %}
@@ -43,7 +43,7 @@ airflow-service-security-managed:
     {%- else %}
 
   cmd.run:
-    - name: {{ d.config.airflow.path }}{{ d.div }}bin{{ d.div }}airflow users create --username {{ d.security.airflow.user }} --firstname first --lastname last --role Admin --email {{ d.security.airflow.email }} --password {{ d.security.airflow.pass }}
+    - name: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/airflow users create --username {{ d.security.airflow.user }} --firstname first --lastname last --role Admin --email {{ d.security.airflow.email }} --password {{ d.security.airflow.pass }}
         {%- if grains.os != 'Windows' %}
     - runas: {{ d.identity.airflow.user }}
         {%- endif %}

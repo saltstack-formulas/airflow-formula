@@ -26,7 +26,7 @@ Debian:
         - libcurl4-openssl-dev
         - libssl-dev
         - python3-pip
-        - python3-distutils-extra 
+        - python3-distutils-extra
         - python3-dev
         - virtualenv
         # from https://airflow.apache.org/docs/stable/installation.html
@@ -38,7 +38,7 @@ Debian:
         - libsasl2-2
         - libsasl2-modules
         - libssl1.1
-        - locales 
+        - locales
         - lsb-release
         - sasl2-bin
         - sqlite3
@@ -84,6 +84,8 @@ Debian:
         - libmysqlclient-dev
         - default-libmysqlclient-dev
         - libkrb5-dev
+        - unixodbc-dev
+        - libsasl2-dev
 
 RedHat:
   pkg:
@@ -101,6 +103,8 @@ RedHat:
         - mariadb-devel
         - krb5-devel
         - graphviz   # save dag structure as image
+        - unixODBC-devel
+        - cyrus-sasl-devel
 
 Suse:
   pkg:
@@ -119,6 +123,9 @@ Suse:
         - python3-cryptography
         - python3-mysqlclient
         - libmariadb-devel
+        - krb5-devel
+        - unixodbc-dev
+        - cyrus-sasl
 
 Arch:
   pkg:
@@ -133,6 +140,10 @@ Arch:
         # for functionality
         - python-cryptography
         - python-mysqlclient
+        - krb5
+        - unixodbc
+        - libiodbc
+        - cyrus-sasl
 
 Gentoo: {}
 Alpine: {}

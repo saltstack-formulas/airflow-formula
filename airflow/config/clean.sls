@@ -19,7 +19,9 @@ airflow-config-clean:
       {%- if grains.os_family == 'MacOS' %}
     - onlyif: '/usr/bin/dscl . list {{ d.dir.airflow.home }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1'
       {%- endif %}
+    - require:
+      - file: airflow-config-clean
   group.absent:
     - name: {{ d.identity.airflow.group }}
     - require:
-      - file: airflow-config-clean
+      - user: airflow-config-clean

@@ -33,7 +33,7 @@ airflow:
       content:
         core:
           authentication: True
-          executor: LocalExecutor
+          executor: CeleryExecutor
           load_examples: True
       state_colors:
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
@@ -55,7 +55,7 @@ airflow:
         - airflow-celery-worker
   pkg:
     airflow:
-      version: 2.0.0rc1  # 1.10.14
+      version: 2.0.0  # 1.10.14
       use_upstream: pip
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages
@@ -63,42 +63,43 @@ airflow:
         # all            # All Airflow features known to man    # NOT VERIFIED
         # all_dbs        # All databases integrations    # NOT VERIFIED
         # devel_all      # All dev tools requirements    # NOT VERIFIED
-        # devel_azure    # Azure development requirements
-        # devel_ci       # Development requirements used in CI    # NOT VERIFIED
         # devel_hadoop   # Airflow + dependencies on the Hadoop stack    # NOT VERIFIED
         # doc            # Packages needed to build docs    # NOT VERIFIED
-        # cloudant
-        # salesforce           # Salesforce hook
-        # snowflake            # Snowflake hooks and operators
-        # oracle               # Oracle hooks and operators
-        # jdbc                 # JDBC hooks and operators
+        # cloudant       # cloudant
+        # salesforce     # Salesforce hook
+        # snowflake      # Snowflake hooks and operators
+        # oracle         # Oracle hooks and operators
+        # jdbc           # JDBC hooks and operators
         
         # THESE WORKED
-        - devel          # Minimum dev tools requirements    # NOT VERIFIED
+        - devel          # Minimum dev tools requirements
+        - devel_ci       # Development requirements used in CI
+        - devel_azure    # Azure development requirements
         - password       # Password authentication for users
         - apache.atlas      # Apache Atlas to use Data Lineage feature
         - apache.cassandra  # Cassandra related operators & hook
         - apache.druid      # Druid related operators & hooks
         - apache.hdfs       # HDFS hooks and operators
         - apache.hive       # All Hive related operators
-        - apache.presto     # All Presto related operators & hooks
+        - apache.pinot         # Pinot DB hook
         - webhdfs           # HDFS hooks and operators
-        ## Services
+        # apache.presto     # All Presto related operators & hooks   (not in airflow 2.0.0)
         - amazon               # aws
+        # azure_container_instances   # not in airflow 2.0.0
+        # azure_blob_storage   # not in airflow 2.0.0
+        # azure_cosmos         # not in airflow 2.0.0
+        # azure_data_lake      # not in airflow 2.0.0
+        # azure_secrets        # not in airflow 2.0.0
         - microsoft.azure      # azure
-        - azure_blob_storage
-        - azure_cosmos
-        - azure_container_instances
-        - azure_data_lake
-        - azure_secrets
         - databricks           # Databricks hooks and operators
         - datadog              # Datadog hooks and sensors
-        - gcp                  # Google Cloud
-        - github_enterprise    # GitHub Enterprise auth backend
+        - google               # Google Cloud
         - google_auth          # Google auth backend
+        - github_enterprise    # GitHub Enterprise auth backend
         - hashicorp            # Hashicorp Services (Vault)
+        - http                 # http hooks and providers
         - jira                 # Jira hooks and operators
-        - qds                  # Enable QDS (Qubole Data Service) support
+        - qubole               # Enable QDS (Qubole Data Service) support
         - salesforce           # Salesforce hook
         - sendgrid             # Send email using sendgrid
         - segment              # Segment hooks and sensors
@@ -111,10 +112,9 @@ airflow:
         - dask                 # DaskExecutor
         - docker               # Docker hooks and operators
         - elasticsearch        # Elasticsearch hooks and Log Handler
-        - kubernetes           # Kubernetes Executor and operator
+        - cncf.kubernetes      # Kubernetes Executor and operator
         - mongo                # Mongo hooks and operators
         - mysql                # MySQL operators and hook, support as Airflow backend (mysql 5.6.4+)
-        - pinot                # Pinot DB hook
         - postgres             # PostgreSQL operators and hook, support as an Airflow backend
         - rabbitmq             # RabbitMQ support as a Celery backend
         - redis                # Redis hooks and sensors
@@ -124,11 +124,15 @@ airflow:
         - cgroups              # Needed To use CgroupTaskRunner
         - crypto               # Cryptography libraries
         - grpc                 # Grpc hooks and operators
-        # kerberos             # Kerberos integration for Kerberized Hadoop
+        - kerberos             # Kerberos integration
         - ldap                 # LDAP authentication for users
+        - imap                 # IMAP hooks and sensors
         - papermill            # Papermill hooks and operators
         - ssh                  # SSH hooks and Operator
-        - winrm                # WinRM hooks and operators
+        - pagerduty            # PagerDuty ..
+        - microsoft.winrm      # WinRM hooks and operators
+        # apache-airflow-providers-microsoft-winrm   # v1
+
 
   dir:
     airflow:

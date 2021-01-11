@@ -15,7 +15,7 @@ airflow:
       initcmd: 'db init'
       content:
         core:
-          dags_folder: /home/airflow/airflow/dags
+          dags_folder: /home/airflow/dags
           base_log_folder: /home/airflow/airflow/logs
           executor: CeleryExecutor
           default_timezone: system
@@ -27,6 +27,7 @@ airflow:
           secret_key: {{ range(1,20000000000) | random }}
           auth_backend: airflow.contrib.auth.backends.password_auth
           cookie_samesite: Lax
+          expose_config: true
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           broker_url: redis://127.0.0.1:6379/0
@@ -52,7 +53,7 @@ airflow:
         - airflow-celery-worker
   pkg:
     airflow:
-      version: 2.0.0rc1  # 1.10.14
+      version: 2.0.0  # 1.10.14
       use_upstream: pip
       name: apache-airflow
       commands:
@@ -68,9 +69,11 @@ airflow:
         - postgres
         - google
         - password
+        - cncf.kerberos
         - devel_ci
         - devel_azure
-        - apache-airflow-backport-providers-microsoft-winrm
+        # apache-airflow-backport-providers-microsoft-winrm    # v1
+        - apache-airflow-providers-microsoft-winrm
       pips:
         # for functionality
         - cryptography
@@ -92,7 +95,7 @@ airflow:
         - attrs
         - cached_property
         - cattrs==1.0.0
-        - pywinrm
+        - pywinrm[kerberos]
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
@@ -147,6 +150,14 @@ airflow:
         - unicodecsv
         - werkzeug
         - zope.deprecation
+        - idna
+        - jsonpointer
+        - rfc3987
+        - strict-rfc3339
+        - webcolors
+        - pyarrow
+        # bug: https://github.com/apache/airflow/issues/12881
+        - apache-airflow-providers-snowflake==1.0.0
   dir:
     airflow:
       base: /opt

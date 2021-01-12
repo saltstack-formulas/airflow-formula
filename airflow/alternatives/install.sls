@@ -18,11 +18,11 @@ airflow-archive-alternatives-install-bin-{{ cmd }}:
     - name: link-airflow-{{ cmd }}
     - link: /usr/local/bin/{{ cmd }}
     - order: 10
-    - path: {{ d.config.airflow.path }}/{{ cmd }}
+    - path: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/{{ cmd }}
     - priority: {{ d.linux.altpriority }}
             {%- else %}
   cmd.run:
-    - name: update-alternatives --install /usr/local/bin/{{ cmd }} link-airflow-{{ cmd }} {{ d.config.airflow.path }}/{{ cmd }} {{ d.linux.altpriority }} # noqa 204
+    - name: update-alternatives --install /usr/local/bin/{{ cmd }} link-airflow-{{ cmd }} {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/{{ cmd }} {{ d.linux.altpriority }} # noqa 204
             {%- endif %}
 
     - onlyif:
@@ -37,7 +37,7 @@ airflow-archive-alternatives-set-bin-{{ cmd }}:
   alternatives.set:
     - unless: {{ grains.os_family in ('Suse', 'Arch') }} || false
     - name: link-airflow-{{ cmd }}
-    - path: {{ d.config.airflow.path }}/{{ cmd }}
+    - path: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/{{ cmd }}
     - onlyif: test -f {{ d.config.airflow.path }}/{{ cmd }}
 
         {%- endfor %}

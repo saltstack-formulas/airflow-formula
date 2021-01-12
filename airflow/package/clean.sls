@@ -22,5 +22,12 @@ airflow-package-clean-pip:
       - sls: {{ sls_service_clean }}
     - require_in:
       - sls: {{ sls_config_clean }}
+    - unless:
+             {%- if grains.os_family == 'MacOS' %}
+      - /usr/bin/dscl . list {{ d.dir.airflow.home }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
+             {%- elif grains.os != 'Windows' %}
+      - getent passwd {{ d.identity.airflow.user }} | true
+             {%- endif %}
   file.absent:
+    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}.local
     - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow

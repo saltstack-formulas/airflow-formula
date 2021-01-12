@@ -80,7 +80,7 @@ default_timezone = {{ config.core.default_timezone or 'utc' }}
 
 # The executor class that airflow should use. Choices include
 # SequentialExecutor, LocalExecutor, CeleryExecutor, DaskExecutor, KubernetesExecutor
-executor = {{ config.core.executor or 'SequentialExecutor' }}
+executor = {{ config.core.executor or 'CeleryExecutor' }}
 
 # The SqlAlchemy connection string to the metadata database.
 # SqlAlchemy supports many different database engine, more information
@@ -363,7 +363,7 @@ access_logfile = -
 error_logfile = -
 
 # Expose the configuration file in the web server
-expose_config = False
+expose_config = {{ config.webserver.expose_config }}
 
 # Expose hostname in the web server
 expose_hostname = True

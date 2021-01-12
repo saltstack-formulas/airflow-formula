@@ -41,12 +41,17 @@
     {% do data.config.airflow.update({ 'initcmd': 'initdb'}) %}
 {%- endif %}
 
-{%- if grains.kernel|lower == 'linux' and p.use_upstream|lower == 'archive' %}
-    {%- set path = '%s/%s-%s/bin/'|format(data.dir.airflow.base, p.name, p.version) %}
-    {%- do data.config.airflow.update({ 'path': path }) %}
+{# directories #}
+{%- if data.dir.airflow.userhome == None %}
+    {%- set user_home = data.dir.airflow.base ~ '/' ~ data.identity.airflow.user %}  {# /home/user #}
+    {%- do data.dir.airflow.update({ 'userhome': user_home, 'airhome': user_home ~ '/airflow'}) %} {# /home/user/airflow #}
+    {%- do data.dir.airflow.update({ 'virtualenv': user_home ~ '/.local'}) %} {# /home/user/.local #}
+{%- endif %}
 
+{# archive #}
+{%- if grains.kernel|lower == 'linux' and p.use_upstream|lower == 'archive' %}
     {%- set url = '%s/%s/%s-%s-bin.%s'|format(p.uri_a, p.version, p.name, p.version, p.suffix) %}
-    {%- do data.pkg.airflow.archive.update({'name': path, 'source': url, 'source_hash': url ~ '.sha512'}) %}
+    {%- do data.pkg.airflow.archive.update({'name': data.dir.airflow.airhome, 'source': url, 'source_hash': url ~ '.sha512'}) %}
 {%- endif %}
 
 {%- set airflow = data %}

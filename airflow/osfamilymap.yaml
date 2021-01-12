@@ -154,7 +154,7 @@ Windows: {}
 MacOS:
   dir:
     airflow:
-      home: /Users
+      base: /Users
       deps:
         - mysql-connector-c
         - openssl

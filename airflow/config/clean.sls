@@ -10,14 +10,15 @@ airflow-config-clean:
   file.absent:
     - names:
       - {{ d.dir.airflow.environ ~ d.div ~ d.environ.airflow.file }}
-      - {{ d.dir.airflow.home ~ d.div ~ d.identity.airflow.user }}
+      - {{  d.dir.airflow.airhome }}{{ d.div }}{{ d.config.airflow.file }}
+      - {{  d.dir.airflow.airhome }}{{ d.div }}config{{ d.div }}airflow_local_settings.py
     - require:
       - sls: {{ sls_service_clean }}
       - sls: {{ sls_package_clean }}
   user.absent:
     - name: {{ d.identity.airflow.user }}
       {%- if grains.os_family == 'MacOS' %}
-    - onlyif: '/usr/bin/dscl . list {{ d.dir.airflow.home }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1'
+    - onlyif: '/usr/bin/dscl . list {{ d.dir.airflow.base }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1'
       {%- endif %}
     - require:
       - file: airflow-config-clean

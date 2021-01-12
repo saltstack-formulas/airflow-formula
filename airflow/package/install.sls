@@ -33,16 +33,16 @@ airflow-package-install-pkg-deps:
 
 airflow-package-install-virtualenv-clean:
   file.absent:
-    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}.local
+    - name: {{ d.dir.airflow.virtualenv }}
     - force: True
     - retry: {{ d.retry_option|json }}   # weird; removal (root rm -fr) fails intermittently?
-    - onlyif: test -d {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}.local
+    - onlyif: test -d {{ d.dir.airflow.virtualenv }}
     - require_in:
       - file: airflow-package-install-virtualenv
 
 airflow-package-install-virtualenv:
   file.directory:
-    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}.local
+    - name: {{ d.dir.airflow.virtualenv }}
     - user: {{ d.identity.airflow.user }}
     - group: {{ d.identity.airflow.group }}
     - mode: '0755'
@@ -50,7 +50,7 @@ airflow-package-install-virtualenv:
       - virtualenv: airflow-package-install-virtualenv
       - pip: airflow-package-install-pip-installed
   virtualenv.managed:
-    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}.local
+    - name: {{ d.dir.airflow.virtualenv }}
     - user: {{ d.identity.airflow.user }}
     - python: python3
     - require:
@@ -68,7 +68,7 @@ airflow-package-install-pip-installed:
         {%- else %}
     - name: {{ d.pkg.airflow.name }}
         {%- endif %}
-    - bin_env: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}.local
+    - bin_env: {{ d.dir.airflow.virtualenv }}
     - env_vars:
       AIRFLOW_GPL_UNIDECODE: 'yes'
     - reload_modules: {{ d.misc.reload }}

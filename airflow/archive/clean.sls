@@ -19,9 +19,7 @@ airflow-airflow-archive-absent:
     - names:
       - {{ d.dir.airflow.tmp }}
       - {{ d.dir.airflow.lib }}
-        {%- if 'path' in d.pkg.airflow %}
-      - {{ d.config.airflow.path }}
-        {%- endif %}
+      - {{ d.dir.airflow.virtualenv }}
         {%- if d.linux.altpriority|int == 0 or grains.os_family in ('Arch', 'MacOS') %}
             {%- for cmd in d.pkg.airflow.commands|unique %}
       - /usr/local/bin/{{ cmd }}

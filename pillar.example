@@ -32,7 +32,7 @@ airflow:
     airflow:
       content:
         # scheduler:
-        #   child_process_log_directory: /home/airflow/logs/scheduler
+        #   child_process_log_directory: /home/airflow/airflow/logs/scheduler
         # core:
         #   dags_folder: /home/airflow/dags
         #   plugins_folder: /home/airflow/plugins

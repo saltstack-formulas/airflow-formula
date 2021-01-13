@@ -22,7 +22,12 @@ airflow:
       file: airflow.cfg
       initcmd: 'db init'
       content:
+        scheduler:
+          child_process_log_directory: /home/airflow/airflow/logs/schedule
         core:
+          dags_folder: /home/airflow/dags
+          plugins_folder: /home/airflow/plugins
+          base_log_folder: /home/airflow/airflow/logs
           executor: CeleryExecutor
           default_timezone: system
           # https://stackoverflow.com/questions/45455342
@@ -173,7 +178,7 @@ airflow:
         - rfc3987
         - strict-rfc3339
         - webcolors
-        - pyarrow
+        - pyarrow<0.18.0,>=0.17.0
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
   identity:

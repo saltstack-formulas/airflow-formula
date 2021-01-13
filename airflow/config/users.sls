@@ -18,6 +18,6 @@ airflow-config-users-install-user:
         {%- if grains.os != 'Windows' %}
     - shell: /bin/bash
             {%- if grains.os_family == 'MacOS' %}
-    - unless: /usr/bin/dscl . list {{ d.dir.airflow.home }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
+    - unless: /usr/bin/dscl . list {{ d.dir.airflow.base }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
             {%- endif %}
         {%- endif %}

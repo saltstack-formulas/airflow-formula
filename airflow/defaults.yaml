@@ -2,6 +2,15 @@
 # vim: ft=yaml
 ---
 airflow:
+  dir:
+    airflow:
+      lib: /var/lib/airflow
+      tmp: /tmp/airflow
+      service: /lib/systemd/system
+      environ: /etc/sysconfig
+      base: /home   # os sensitive user homedir
+      userhome: null    # AIRFLOW_HOME is set by pillar data, otherwise map.jinja
+      virutalenv: null  # set by pillar data, otherwise map.jinja
   security:
     airflow:
       user: airflow
@@ -10,17 +19,23 @@ airflow:
       script: {{ range(1,200000) | random }}.py
   config:
     airflow:
-      path: /home/airflow/airflow
       file: airflow.cfg
       initcmd: 'db init'
       content:
         core:
-          dags_folder: /home/airflow/dags
-          base_log_folder: /home/airflow/airflow/logs
           executor: CeleryExecutor
           default_timezone: system
           # https://stackoverflow.com/questions/45455342
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
+          sql_alchemy_pool_enabled: true
+          sql_alchemy_max_overflow: 10
+          sql_alchemy_pool_recycle: 1800
+          parallelism: 32
+          dag_concurrency: 16
+          max_active_runs_per_dag: 16
+          dagbag_import_timeout: 30
+          dag_file_processor_timeout: 50
+          security: ''
           load_examples: False
         webserver:
           authenticate: true
@@ -28,6 +43,9 @@ airflow:
           auth_backend: airflow.contrib.auth.backends.password_auth
           cookie_samesite: Lax
           expose_config: true
+        secrets:
+          backend: ''
+          backend_kwargs: ''
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           broker_url: redis://127.0.0.1:6379/0
@@ -158,14 +176,6 @@ airflow:
         - pyarrow
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
-  dir:
-    airflow:
-      base: /opt
-      lib: /var/lib/airflow
-      tmp: /tmp/airflow
-      service: /lib/systemd/system
-      environ: /etc/sysconfig
-      home: /home
   identity:
     rootuser: root
     rootgroup: root

@@ -15,16 +15,16 @@ include:
 
 airflow-service-install-database:
   cmd.run:
-    - name: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/airflow {{ d.config.airflow.initcmd }}
+    - name: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}airflow {{ d.config.airflow.initcmd }}
     - runas: {{ d.identity.airflow.user }}
     - env:
-        - PATH: '${PATH}:/{{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin'
+        - PATH: '{{ d.dir.airflow.virtualenv }}{{ d.div }}bin:${PATH}'
 
         {%- for svcname in d.service.airflow.names %}
 
 airflow-service-install-managed-{{ svcname }}:
   file.managed:
-    - name: {{ d.dir.airflow.service }}/{{ svcname }}.service
+    - name: {{ d.dir.airflow.service }}{{ d.div }}{{ svcname }}.service
     - source: {{ files_switch(['systemd.ini.jinja'],
                               lookup='airflow-service-install-managed-' ~ svcname
                  )
@@ -42,8 +42,8 @@ airflow-service-install-managed-{{ svcname }}:
         type: simple
         user: {{ d.identity.airflow.user }}
         group: {{ d.identity.airflow.group }}
-        workdir: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local
-        start: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.local/bin/{{ svcname|replace('-',' ') }}
+        workdir: {{ d.dir.airflow.virtualenv }}
+        start: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}{{ svcname|replace('-',' ') }}
         stop: ''
         name: {{ svcname }}
     - require_in:

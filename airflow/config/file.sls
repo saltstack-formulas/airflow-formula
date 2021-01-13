@@ -14,7 +14,7 @@ include:
 
 airflow-config-file-managed:
   file.managed:
-    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow{{ d.div }}{{ d.config.airflow.file }}
+    - name: {{  d.dir.airflow.airhome }}{{ d.div }}{{ d.config.airflow.file }}
     - source: {{ files_switch(['airflow.cfg.jinja'],
                               lookup='airflow-config-file-managed'
                  )
@@ -27,14 +27,15 @@ airflow-config-file-managed:
     - group: {{ d.identity.airflow.group }}
         {%- endif %}
     - context:
+        airflow_home: {{ d.dir.airflow.airhome }}
         airversion: {{ d.pkg.airflow.version.split('.')[0]|int }}
-        config: {{ d.config.airflow.content|json }}
+        cfg: {{ d.config.airflow.content|json }}
     - require:
       - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
 
 airflow-config-config-managed:
   file.managed:
-    - name: {{ d.dir.airflow.home }}{{ d.div }}{{ d.identity.airflow.user }}{{ d.div }}airflow{{ d.div }}config{{ d.div }}airflow_local_settings.py
+    - name: {{ d.dir.airflow.airhome }}{{ d.div }}config{{ d.div }}airflow_local_settings.py
     - source: {{ files_switch(['local_settings.py.jinja'],
                               lookup='airflow-config-config-managed'
                  )
@@ -53,18 +54,21 @@ airflow-config-config-managed:
 
 airflow-config-bash-profile-managed:
   file.replace:
-    # fix userpath
-    - name: {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.bash_profile
+    - name: {{ d.dir.airflow.userhome }}/.bash_profile
     - pattern: '"^PATH=(.*):$HOME/.local/bin(.*)"'
     - repl: 'PATH=$HOME/.local/bin:\1:\2'
     - append_if_not_found: True
     - not_found_content: 'export PATH=$HOME/.local/bin:$PATH'
-    - onlyif: test -f {{ d.dir.airflow.home }}/{{ d.identity.airflow.user }}/.bash_profile
+    - onlyif: test -f {{ d.dir.airflow.userhome }}/.bash_profile
 
 airflow-config-dags-directory:
   file.directory:
-    - name: {{ d.config.airflow.content.core.dags_folder }}
     - makedirs: True
+        {%- if 'dags_folder' in d.config.airflow.content.core %}
+    - name: {{ d.config.airflow.content.core.dags_folder }}
+        {%- else %}
+    - name: {{ d.dir.airflow.userhome ~ d.div ~ 'dags' }}
+        {%- endif %}
         {%- if grains.os != 'Windows' %}
     - mode: '0644'
     - user: {{ d.identity.airflow.user }}

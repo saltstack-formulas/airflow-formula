@@ -101,7 +101,7 @@ This state will install the airflow pip package only.
 ``airflow.archive``
 ^^^^^^^^^^^^^^^^^^^^
 
-This state will install the airflow archive only.
+This state will install the airflow archive only. ** Not implemented ** placeholder for potential windows support ***
 
 ``airflow.config``
 ^^^^^^^^^^^^^^^^^^^
@@ -123,7 +123,7 @@ via include list.
 this state will undo everything performed in the ``airflow`` meta-state in reverse order, i.e.
 stops the service,
 removes the configuration file and
-then uninstalls the package/archive.
+then uninstalls the package/archive. ** Not implemented ** placeholder for potential windows support ***
 
 ``airflow.service.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

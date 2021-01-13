@@ -31,6 +31,12 @@ airflow:
   config:
     airflow:
       content:
+        # scheduler:
+        #   child_process_log_directory: /home/airflow/logs/scheduler
+        # core:
+        #   dags_folder: /home/airflow/dags
+        #   plugins_folder: /home/airflow/plugins
+        #   base_log_folder: /home/airflow/logs
         core:
           authentication: True
           executor: CeleryExecutor
@@ -134,9 +140,6 @@ airflow:
         # apache-airflow-providers-microsoft-winrm   # v1
 
 
-  dir:
-    airflow:
-      config: /home/airflow/airflow
   linux:
     altpriority: 0   # zero disables alternatives
 

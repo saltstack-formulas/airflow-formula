@@ -515,7 +515,7 @@ worker_concurrency = {{ '16' if 'worker_concurrenty' not in c.celery else c.cele
 # If autoscale option is available, worker_concurrency will be ignored.
 # http://docs.celeryproject.org/en/latest/reference/celery.bin.worker.html#cmdoption-celery-worker-autoscale
 # Example: worker_autoscale = 16,12
-worker_autoscale = {{ '' if 'worker_autoscale' not in c.celery else c.celery.worker_autoscale }}
+# worker_autoscale = {{ '16,12' if 'worker_autoscale' not in c.celery else c.celery.worker_autoscale }}
 
 # When you start an airflow worker, airflow starts a tiny web server
 # subprocess to serve the workers local log files to the airflow main

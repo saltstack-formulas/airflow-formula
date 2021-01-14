@@ -83,6 +83,7 @@ airflow:
         options: '--strip-components=1'
       suffix: tar.gz
       deps: []
+      providers: {}
       extras:
         - celery
         - postgres
@@ -91,8 +92,6 @@ airflow:
         - cncf.kerberos
         - devel_ci
         - devel_azure
-        # apache-airflow-backport-providers-microsoft-winrm    # v1
-        - apache-airflow-providers-microsoft-winrm
       pips:
         # for functionality
         - cryptography

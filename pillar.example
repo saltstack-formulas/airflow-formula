@@ -83,6 +83,10 @@ airflow:
     airflow:
       version: 2.0.0  # 1.10.14
       use_upstream: pip
+      # "extras" are installed via 'pip install apache-airflow[extras,]==version'
+      # "providers" are installed via 'pip install [providers,]'
+      # If you want airflow.providers instead, set empty dict (extras: {}) here
+      # and run that state by itself, on-demand. See providers dict.
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages
         # NOT VERIFIED OR "I HAD ISSUES WITH THESE!"
@@ -157,7 +161,68 @@ airflow:
         - ssh                  # SSH hooks and Operator
         - pagerduty            # PagerDuty ..
         - microsoft.winrm      # WinRM hooks and operators
-        # apache-airflow-providers-microsoft-winrm   # v1
+      providers:
+        - apache-airflow-providers-apache-cassandra
+        - apache-airflow-providers-apache-druid
+        - apache-airflow-providers-apache-hdfs
+        - apache-airflow-providers-apache-hive
+        - apache-airflow-providers-apache-kylin    #
+        - apache-airflow-providers-apache-livy
+        - apache-airflow-providers-apache-pig
+        - apache-airflow-providers-apache-pinot
+        - apache-airflow-providers-apache-spark
+        - apache-airflow-providers-apache-sqoop
+        - apache-airflow-providers-celery
+        - apache-airflow-providers-cloudant
+        - apache-airflow-providers-cncf-kubernetes
+        - apache-airflow-providers-databricks
+        - apache-airflow-providers-datadog
+        - apache-airflow-providers-dingding
+        - apache-airflow-providers-discord
+        - apache-airflow-providers-docker
+        - apache-airflow-providers-elasticsearch
+        - apache-airflow-providers-exasol
+        - apache-airflow-providers-facebook
+        - apache-airflow-providers-ftp
+        - apache-airflow-providers-google
+        - apache-airflow-providers-grpc
+        - apache-airflow-providers-hashicorp
+        - apache-airflow-providers-imap
+        - apache-airflow-providers-jdbc
+        - apache-airflow-providers-jenkins
+        - apache-airflow-providers-jira
+        - apache-airflow-providers-microsoft-azure
+        - apache-airflow-providers-microsoft-mssql
+        - apache-airflow-providers-microsoft-winrm
+        - apache-airflow-providers-mongo
+        - apache-airflow-providers-mysql
+        - apache-airflow-providers-odbc
+        - apache-airflow-providers-openfaas
+        - apache-airflow-providers-opsgenie
+        - apache-airflow-providers-oracle
+        - apache-airflow-providers-pagerduty
+        - apache-airflow-providers-papermill
+        - apache-airflow-providers-plexus
+        - apache-airflow-providers-postgres
+        - apache-airflow-providers-presto
+        - apache-airflow-providers-qubole
+        - apache-airflow-providers-redis
+        - apache-airflow-providers-salesforce
+        - apache-airflow-providers-samba
+        - apache-airflow-providers-segment
+        - apache-airflow-providers-sendgrid
+        - apache-airflow-providers-sftp
+        - apache-airflow-providers-singularity
+        - apache-airflow-providers-slack
+        - apache-airflow-providers-snowflake
+        - apache-airflow-providers-sqlite
+        - apache-airflow-providers-ssh
+        - apache-airflow-providers-telegram
+        - apache-airflow-providers-vertica
+        - apache-airflow-providers-yandex
+        - apache-airflow-providers-zendesk
+        - apache-airflow-providers-amazon
+
 
 
   linux:

@@ -654,8 +654,7 @@ worker_concurrency = {{ '8' if 'worker_concurrenty' not in c.celery else c.celer
 # If autoscale option is available, worker_concurrency will be ignored.
 # http://docs.celeryproject.org/en/latest/reference/celery.bin.worker.html#cmdoption-celery-worker-autoscale
 # Example: worker_autoscale = 16,12
-# worker_autoscale =
-worker_autoscale = {{ '' if 'worker_autoscale' not in c.celery else c.celery.worker_autoscale }}
+# worker_autoscale = {{ '16,12' if 'worker_autoscale' not in c.celery else c.celery.worker_autoscale }}
 
 # Used to increase the number of tasks that a worker prefetches which can improve performance.
 # The number of processes multiplied by worker_prefetch_multiplier is the number of tasks

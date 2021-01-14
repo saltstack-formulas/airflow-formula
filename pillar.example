@@ -31,16 +31,36 @@ airflow:
   config:
     airflow:
       content:
-        # scheduler:
-        #   child_process_log_directory: /home/airflow/airflow/logs/scheduler
-        # core:
-        #   dags_folder: /home/airflow/dags
-        #   plugins_folder: /home/airflow/plugins
-        #   base_log_folder: /home/airflow/logs
+        api: {}
+        celery_kubernetes_executor: {}
+        celery:
+          # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
+          broker_url: redis://127.0.0.1:6379/0
+          result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
+        cli: {}
         core:
-          authentication: True
+          authentication: True  # gone in v2
+          dags_folder: /home/airflow/dags
+          plugins_folder: /home/airflow/plugins
           executor: CeleryExecutor
+          default_timezone: utc
           load_examples: True
+          # https://stackoverflow.com/questions/45455342
+          sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
+          security: ''
+        dask: {}
+        elasticsearch: {}
+        kerberos: {}
+        kubernetes: {}
+        ldap: {}   # gone in v2
+        logging: {}
+        metrics: {}
+        secrets: {}
+        sentry: {}
+        smart_sensor: {}
+        smtp: {}
+        webserver:
+          secret_key: {{ range(1,20000000000) | random }}
       state_colors:
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
         queued: 'darkgray'

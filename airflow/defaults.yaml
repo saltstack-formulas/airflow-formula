@@ -175,7 +175,7 @@ airflow:
         - rfc3987
         - strict-rfc3339
         - webcolors
-        - pyarrow<0.18.0,>=0.17.0
+        - pyarrow
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
         # Ecosystem
@@ -188,6 +188,10 @@ airflow:
         - jupyter
         - tableauserverclient
         - azure-storage-blob
+        - paramiko
+        # authentication
+        - python-ldap
+        - requests-kerberos
 
   identity:
     rootuser: root

@@ -43,9 +43,15 @@ airflow-package-install-virtualenv-clean:
 airflow-package-install-virtualenv:
   file.directory:
     - name: {{ d.dir.airflow.virtualenv }}
+            {%- if grains.os|lower != 'windows' %}
     - user: {{ d.identity.airflow.user }}
     - group: {{ d.identity.airflow.group }}
     - mode: '0755'
+    - recurse:
+        - user
+        - group
+        - mode
+            {%- endif %}
     - require_in:
       - virtualenv: airflow-package-install-virtualenv
       - pip: airflow-package-install-pip-installed

@@ -71,9 +71,13 @@ airflow-config-dags-directory:
     - name: {{ d.dir.airflow.userhome ~ d.div ~ 'dags' }}
         {%- endif %}
         {%- if grains.os != 'Windows' %}
-    - mode: '0644'
+    - mode: '0775'
     - user: {{ d.identity.airflow.user }}
     - group: {{ d.identity.airflow.group }}
+    - recurse:
+        - user
+        - group
+        - mode
         {%- endif %}
 
     {%- else %}

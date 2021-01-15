@@ -30,13 +30,15 @@ airflow-archive-install:
     - clean: {{ d.misc.clean }}
     - require_in:
       - archive: airflow-archive-install
-    - mode: 755
+            {%- if grains.os|lower != 'windows' %}
+    - mode: 775
     - user: {{ d.identity.airflow.user }}
     - group: {{ d.identity.airflow.group }}
     - recurse:
         - user
         - group
         - mode
+            {%- endif %}
     - require:
       - sls: {{ sls_config_users }}
   archive.extracted:
@@ -44,11 +46,13 @@ airflow-archive-install:
     - retry: {{ d.retry_option|json }}
     - enforce_toplevel: false
     - trim_output: true
+            {%- if grains.os|lower != 'windows' %}
     - user: {{ d.identity.airflow.user }}
     - group: {{ d.identity.airflow.group }}
     - recurse:
         - user
         - group
+            {%- endif %}
     - require:
       - file: airflow-archive-install
     - require_in:

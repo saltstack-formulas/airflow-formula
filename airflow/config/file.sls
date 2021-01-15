@@ -8,6 +8,7 @@
     {%- if d.config.airflow.content %}
         {%- set sls_archive_install = tplroot ~ '.archive.install' %}
         {%- set sls_package_install = tplroot ~ '.package.install' %}
+        {%- set airflow_cfg_jinja = 'airflow' ~ d.pkg.airflow.version.split('.')[0]|int ~ '.cfg.jinja' %}
 
 include:
   - {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
@@ -15,7 +16,7 @@ include:
 airflow-config-file-managed:
   file.managed:
     - name: {{  d.dir.airflow.airhome }}{{ d.div }}{{ d.config.airflow.file }}
-    - source: {{ files_switch(['airflow.cfg.jinja'],
+    - source: {{ files_switch([ airflow_cfg_jinja ],
                               lookup='airflow-config-file-managed'
                  )
               }}

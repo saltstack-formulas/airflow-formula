@@ -2,38 +2,41 @@
 # File managed by Salt at <{{ source }}>.
 # Your changes may be overwritten.
 ########################################################################
+{%- set c = cfg %}
+# airflow v1
+{%- set logs = airflow_home ~ '/logs' if 'base_log_folder' not in c.core else c.core.base_log_folder %}
+{%- set base_url = 'http://localhost:8080' if 'base_url' not in c.webserver else c.webserver.base_url %}
 
-[{{ 'logging' if airversion|int == 2 else 'core' }}]
-
+[core]
 # The folder where airflow should store its log files
 # This path must be absolute
-base_log_folder = {{ cfg.core.base_log_folder or airflow_home ~ '/logs' }}
+base_log_folder = {{ logs }}
 
 # Airflow can store logs remotely in AWS S3, Google Cloud Storage or Elastic Search.
 # Set this to True if you want to enable remote logging.
-remote_logging = False
+remote_logging = {{ 'False' if 'remote_logging' not in c.core else c.core.remote_logging }}
 
 # Users must supply an Airflow connection id that provides access to the storage
 # location.
-remote_log_conn_id =
-remote_base_log_folder =
-encrypt_s3_logs = False
+remote_log_conn_id = {{ '' if 'remote_log_conn_id' not in c.core else c.core.remote_log_conn_id }}
+remote_base_log_folder = {{ '' if 'remote_remote_base_log_folder' not in c.core else c.core.remote_remote_base_log_folder }}
+encrypt_s3_logs = {{ 'False' if 'encrypt_s3_logs' not in c.core else c.core.encrypt_S3_logs }}
 
 # Logging level
-logging_level = INFO
+logging_level = {{ 'INFO' if 'logging_level' not in c.core else c.core.logging_level }}
 
 # Logging level for Flask-appbuilder UI
-fab_logging_level = WARN
+fab_logging_level = {{ 'WARN' if 'fab_logging_level' not in c.core else c.core.fab_logging_level }}
 
 # Logging class
 # Specify the class that will specify the logging configuration
 # This class has to be on the python classpath
 # Example: logging_config_class = my.path.default_local_settings.LOGGING_CONFIG
-logging_config_class =
+logging_config_class = {{ '' if 'logging_config_class' not in c.core else c.core.logging_config_class }}
 
 # Flag to enable/disable Colored logs in Console
 # Colour the logs when the controlling terminal is a TTY.
-colored_console_log = True
+colored_console_log = {{ 'True' if 'colored_console_log' not in c.core else c.core.colored_console_log }}
 
 {% raw %}
 
@@ -51,18 +54,15 @@ log_processor_filename_template: {{ filename }}.log
 
 {% endraw %}
 
-dag_processor_manager_log_location = {{ cfg.core.base_log_folder or airflow_home ~ '/logs' }}/dag_processor_manager/dag_processor_manager.log
+dag_processor_manager_log_location = {{ logs }}/dag_processor_manager/dag_processor_manager.log
 
 # Name of handler to read task instance logs.
 # Default to use task handler.
-task_log_reader = task
-
-{{ '[core]   # airflow 2.0' if airversion|int == 2 else '' }}
+task_log_reader = {{ 'task' if 'task_log_reader' not in c.core else c.core.task_log_reader }}
 
 # The folder where your airflow pipelines live, most likely a
 # subfolder in a code repository. This path must be absolute.
-dags_folder = {{ cfg.core.dags_folder or airflow_home ~ '/dags' }}
-
+dags_folder = {{ airflow_home ~ '/dags' if 'dags_folder' not in c.core else c.core.dags_folder }}
 
 # Hostname by providing a path to a callable, which will resolve the hostname.
 # The format is "package:function".
@@ -72,30 +72,30 @@ dags_folder = {{ cfg.core.dags_folder or airflow_home ~ '/dags' }}
 #
 # No argument should be required in the function specified.
 # If using IP address as hostname is preferred, use value ``airflow.utils.net:get_host_ip_address``
-hostname_callable = {{ 'socket.getfqdn' if airversion|int == 2 else 'socket:getfqdn' }}
+hostname_callable = {{ 'socket:getfqdn' if 'hostname_callable' not in c.core else c.core.hostname_callable }}
 
 # Default timezone in case supplied date times are naive
 # can be utc (default), system, or any IANA timezone string (e.g. Europe/Amsterdam)
-default_timezone = {{ cfg.core.default_timezone or 'utc' }}
+default_timezone = {{ 'utc' if 'default_timezone' not in c.core else c.core.default_timezone }}
 
 # The executor class that airflow should use. Choices include
 # SequentialExecutor, LocalExecutor, CeleryExecutor, DaskExecutor, KubernetesExecutor
-executor = {{ cfg.core.executor or 'CeleryExecutor' }}
+executor = {{ 'CeleryExecutor' if 'executor' not in c.core else c.core.executor }}
 
 # The SqlAlchemy connection string to the metadata database.
 # SqlAlchemy supports many different database engine, more information
 # their website
-sql_alchemy_conn = {{ cfg.core.sql_alchemy_conn or 'sqlite:////home/airflow/airflow/airflow.db' }}
+sql_alchemy_conn = {{ 'sqlite:////home/airflow/airflow/airflow.db' if 'sql_alchemy_conn' not in c.core else c.core.sql_alchemy_conn }}
 
 # The encoding for the databases
 sql_engine_encoding = utf-8
 
 # If SqlAlchemy should pool database connections.
-sql_alchemy_pool_enabled = {{ cfg.core.sql_alchemy_pool_enabled }}
+sql_alchemy_pool_enabled = {{ 'true' if 'sql_alchemy_pool_enabled' not in c.core else c.core.sql_alchemy_pool_enabled }}
 
 # The SqlAlchemy pool size is the maximum number of database connections
 # in the pool. 0 indicates no limit.
-sql_alchemy_pool_size = 5
+sql_alchemy_pool_size = {{ '5' if 'sql_alchemy_pool_size' not in c.core else c.core.sql_alchemy_pool_size }}
 
 # The maximum overflow size of the pool.
 # When the number of checked-out connections reaches the size set in pool_size,
@@ -106,13 +106,13 @@ sql_alchemy_pool_size = 5
 # and the total number of "sleeping" connections the pool will allow is pool_size.
 # max_overflow can be set to -1 to indicate no overflow limit;
 # no limit will be placed on the total number of concurrent connections. Defaults to 10.
-sql_alchemy_max_overflow = {{ cfg.core.sql_alchemy_max_overflow }}
+sql_alchemy_max_overflow = {{ '10' if 'sql_alchemy_max_overflow' not in c.core else c.core.sql_alchemy_max_overflow }}
 
 # The SqlAlchemy pool recycle is the number of seconds a connection
 # can be idle in the pool before it is invalidated. This config does
 # not apply to sqlite. If the number of DB connections is ever exceeded,
 # a lower config value will allow the system to recover faster.
-sql_alchemy_pool_recycle = {{ cfg.core.sql_alchemy_pool_recycle }}
+sql_alchemy_pool_recycle = {{ '1800' if 'sql_alchemy_pool_recycle' not in c.core else c.core.sql_alchemy_pool_recycle }}
 
 # Check connection at the start of each connection pool checkout.
 # Typically, this is a simple statement like "SELECT 1".
@@ -133,51 +133,51 @@ sql_alchemy_schema =
 # The amount of parallelism as a setting to the executor. This defines
 # the max number of task instances that should run simultaneously
 # on this airflow installation
-parallelism = {{ cfg.core.parallelism }}
+parallelism = {{ '32' if 'parallelism' not in c.core else c.core.parallelism }}
 
 # The number of task instances allowed to run concurrently by the scheduler
-dag_concurrency = {{ cfg.core.dag_concurrency }}
+dag_concurrency = {{ '16' if 'dag_concurrency' not in c.core else c.core.dag_concurrency }}
 
 # Are DAGs paused by default at creation
-dags_are_paused_at_creation = True
+dags_are_paused_at_creation = {{ 'True' if 'dags_are_paused_at_creation' not in c.core else c.core.dags_are_paused_at_creation }}
 
 # The maximum number of active DAG runs per DAG
-max_active_runs_per_dag = {{ cfg.core.max_active_runs_per_dag }}
+max_active_runs_per_dag = {{ '16' if 'max_active_runs_per_dag' not in c.core else c.core.max_active_runs_per_dag }}
 
 # Whether to load the DAG examples that ship with Airflow. It's good to
 # get started, but you probably want to set this to False in a production
 # environment
-load_examples = {{ cfg.core.load_examples or True }}
+load_examples = {{ 'False' if 'load_examples' not in c.core else c.core.load_examples }}
 
 # Whether to load the default connections that ship with Airflow. It's good to
 # get started, but you probably want to set this to False in a production
 # environment
-load_default_connections = True
+{{ 'True' if 'load_default_connections' not in c.core else c.core.load_default_connections }}
 
 # Where your Airflow plugins are stored
-plugins_folder = {{ cfg.core.plugins_folder or airflow_home ~ '/plugins' }}
+plugins_folder = {{ airflow_home ~ '/plugins' if 'plugins_folder' not in c.core else c.core.plugins_folder }}
 
 # Secret key to save connection passwords in the db
-fernet_key = kccQvkfGdFN-g_0B1MurFqj6n4zqo3gAYRcDvD5HoGY=
+fernet_key = {{ 'kccQvkfGdFN-g_0B1MurFqj6n4zqo3gAYRcDvD5HoGY=' if 'fernet_key' not in c.core else c.core.fernet_key }}
 
 # Whether to disable pickling dags
 donot_pickle = False
 
 # How long before timing out a python file import
-dagbag_import_timeout = {{ cfg.core.dagbag_import_timeout }}
+dagbag_import_timeout = {{ '30' if 'dagbag_import_timeout' not in c.core else c.core.dagbag_import_timeout }}
 
 # How long before timing out a DagFileProcessor, which processes a dag file
-dag_file_processor_timeout = {{ cfg.core.dag_file_processor_timeout }}
+dag_file_processor_timeout = {{ '50' if 'dag_file_processor_timeout' not in c.core else c.core.dag_file_processor_timeout }}
 
 # The class to use for running task instances in a subprocess
-task_runner = StandardTaskRunner
+task_runner = {{ 'StandardTaskRunner' if 'task_runner' not in c.core else c.core.task_runner }}
 
 # If set, tasks without a ``run_as_user`` argument will be run with this user
 # Can be used to de-elevate a sudo user running Airflow when executing tasks
-default_impersonation =
+default_impersonation = {{ '' if 'default_impersonation' not in c.core else c.core.default_impersonation }}
 
 # What security module to use (for example kerberos)
-security = {{ cfg.core.security }}
+security = {{ '' if 'security' not in c.core else c.core.security }}
 
 # If set to False enables some unsecure features like Charts and Ad Hoc Queries.
 # In 2.0 will default to True.
@@ -185,7 +185,7 @@ secure_mode = True
 
 # Turn unit test mode on (overwrites many configuration options with test
 # values at runtime)
-unit_test_mode = False
+unit_test_mode = {{ 'False' if 'unit_test_mode' not in c.core else c.core.unit_test_mode }}
 
 # Whether to enable pickling for xcom (note that this is insecure and allows for
 # RCE exploits). This will be deprecated in Airflow 2.0 (be forced to False).
@@ -198,7 +198,7 @@ killed_task_cleanup_time = 60
 # Whether to override params with dag_run.conf. If you pass some key-value pairs
 # through ``airflow dags backfill -c`` or
 # ``airflow dags trigger -c``, the key-value pairs will override the existing ones in params.
-dag_run_conf_overrides_params = False
+dag_run_conf_overrides_params = {{ 'False' if 'dag_run_conf_overrides_params' not in c.core else c.core.dag_run_conf_overrides_params }}
 
 # Worker initialisation check to validate Metadata Database connection
 worker_precheck = False
@@ -226,7 +226,7 @@ min_serialized_dag_fetch_interval = 10
 # trying to access files in a DAG folder. Defaults to same as the
 # ``store_serialized_dags`` setting.
 # Example: store_dag_code = False
-# store_dag_code =
+# store_dag_code = {{ 'False' if 'store_dag_code' not in c.core else c.core.store_dag_code }}
 
 # Maximum number of Rendered Task Instance Fields (Template Fields) per task to store
 # in the Database.
@@ -246,35 +246,35 @@ xcom_backend = airflow.models.xcom.BaseXCom
 [secrets]
 # Full class name of secrets backend to enable (will precede env vars and metastore in search path)
 # Example: backend = airflow.contrib.secrets.aws_systems_manager.SystemsManagerParameterStoreBackend
-backend = {{ cfg.secrets.backend }}
+backend = {{ '' if 'backend' not in c.secrets else c.secrets.backend }}
 
 # The backend_kwargs param is loaded into a dictionary and passed to __init__ of secrets backend class.
 # See documentation for the secrets backend you are using. JSON is expected.
 # Example for AWS Systems Manager ParameterStore:
 # ``{"connections_prefix": "/airflow/connections", "profile_name": "default"}``
-backend_kwargs = {{ cfg.secrets.backend_kwargs }}
+backend_kwargs = {{ '' if 'backend_kwargs' not in c.secrets else c.secrets.backend_kwargs }}
 
 [cli]
 # In what way should the cli access the API. The LocalClient will use the
 # database directly, while the json_client will use the api running on the
 # webserver
-api_client = airflow.api.client.local_client
+api_client = {{ 'airflow.api.client.local_client' if 'api_client' not in c.cli else c.cli.api_client }}
 
 # If you set web_server_url_prefix, do NOT forget to append it here, ex:
 # ``endpoint_url = http://localhost:8080/myroot``
 # So api will look like: ``http://localhost:8080/myroot/api/experimental/...``
-endpoint_url = http://localhost:8080
+endpoint_url = {{ base_url }}{{ '' if 'endpoint_url' not in c.cli else c.cli.endpoint_url }}
 
 [debug]
 # Used only with DebugExecutor. If set to True DAG will fail with first
 # failed task. Helpful for debugging purposes.
-fail_fast = False
+fail_fast = {{ 'False' if 'fail_fast' not in c.cli else c.cli.fail_fast }}
 
 [api]
 # How to authenticate users of the API. See
 # https://airflow.apache.org/docs/stable/security.html for possible values.
 # ("airflow.api.auth.backend.default" allows all requests for historic reasons)
-auth_backend = airflow.api.auth.backend.deny_all
+auth_backend = {{ 'airflow.api.auth.backend.deny_all' if 'auth_backend' not in c.api else c.api.auth_backend }}
 
 [lineage]
 # what lineage backend to use
@@ -301,11 +301,11 @@ default_gpus = 0
 default_hive_mapred_queue =
 
 [webserver]
-auth_backend = {{ cfg.webserver.auth_backend or '' }}
+auth_backend = {{ '' if 'auth_backend' not in c.webserver else c.webserver.auth_backend }}
 # The base url of your website as airflow cannot guess what domain or
 # cname you are using. This is used in automated emails that
 # airflow sends to point links to the right web server
-base_url = http://localhost:8080
+base_url = {{ base_url }}
 
 # Default timezone to display all dates in the RBAC UI, can be UTC, system, or
 # any IANA timezone string (e.g. Europe/Amsterdam). If left empty the
@@ -314,18 +314,18 @@ base_url = http://localhost:8080
 default_ui_timezone = UTC
 
 # The ip specified when starting the web server
-web_server_host = 0.0.0.0
+web_server_host = {{ '0.0.0.0' if 'web_server_host' not in c.webserver else c.webserver.web_server_host }}
 
 # The port on which to run the web server
-web_server_port = 8080
+web_server_port = {{ '8080' if 'web_server_port' not in c.webserver else c.webserver.web_server_port }}
 
 # Paths to the SSL certificate and key for the web server. When both are
 # provided SSL will be enabled. This does not change the web server port.
-web_server_ssl_cert =
+web_server_ssl_cert = {{ '' if 'web_server_ssl_cert' not in c.webserver else c.webserver.web_server_ssl_cert }}
 
 # Paths to the SSL certificate and key for the web server. When both are
 # provided SSL will be enabled. This does not change the web server port.
-web_server_ssl_key =
+web_server_ssl_key = {{ '' if 'web_server_ssl_key' not in c.webserver else c.webserver.web_server_ssl_key }}
 
 # Number of seconds the webserver waits before killing gunicorn master that doesn't respond
 web_server_master_timeout = 120
@@ -347,23 +347,23 @@ reload_on_plugin_change = False
 
 # Secret key used to run your flask app
 # It should be as random as possible
-secret_key = {{ cfg.webserver.secret_key or 'temporary_key' }}
+secret_key = {{ 'temporary_key' if 'secret_key' not in c.webserver else c.webserver.secret_key }}
 
 # Number of workers to run the Gunicorn web server
-workers = 4
+workers = {{ '4' if 'workers' not in c.webserver else c.webserver.workers }}
 
 # The worker class gunicorn should use. Choices include
 # sync (default), eventlet, gevent
-worker_class = sync
+worker_class = {{ 'sync' if 'worker_class' not in c.webserver else c.webserver.worker_class }}
 
 # Log files for the gunicorn webserver. '-' means log to stderr.
-access_logfile = -
+access_logfile = {{ '-' if 'access_logfile' not in c.webserver else c.webserver.access_logfile }}
 
 # Log files for the gunicorn webserver. '-' means log to stderr.
-error_logfile = -
+error_logfile = {{ '-' if 'error_logfile' not in c.webserver else c.webserver.error_logfile }}
 
 # Expose the configuration file in the web server
-expose_config = {{ cfg.webserver.expose_config }}
+expose_config = {{ 'True' if 'expose_config' not in c.webserver else c.webserver.expose_config }}
 
 # Expose hostname in the web server
 expose_hostname = True
@@ -373,7 +373,7 @@ expose_stacktrace = True
 
 # Set to true to turn on authentication:
 # https://airflow.apache.org/security.html#web-authentication
-authenticate = {{ cfg.webserver.authenticate }}
+authenticate = {{ 'false' if 'authenticate' not in c.webserver else c.webserver.authenticate }}
 
 # Filter the list of dags by owner name (requires authentication to be enabled)
 filter_by_owner = False
@@ -383,7 +383,7 @@ filter_by_owner = False
 #
 # Note that the ldap server needs the "memberOf" overlay to be set up
 # in order to user the ldapgroup mode.
-owner_mode = user
+owner_mode = {{ 'user' if 'owner_mode' not in c.webserver else c.webserver.owner_mode }}
 
 # Default DAG view. Valid values are:
 # tree, graph, duration, gantt, landing_times
@@ -421,7 +421,7 @@ page_size = 100
 rbac = False
 
 # Define the color of navigation bar
-navbar_color = {{ '#007A87' if airversion|int == 1 else '#fff' }}
+navbar_color = #007A87
 
 # Default dagrun to show in UI
 default_dag_run_display_number = 25
@@ -449,7 +449,7 @@ proxy_fix_x_prefix = 1
 cookie_secure = False
 
 # Set samesite policy on session cookie
-cookie_samesite = {{ cfg.webserver.cookie_samesite or 'Lax' }}
+cookie_samesite = {{ 'Lax' if 'cookie_samesite' not in c.webserver else c.webserver.cookie_samesite }}
 
 # Default setting for wrap toggle on DAG code and TI log views.
 default_wrap = False
@@ -480,33 +480,33 @@ email_backend = airflow.utils.email.send_email_smtp
 # If you want airflow to send emails on retries, failure, and you want to use
 # the airflow.utils.email.send_email_smtp function, you have to configure an
 # smtp server here
-smtp_host = localhost
-smtp_starttls = True
-smtp_ssl = False
+smtp_host = {{ 'localhost' if 'smtp_host' not in c.smtp else c.smtp.smtp_host }}
+smtp_starttls = {{ 'True' if 'smtp_starttls' not in c.smtp else c.smtp.smtp_starttls }}
+smtp_ssl = {{ 'False' if 'smtp_ssl' not in c.smtp else c.smtp.smtp_ssl }}
 # Example: smtp_user = airflow
 # smtp_user =
 # Example: smtp_password = airflow
 # smtp_password =
-smtp_port = 25
-smtp_mail_from = airflow@example.com
+smtp_port = {{ '25' if 'smtp_port' not in c.smtp else c.smtp.smtp_port }}
+smtp_mail_from = {{ 'airflow@example.com' if 'smtp_mail_from' not in c.smtp else c.smtp.smtp_mail_from }}
 
 [sentry]
 
 # Sentry (https://docs.sentry.io) integration
-sentry_dsn =
+sentry_dsn = {{ '' if 'sentry_dsn' not in c.sentry else c.sentry.sentry_dsn }}
 
 [celery]
 
 # This section only applies if you are using the CeleryExecutor in
 # ``[core]`` section above
 # The app name that will be used by celery
-celery_app_name = airflow.executors.celery_executor
+celery_app_name = {{ 'airflow.executors.celery_executor' if 'celery_app_name' not in c.celery else c.celery.celery_app_name }}
 
 # The concurrency that will be used when starting workers with the
 # ``airflow celery worker`` command. This defines the number of task instances that
 # a worker will take, so size up your workers based on the resources on
 # your worker box and the nature of your tasks
-worker_concurrency = 16
+worker_concurrency = {{ '16' if 'worker_concurrenty' not in c.celery else c.celery.worker_concurrency }}
 
 # The maximum and minimum concurrency that will be used when starting workers with the
 # ``airflow celery worker`` command (always keep minimum processes, but grow
@@ -515,20 +515,20 @@ worker_concurrency = 16
 # If autoscale option is available, worker_concurrency will be ignored.
 # http://docs.celeryproject.org/en/latest/reference/celery.bin.worker.html#cmdoption-celery-worker-autoscale
 # Example: worker_autoscale = 16,12
-# worker_autoscale =
+# worker_autoscale = {{ '16,12' if 'worker_autoscale' not in c.celery else c.celery.worker_autoscale }}
 
 # When you start an airflow worker, airflow starts a tiny web server
 # subprocess to serve the workers local log files to the airflow main
 # web server, who then builds pages and sends them to users. This defines
 # the port on which the logs are served. It needs to be unused, and open
 # visible from the main web server to connect into the workers.
-worker_log_server_port = 8793
+worker_log_server_port = {{ '8793' if 'worker_log_server_port' not in c.celery else c.celery.worker_log_server_port }}
 
 # The Celery broker URL. Celery supports RabbitMQ, Redis and experimentally
 # a sqlalchemy database. Refer to the Celery documentation for more
 # information.
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#broker-settings
-broker_url = {{ cfg.celery.broker_url or 'sqla+mysql://airflow:airflow@localhost:3306/airflow' }}
+broker_url = {{ 'redis://redis:6379/0' if 'broker_url' not in c.celery else c.celery.broker_url }}
 
 # The Celery result_backend. When a job finishes, it needs to update the
 # metadata of the job. Therefore it will post a message on a message bus,
@@ -536,26 +536,26 @@ broker_url = {{ cfg.celery.broker_url or 'sqla+mysql://airflow:airflow@localhost
 # This status is used by the scheduler to update the state of the task
 # The use of a database is highly recommended
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-result-backend-settings
-result_backend = {{ cfg.celery.result_backend or 'db+mysql://airflow:airflow@localhost:3306/airflow' }}
+result_backend = {{ 'db+postgresql://postgres:airflow@postgres/airflow' if 'result_backend' not in c.celery else c.celery.result_backend }}
 
 # Celery Flower is a sweet UI for Celery. Airflow has a shortcut to start
 # it ``airflow flower``. This defines the IP that Celery Flower runs on
-flower_host = 0.0.0.0
+flower_host = {{ '0.0.0.0' if 'flower_host' not in c.celery else c.celery.flower_host }}
 
 # The root URL for Flower
 # Example: flower_url_prefix = /flower
-flower_url_prefix =
+flower_url_prefix = {{ '' if 'flower_url_prefix' not in c.celery else c.celery.flower_url_prefix }}
 
 # This defines the port that Celery Flower runs on
-flower_port = 5555
+flower_port = {{ '5555' if 'flower_port' not in c.celery else c.celery.flower_port }}
 
 # Securing Flower with Basic Authentication
 # Accepts user:password pairs separated by a comma
 # Example: flower_basic_auth = user1:password1,user2:password2
-flower_basic_auth =
+flower_basic_auth = {{ '' if 'flower_basic_auth' not in c.celery else c.celery.flower_basic_auth }}
 
 # Default queue that tasks get assigned to and that worker listen on.
-default_queue = default
+default_queue = {{ 'default' if 'default_queue' not in c.clery else c.celery.default_queue }}
 
 # How many processes CeleryExecutor uses to sync task state.
 # 0 means to use max(1, number of cores - 1) processes.
@@ -565,17 +565,17 @@ sync_parallelism = 0
 celery_config_options = airflow.config_templates.default_celery.DEFAULT_CELERY_CONFIG
 
 # In case of using SSL
-ssl_active = False
-ssl_key =
-ssl_cert =
-ssl_cacert =
+ssl_active = {{ 'False' if 'ssl_active' not in c.celery else c.celery.ssl_active }}
+ssl_key = {{ '' if 'ssl_key' not in c.celery else c.celery.ssl_key }}
+ssl_cert = {{ '' if 'ssl_cert' not in c.celery else c.celery.ssl_cert }}
+ssl_cacert = {{ '' if 'ssl_cacert' not in c.celery else c.celery.ssl_cacert }}
 
 # Celery Pool implementation.
 # Choices include: prefork (default), eventlet, gevent or solo.
 # See:
 # https://docs.celeryproject.org/en/latest/userguide/workers.html#concurrency
 # https://docs.celeryproject.org/en/latest/userguide/concurrency/eventlet.html
-pool = prefork
+pool = {{ 'prefork' if 'pool' not in c.celery else c.celery.pool }}
 
 # The number of seconds to wait before timing out ``send_task_to_executor`` or
 # ``fetch_celery_task_state`` operations.
@@ -601,12 +601,12 @@ operation_timeout = 2
 # This section only applies if you are using the DaskExecutor in
 # [core] section above
 # The IP address and port of the Dask cluster's scheduler.
-cluster_address = 127.0.0.1:8786
+cluster_address = {{ '127.0.0.1:8786' if 'cluster_address' not in c.dask else d.dask.cluster_address }}
 
 # TLS/ SSL settings to access a secured Dask scheduler.
-tls_ca =
-tls_cert =
-tls_key =
+tls_ca = {{ '' if 'tls_ca' not in c.dask else d.dask.tls_ca }}
+tls_cert = {{ '' if 'tls_cert' not in c.dask else d.dask.tls_cert }}
+tls_key = {{ '' if 'tls_key' not in c.dask else d.dask.tls_key }}
 
 [scheduler]
 # Task instances listen for external kill signal (when you clear tasks
@@ -643,12 +643,12 @@ print_stats_interval = 30
 # ago (in seconds), scheduler is considered unhealthy.
 # This is used by the health check in the "/health" endpoint
 scheduler_health_check_threshold = 30
-child_process_log_directory = {{ cfg.scheduler.child_process_log_directory or airflow_home ~ '/logs/scheduler' }}
+child_process_log_directory = {{ logs }}/scheduler
 
 # Local task jobs periodically heartbeat to the DB. If the job has
 # not heartbeat in this many seconds, the scheduler will mark the
 # associated task instance as failed and will re-schedule the task.
-scheduler_zombie_task_threshold = 300
+scheduler_zombie_task_threshold = {{ '300' if 'scheduler_zombie_task_threshold' not in c.core else c.core.scheduler_zombie_task_threshold }}
 
 # Turn off scheduler catchup by setting this to False.
 # Default behavior is unchanged and
@@ -656,7 +656,7 @@ scheduler_zombie_task_threshold = 300
 # will not do scheduler catchup if this is False,
 # however it can be set on a per DAG basis in the
 # DAG definition (catchup)
-catchup_by_default = True
+catchup_by_default = Tue
 
 # This changes the batch size of queries in the scheduling main loop.
 # If this is too high, SQL query performance may be impacted by one
@@ -681,45 +681,34 @@ use_job_schedule = True
 # Only has effect if schedule_interval is set to None in DAG
 allow_trigger_in_future = False
 
-    {%- if airversion|int == 2 %}
-[smart_sensor]
-use_smart_sensor = true
-shard_code_upper_limit = 10000
-
-# Users can change the following config based on their requirements
-shards = 5
-sensors_enabled = NamedHivePartitionSensor, MetastorePartitionSensor
-
-[metrics]
-    {%- endif %}
 # Statsd (https://github.com/etsy/statsd) integration settings
-statsd_on = False
-statsd_host = localhost
-statsd_port = 8125
-statsd_prefix = airflow
+statsd_on = {{ 'False' if 'statsd_on' not in c.metrics else c.metrics.statsd_on }}
+statsd_host = {{ 'localhost' if 'statsd_host' not in c.metrics else c.metrics.statsd_host }}
+statsd_port = {{ '8125' if 'statsd_port' not in c.metrics else c.metrics.statsd_port }}
+statsd_prefix = {{ 'airflow' if 'statsd_prefix' not in c.metrics else c.metrics.statsd_prefix }}
 
 # If you want to avoid send all the available metrics to StatsD,
 # you can configure an allow list of prefixes to send only the metrics that
 # start with the elements of the list (e.g: scheduler,executor,dagrun)
-statsd_allow_list =
+statsd_allow_list = {{ '' if 'statsd_allow_list' not in c.metrics else c.metrics.statsd_allow_list }}
 
 [ldap]
 # set this to ldaps://<your.ldap.server>:<port>
-uri =
-user_filter = objectClass=*
-user_name_attr = uid
-group_member_attr = memberOf
-superuser_filter =
-data_profiler_filter =
-bind_user = cn=Manager,dc=example,dc=com
-bind_password = insecure
-basedn = dc=example,dc=com
-cacert = /etc/ca/ldap_ca.crt
-search_scope = LEVEL
+uri = {{ '' if 'uri' not in c.ldap else c.ldap.uri }}
+user_filter =  {{ 'cfg.ldap.objectClass=*' if 'user_filter' not in c.ldap else c.ldap.user_filter }}
+user_name_attr =  {{ 'uid' if 'user_name_attr' not in c.ldap else c.ldap.user_name_attr }}
+group_member_attr =  {{ 'memberOf' if 'group_member_attr' not in c.ldap else c.ldap.group_member_attr }}
+superuser_filter = {{ '' if 'superuser_filter' not in c.ldap else c.ldap.superuser_filter }}
+data_profiler_filter = {{ '' if 'data_profiler_filter' not in c.ldap else c.ldap.data_profiler_filter }}
+bind_user =  {{ 'cn=Manager,dc=example,dc=com' if 'bind_user' not in c.ldap else c.ldap.bind_user }}
+bind_password =  {{ 'insecure' if 'bind_password' not in c.ldap else c.ldap.bind_password }}
+basedn =  {{ 'dc=example,dc=com' if 'basedn' not in c.ldap else c.ldap.basedn }}
+cacert =  {{ '/etc/ca/ldap_ca.crt' if 'cacert' not in c.ldap else c.ldap.cacert }}
+search_scope =  {{ 'LEVEL' if 'search_scope' not in c.ldap else c.ldap.search_scope }}
 
 # This setting allows the use of LDAP servers that either return a
 # broken schema, or do not return a schema.
-ignore_malformed_schema = False
+ignore_malformed_schema = {{ 'False' if 'ignore_malformed_schema' not in ldap.cfg else c.ldap.ignore_malformed_scheam }}
 
 [mesos]
 # Mesos master address which MesosExecutor will connect to.
@@ -771,10 +760,10 @@ authenticate = False
 ccache = /tmp/airflow_krb5_ccache
 
 # gets augmented with fqdn
-principal = airflow
-reinit_frequency = 3600
-kinit_path = kinit
-keytab = airflow.keytab
+principal = {{ 'airflow' if 'principal' not in c.kerberos else c.kerberos.principal }}
+reinit_frequency = {{ '3600' if 'reinit_frequency' not in c.kerberos else c.kerberos.reinit_frequency }}
+kinit_path = {{ 'kinit' if 'kinit_path' not in c.kerberos else c.kerberos.kinit_path }}
+keytab = {{ 'airflow.keytab' if 'keytab' not in c.kerberos else c.kerberos.keytab }}
 
 [github_enterprise]
 api_rev = v3
@@ -785,7 +774,7 @@ hide_sensitive_variable_fields = True
 
 [elasticsearch]
 # Elasticsearch host
-host =
+host = {{ '' if 'host' not in c.elasticsearch else c.elasticsearch.host }}
 
 # Format of the log_id, which is used to query for a given tasks logs
 log_id_template = {dag_id}-{task_id}-{execution_date}-{try_number}
@@ -813,34 +802,34 @@ verify_certs = True
 
 [kubernetes]
 # The repository, tag and imagePullPolicy of the Kubernetes Image for the Worker to Run
-worker_container_repository =
+worker_container_repository = {{ '' if 'worker_container_repository' not in c.kubernetes else c.kubernetes.worker_container_repository }}
 
 # Path to the YAML pod file. If set, all other kubernetes-related fields are ignored.
 # (This feature is experimental)
-pod_template_file =
-worker_container_tag =
-worker_container_image_pull_policy = IfNotPresent
+pod_template_file = {{ '' if 'pod_template_file' not in c.kubernetes else c.kubernetes.pod_template_file }}
+worker_container_tag = {{ '' if 'worker_container_tag' not in c.kubernetes else c.kubernetes.worker_container_tag }}
+worker_container_image_pull_policy = {{ 'IfNotPresent' if 'worker_container_image_pull_policy' not in c.kubernetes else c.kubernetes.worker_container_image_pull_policy }}
 
 # If True, all worker pods will be deleted upon termination
-delete_worker_pods = True
+delete_worker_pods = {{ 'True' if 'delete_worker_pods' not in c.kubernetes else c.kubernetes.delete_worker_pods }}
 
 # If False (and delete_worker_pods is True),
 # failed worker pods will not be deleted so users can investigate them.
 delete_worker_pods_on_failure = False
 
 # Number of Kubernetes Worker Pod creation calls per scheduler loop
-worker_pods_creation_batch_size = 1
+worker_pods_creation_batch_size = {{ '1' if 'worker_pods_creation_batch_size' not in c.kubernetes else c.kubernetes.worker_pods_creation_batch_size }}
 
 # The Kubernetes namespace where airflow workers should be created. Defaults to ``default``
-namespace = default
+namespace = {{ 'default' if 'namespace' not in c.kubernetes else c.kubernetes.namespace }}
 
 # Allows users to launch pods in multiple namespaces.
 # Will require creating a cluster-role for the scheduler
-multi_namespace_mode = False
+multi_namespace_mode = {{ 'False' if 'multi_namespace_mode' not in c.kubernetes else c.kubernetes.multi_namespace_mode }}
 
 # The name of the Kubernetes ConfigMap containing the Airflow Configuration (this file)
 # Example: airflow_configmap = airflow-configmap
-airflow_configmap =
+airflow_configmap = {{ 'airflow_configmap' if 'multi_namespace_mode' not in c.kubernetes else c.kubernetes.airflow_configmap }}
 
 # The name of the Kubernetes ConfigMap containing ``airflow_local_settings.py`` file.
 #
@@ -864,47 +853,47 @@ airflow_configmap =
 #     airflow.cfg: |
 #         ...
 # Example: airflow_local_settings_configmap = airflow-configmap
-airflow_local_settings_configmap =
+airflow_local_settings_configmap = {{ '' if 'airflow_local_settings_configmap' not in c.kubernetes else c.kubernetes.airflow_local_settings_configmap }}
 
 # For docker image already contains DAGs, this is set to ``True``, and the worker will
 # search for dags in dags_folder,
 # otherwise use git sync or dags volume claim to mount DAGs
-dags_in_image = False
+dags_in_image = {{ 'False' if 'dags_in_image' not in c.kubernetes else c.kubernetes.dags_in_image }}
 
 # For either git sync or volume mounted DAGs, the worker will look in this subpath for DAGs
-dags_volume_subpath =
+dags_volume_subpath = {{ 'dags_volume_subpath' if 'dags_volume_subpath' not in c.kubernetes else c.kubernetes.dags_volume_subpath }}
 
 # For either git sync or volume mounted DAGs, the worker will mount the volume in this path
-dags_volume_mount_point =
+dags_volume_mount_point = {{ '' if 'dags_volume_mount_point' not in c.kubernetes else c.kubernetes.dags_volume_mount_point }}
 
 # For DAGs mounted via a volume claim (mutually exclusive with git-sync and host path)
-dags_volume_claim =
+dags_volume_claim = {{ '' if 'dags_volume_claim' not in c.kubernetes else c.kubernetes.dags_volume_claim }}
 
 # For volume mounted logs, the worker will look in this subpath for logs
-logs_volume_subpath =
+logs_volume_subpath = {{ '' if 'logs_volume_subpath' not in c.kubernetes else c.kubernetes.logs_volume_subpath }}
 
 # A shared volume claim for the logs
-logs_volume_claim =
+logs_volume_claim = {{ '' if 'logs_volume_claim' not in c.kubernetes else c.kubernetes.logs_volume_claim }}
 
 # For DAGs mounted via a hostPath volume (mutually exclusive with volume claim and git-sync)
 # Useful in local environment, discouraged in production
-dags_volume_host =
+dags_volume_host = {{ '' if 'dags_volume_host' not in c.kubernetes else c.kubernetes.dags_volume_host }}
 
 # A hostPath volume for the logs
 # Useful in local environment, discouraged in production
-logs_volume_host =
+logs_volume_host = {{ '' if 'logs_volume_host' not in c.kubernetes else c.kubernetes.logs_volume_host }}
 
 # A list of configMapsRefs to envFrom. If more than one configMap is
 # specified, provide a comma separated list: configmap_a,configmap_b
-env_from_configmap_ref =
+env_from_configmap_ref = {{ '' if 'env_from_configmap_ref' not in c.kubernetes else c.kubernetes.env_from_configmap_ref }}
 
 # A list of secretRefs to envFrom. If more than one secret is
 # specified, provide a comma separated list: secret_a,secret_b
-env_from_secret_ref =
+env_from_secret_ref = {{ '' if 'env_from_secret_ref' not in c.kubernetes else c.kubernetes.env_from_secret_ref }}
 
 # Git credentials and repository for DAGs mounted via Git (mutually exclusive with volume claim)
-git_repo =
-git_branch =
+git_repo = {{ '' if 'git_repo' not in c.kubernetes else c.kubernetes.git_repo }}
+git_branch = {{ '' if 'git_branch' not in c.kubernetes else c.kubernetes.git_branch }}
 
 # Use a shallow clone with a history truncated to the specified number of commits.
 # 0 - do not use shallow clone.
@@ -917,14 +906,14 @@ git_sync_rev =
 
 # Use git_user and git_password for user authentication or git_ssh_key_secret_name
 # and git_ssh_key_secret_key for SSH authentication
-git_user =
-git_password =
-git_sync_root = /git
-git_sync_dest = repo
+git_user = {{ '' if 'git_user' not in c.kubernetes else c.kubernetes.git_user }}
+git_password = {{ '' if 'git_password' not in c.kubernetes else c.kubernetes.git_password }}
+git_sync_root = {{ '/git' if 'git_sync_root' not in c.kubernetes else c.kubernetes.git_sync_root }}
+git_sync_dest = {{ 'repo' if 'git_sync_dest' not in c.kubernetes else c.kubernetes.git_sync_dest }}
 
 # Mount point of the volume if git-sync is being used.
 # i.e. /home/airflow/airflow/dags
-git_dags_folder_mount_point =
+git_dags_folder_mount_point = {{airflow_home~'/dags' if 'git_dags_folder_mount_point' not in c.kubernetes else c.kubernetes.git_dags_folder_mount_point}}
 
 # To get Git-sync SSH authentication set up follow this format
 #
@@ -941,7 +930,7 @@ git_dags_folder_mount_point =
 #     # key needs to be gitSshKey
 #     gitSshKey: <base64_encoded_data>
 # Example: git_ssh_key_secret_name = airflow-secrets
-git_ssh_key_secret_name =
+git_ssh_key_secret_name = {{ '' if 'git_ssh_key_secret_name' not in c.kubernetes else c.kubernetes.git_ssh_key_secret_name }}
 
 # To get Git-sync SSH authentication set up follow this format
 #
@@ -960,7 +949,7 @@ git_ssh_key_secret_name =
 #     airflow.cfg: |
 #         ...
 # Example: git_ssh_known_hosts_configmap_name = airflow-configmap
-git_ssh_known_hosts_configmap_name =
+git_ssh_known_hosts_configmap_name = {{ '' if 'git_ssh_known_hosts_configmap_name' not in c.kubernetes else c.kubernetes.git_ssh_known_hosts_configmap_name}}
 
 # To give the git_sync init container credentials via a secret, create a secret
 # with two fields: GIT_SYNC_USERNAME and GIT_SYNC_PASSWORD (example below) and
@@ -979,11 +968,11 @@ git_ssh_known_hosts_configmap_name =
 #   data:
 #     GIT_SYNC_USERNAME: <base64_encoded_git_username>
 #     GIT_SYNC_PASSWORD: <base64_encoded_git_password>
-git_sync_credentials_secret =
+git_sync_credentials_secret = {{ '' if 'git_sync_credentials_secret' not in c.kubernetes else c.kubernetes.git_sync_credentials_secret }}
 
 # For cloning DAGs from git repositories into volumes: https://github.com/kubernetes/git-sync
-git_sync_container_repository = k8s.gcr.io/git-sync
-git_sync_container_tag = v3.1.1
+git_sync_container_repository = {{ 'k8s.gcr.io/git-sync' if 'git_sync_container_repository' not in c.kubernetes else c.kubernetes.git_sync_container_repository }}
+git_sync_container_tag = {{ 'v3.1.1' if 'git_sync_container_tag' not in c.kubernetes else c.kubernetes.git_sync_container_tag }}
 git_sync_init_container_name = git-sync-clone
 git_sync_run_as_user = 65533
 
@@ -991,35 +980,35 @@ git_sync_run_as_user = 65533
 # Service accounts are required for workers that require access to secrets or cluster resources.
 # See the Kubernetes RBAC documentation for more:
 # https://kubernetes.io/docs/admin/authorization/rbac/
-worker_service_account_name =
+worker_service_account_name = {{ '' if 'worker_service_account_name' not in c.kubernetes else c.kubernetes.worker_service_account_name }}
 
 # Any image pull secrets to be given to worker pods, If more than one secret is
 # required, provide a comma separated list: secret_a,secret_b
-image_pull_secrets =
+image_pull_secrets = {{ '' if 'image_pull_secrets' not in c.kubernetes else c.kubernetes.image_pull_secrets }}
 
 # GCP Service Account Keys to be provided to tasks run on Kubernetes Executors
 # Should be supplied in the format: key-name-1:key-path-1,key-name-2:key-path-2
-gcp_service_account_keys =
+gcp_service_account_keys = {{ '' if 'gcp_service_account_keys' not in c.kubernetes else c.kubernetes.gcp_service_account_keys }}
 
 # Use the service account kubernetes gives to pods to connect to kubernetes cluster.
 # It's intended for clients that expect to be running inside a pod running on kubernetes.
 # It will raise an exception if called from a process not running in a kubernetes environment.
-in_cluster = True
+in_cluster = {{ 'True' if 'in_cluster' not in c.kubernetes else c.kubernetes.in_cluster }}
 
 # When running with in_cluster=False change the default cluster_context or config_file
 # options to Kubernetes client. Leave blank these to use default behaviour like ``kubectl`` has.
-# cluster_context =
-# config_file =
+cluster_context = {{ '' if 'cluster_context' not in c.kubernetes else c.kubernetes.cluster_context }}
+config_file = {{ '' if 'config_file' not in c.kubernetes else c.kubernetes.config_file }}
 
 # Affinity configuration as a single line formatted JSON object.
 # See the affinity model for top-level key names (e.g. ``nodeAffinity``, etc.):
 # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#affinity-v1-core
-affinity =
+affinity = {{ '' if 'affinity' not in c.kubernetes else c.kubernetes.affinity }}
 
 # A list of toleration objects as a single line formatted JSON array
 # See:
 # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.12/#toleration-v1-core
-tolerations =
+tolerations = {{ '' if 'tolerations' not in c.kubernetes else c.kubernetes.tolerations }}
 
 # Keyword parameters to pass while calling a kubernetes client core_v1_api methods
 # from Kubernetes Executor provided as a single line formatted JSON dictionary string.
@@ -1030,7 +1019,7 @@ tolerations =
 # Note that if no _request_timeout is specified, the kubernetes client will wait indefinitely
 # for kubernetes api responses, which will cause the scheduler to hang.
 # The timeout is specified as [connect timeout, read timeout]
-kube_client_request_args =
+kube_client_request_args = {{ '' if 'kube_client_requests_args' not in c.kubernetes else c.kubernetes.kube_client_requests_args }}
 
 # Optional keyword arguments to pass to the ``delete_namespaced_pod`` kubernetes client
 # ``core_v1_api`` method when using the Kubernetes Executor.
@@ -1038,15 +1027,15 @@ kube_client_request_args =
 # class defined here:
 # https://github.com/kubernetes-client/python/blob/41f11a09995efcd0142e25946adc7591431bfb2f/kubernetes/client/models/v1_delete_options.py#L19
 # Example: delete_option_kwargs = {"grace_period_seconds": 10}
-delete_option_kwargs =
+delete_option_kwargs = {{ '' if 'delete_option_kwargs' not in c.kubernetes else c.kubernetes.delete_option_kwargs }}
 
 # Specifies the uid to run the first process of the worker pods containers as
-run_as_user = 50000
+run_as_user = {{ '50000' if 'run_as_user' not in c.kubernetes else c.kubernetes.run_as_user }}
 
 # Specifies a gid to associate with all containers in the worker pods
 # if using a git_ssh_key_secret_name use an fs_group
 # that allows for the key to be read, e.g. 65533
-fs_group =
+fs_group = {{ '' if 'fs_group' not in c.kubernetes else c.kubernetes.fs_group }}
 
 [kubernetes_node_selectors]
 

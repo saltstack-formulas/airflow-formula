@@ -18,7 +18,7 @@ airflow-formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-A SaltStack formula to manage apache-airflow (https://airflow.apache.org) on GNU/Linux.
+A SaltStack formula to manage Apache Airflow 1.0 and 2.0 (https://airflow.apache.org) on GNU/Linux.
 
 .. contents:: **Table of Contents**
    :depth: 1
@@ -115,6 +115,11 @@ via include list.
 This state will start the airflow service and has a dependency on ``airflow.config``
 via include list.
 
+``airflow.providers``
+^^^^^^^^^^^^^^^^^^^^^
+
+This state will install the airflow provider packages listed in 'airflow:pkg:airflow:providers' (if any).
+
 ``airflow.clean``
 ^^^^^^^^^^^^^^^^^^
 
@@ -147,6 +152,13 @@ This state will remove the airflow package and has a depency on
 
 This state will remove the airflow archive and has a depency on
 ``airflow.config.clean`` via include list.
+
+``airflow.providers.clean``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This state will uninstall the airflow provider packages listed in 'airflow:pkg:airflow:providers' (if any).
+
+
+
 
 Available sub-states
 --------------------

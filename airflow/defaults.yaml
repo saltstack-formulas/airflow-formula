@@ -22,39 +22,35 @@ airflow:
       file: airflow.cfg
       initcmd: 'db init'
       content:
-        scheduler:
-          child_process_log_directory: /home/airflow/airflow/logs/schedule
-        core:
-          dags_folder: /home/airflow/dags
-          plugins_folder: /home/airflow/plugins
-          base_log_folder: /home/airflow/airflow/logs
-          executor: CeleryExecutor
-          default_timezone: system
-          # https://stackoverflow.com/questions/45455342
-          sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
-          sql_alchemy_pool_enabled: true
-          sql_alchemy_max_overflow: 10
-          sql_alchemy_pool_recycle: 1800
-          parallelism: 32
-          dag_concurrency: 16
-          max_active_runs_per_dag: 16
-          dagbag_import_timeout: 30
-          dag_file_processor_timeout: 50
-          security: ''
-          load_examples: False
-        webserver:
-          authenticate: true
-          secret_key: {{ range(1,20000000000) | random }}
-          auth_backend: airflow.contrib.auth.backends.password_auth
-          cookie_samesite: Lax
-          expose_config: true
-        secrets:
-          backend: ''
-          backend_kwargs: ''
+        api: {}
+        celery_kubernetes_executor: {}
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           broker_url: redis://127.0.0.1:6379/0
           result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
+        cli: {}
+        core:
+          dags_folder: /home/airflow/dags
+          plugins_folder: /home/airflow/plugins
+          executor: CeleryExecutor
+          default_timezone: utc
+          # https://stackoverflow.com/questions/45455342
+          sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
+          security: ''
+        dask: {}
+        elasticsearch: {}
+        kerberos: {}
+        kubernetes: {}
+        ldap: {}   # gone in v2
+        logging: {}
+        metrics: {}
+        secrets: {}
+        sentry: {}
+        smart_sensor: {}
+        smtp: {}
+        webserver:
+          secret_key: {{ range(1,20000000000) | random }}
+          auth_backend: airflow.contrib.auth.backends.password_auth
       state_colors: {}
       # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
 
@@ -87,6 +83,7 @@ airflow:
         options: '--strip-components=1'
       suffix: tar.gz
       deps: []
+      providers: {}
       extras:
         - celery
         - postgres
@@ -95,8 +92,6 @@ airflow:
         - cncf.kerberos
         - devel_ci
         - devel_azure
-        # apache-airflow-backport-providers-microsoft-winrm    # v1
-        - apache-airflow-providers-microsoft-winrm
       pips:
         # for functionality
         - cryptography

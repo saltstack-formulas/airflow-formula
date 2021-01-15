@@ -85,6 +85,7 @@ airflow:
       deps: []
       providers: {}
       extras:
+        ### These could be moved to pillar.example instead of being default
         - celery
         - postgres
         - google
@@ -93,6 +94,7 @@ airflow:
         - devel_ci
         - devel_azure
       pips:
+        ### These could be moved to pillar.example instead of being default
         # for functionality
         - cryptography
             {%- if grains.os_family == 'RedHat' %}
@@ -176,6 +178,17 @@ airflow:
         - pyarrow<0.18.0,>=0.17.0
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
+        # Ecosystem
+        - pylint-airflow
+        - dag-factory
+        - airflow-code-editor
+        - black
+        - afctl
+        - gusty
+        - jupyter
+        - tableauserverclient
+        - azure-storage-blob
+
   identity:
     rootuser: root
     rootgroup: root

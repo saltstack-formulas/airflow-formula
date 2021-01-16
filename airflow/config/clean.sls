@@ -11,6 +11,7 @@ airflow-config-clean:
     - names:
       - {{ d.dir.airflow.environ ~ d.div ~ d.environ.airflow.file }}
       - {{  d.dir.airflow.airhome }}{{ d.div }}{{ d.config.airflow.file }}
+      - {{  d.dir.airflow.airhome }}{{ d.div }}{{ d.config.airflow.webserver }}
       - {{  d.dir.airflow.airhome }}{{ d.div }}config{{ d.div }}airflow_local_settings.py
     - require:
       - sls: {{ sls_service_clean }}

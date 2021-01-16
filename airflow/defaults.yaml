@@ -20,7 +20,20 @@ airflow:
   config:
     airflow:
       file: airflow.cfg
+      webserver: webserver_config.py
       initcmd: 'db init'
+
+      flask:
+        auth_type: AUTH_DB
+        auth_user_registration_role: Admin
+        app_theme: null # use default
+
+        ##### These four are verifed with Active Directory ####
+        auth_ldap_server: ldap://ldapserver.new
+        auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
+        auth_ldap_append_domain: example.com
+        auth_ldap_search: DC=example,DC=com
+
       content:
         api: {}
         celery_kubernetes_executor: {}
@@ -175,7 +188,7 @@ airflow:
         - rfc3987
         - strict-rfc3339
         - webcolors
-        - pyarrow
+        - pyarrow<0.18.0,>=0.17.0    # snowflake wants this version?
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
         # Ecosystem

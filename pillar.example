@@ -30,6 +30,15 @@ airflow:
       email: airflow@localhost
   config:
     airflow:
+      flask:
+        auth_user_registration: False
+        auth_user_registration_role: Admin
+        #### Active Directory Example ####
+        # auth_type: AUTH_LDAP
+        auth_ldap_server: ldap://ldapserver.new
+        auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
+        auth_ldap_append_domain: example.com
+
       content:
         api: {}
         celery_kubernetes_executor: {}
@@ -166,7 +175,7 @@ airflow:
         - apache-airflow-providers-apache-druid
         - apache-airflow-providers-apache-hdfs
         - apache-airflow-providers-apache-hive
-        - apache-airflow-providers-apache-kylin    #
+        - apache-airflow-providers-apache-kylin
         - apache-airflow-providers-apache-livy
         - apache-airflow-providers-apache-pig
         - apache-airflow-providers-apache-pinot
@@ -222,8 +231,6 @@ airflow:
         - apache-airflow-providers-yandex
         - apache-airflow-providers-zendesk
         - apache-airflow-providers-amazon
-
-
 
   linux:
     altpriority: 0   # zero disables alternatives

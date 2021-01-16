@@ -107,7 +107,7 @@ This state will install the airflow archive only. ** Not implemented ** placehol
 ^^^^^^^^^^^^^^^^^^^
 
 This state will configure the airflow service and has a dependency on ``airflow.install``
-via include list.
+via include list. It will also invoke ``airflow.config.flask`` for webserver and authentication.
 
 ``airflow.service``
 ^^^^^^^^^^^^^^^^^^^^
@@ -159,11 +159,17 @@ This state will uninstall the airflow provider packages listed in 'airflow:pkg:a
 
 
 
-
 Available sub-states
 --------------------
 
-Various sub-states are available.
+Various sub-states are available, including:
+
+
+``airflow.config.flask``
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+This state will configure the flask-appbuilder configuration file for airflow webservice and ui authentication.
+
 
 Testing
 -------

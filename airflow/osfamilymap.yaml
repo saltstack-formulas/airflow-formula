@@ -105,6 +105,8 @@ RedHat:
         - graphviz   # save dag structure as image
         - unixODBC-devel
         - cyrus-sasl-devel
+        - openldap-devel
+        # openldap-clients
 
 Suse:
   pkg:

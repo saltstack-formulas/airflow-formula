@@ -9,12 +9,12 @@
 include:
   - {{ sls_service_running }}
 
-airflow-service-security-managed:
+airflow-config-database-managed:
     {%- if d.pkg.airflow.version.split('.')[0]|int == 1 %}
   file.managed:
-    - name: {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
+    - name: {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.database.airflow.script }}
     - source: {{ files_switch(['security.py.jinja'],
-                              lookup='airflow-service-security-managed'
+                              lookup='airflow-config-database-managed'
                  )
               }}
     - makedirs: True
@@ -25,25 +25,25 @@ airflow-service-security-managed:
         {%- endif %}
     - context:
         python: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}python
-        user: {{ d.security.airflow.user }}
-        email: {{ d.security.airflow.email }}
-        pass: {{ d.security.airflow.pass }}
+        user: {{ d.database.airflow.user }}
+        email: {{ d.database.airflow.email }}
+        pass: {{ d.database.airflow.pass }}
     - require:
       - sls: {{ sls_service_running }}
   cmd.run:
     - names:
-      - {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
-      - rm {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.security.airflow.script }}
+      - {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.database.airflow.script }}
+      - rm {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.database.airflow.script }}
         {%- if grains.os != 'Windows' %}
     - runas: {{ d.identity.airflow.user }}
         {%- endif %}
     - require:
-      - file: airflow-service-security-managed
+      - file: airflow-config-database-managed
 
     {%- else %}
 
   cmd.run:
-    - name: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}airflow users create --username {{ d.security.airflow.user }} --firstname first --lastname last --role Admin --email {{ d.security.airflow.email }} --password {{ d.security.airflow.pass }}
+    - name: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}airflow users create --username {{ d.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ d.database.airflow.email }} --password {{ d.database.airflow.pass }}
         {%- if grains.os != 'Windows' %}
     - runas: {{ d.identity.airflow.user }}
         {%- endif %}

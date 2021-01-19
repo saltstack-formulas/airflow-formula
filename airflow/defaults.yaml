@@ -11,7 +11,14 @@ airflow:
       base: /home   # os sensitive user homedir
       userhome: null    # AIRFLOW_HOME is set by pillar data, otherwise map.jinja
       virutalenv: null  # set by pillar data, otherwise map.jinja
-  security:
+  identity:
+    rootuser: root
+    rootgroup: root
+    airflow:
+      user: airflow
+      group: airflow
+      skip_user_state: false     # i.e. active directory
+  database:
     airflow:
       user: airflow
       pass: airflow
@@ -205,13 +212,9 @@ airflow:
         # authentication
         - python-ldap
         - requests-kerberos
+        - requests-credssp
+        - requests_ntlm
 
-  identity:
-    rootuser: root
-    rootgroup: root
-    airflow:
-      user: airflow
-      group: airflow
   misc:
     refresh: true
     reload: true

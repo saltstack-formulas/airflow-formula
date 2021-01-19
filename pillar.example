@@ -23,7 +23,12 @@ postgres:
     - ['host', 'replication', 'all', '::1/128', 'md5']
 
 airflow:
-  security:
+  identity:
+    airflow:
+      user: airflow
+      group: airflow
+      skip_user_state: false   # local user
+  database:
     airflow:
       user: airflow
       pass: airflow
@@ -31,12 +36,13 @@ airflow:
   config:
     airflow:
       flask:
+        auth_type: AUTH_DB # AUTH_LDAP, etc
         auth_user_registration: False
         auth_user_registration_role: Admin
         #### Active Directory Example ####
-        # auth_type: AUTH_LDAP
         auth_ldap_server: ldap://ldapserver.new
-        auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
+        auth_ldap_search_filter: (memberOf=CN=myGrpRole,OU=myOrg,DC=example,DC=com)
+        # match multiple groups: (memberOf=(CN=myGrp*),OU=myOrg,DC=example,DC=com)
         auth_ldap_append_domain: example.com
 
       content:

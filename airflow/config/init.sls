@@ -5,4 +5,5 @@ include:
   - .users
   - .file
   - .flask
+  - .database
   - .environ

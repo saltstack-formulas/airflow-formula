@@ -7,8 +7,8 @@
 airflow-config-users-install-group:
   group.present:
     - name: {{ d.identity.airflow.group }}
-    - require_in:
-      - user: airflow-config-users-install-user
+
+    {%- if d.identity.airflow.skip_user_state == false %}
 
 airflow-config-users-install-user:
   user.present:
@@ -21,3 +21,7 @@ airflow-config-users-install-user:
     - unless: /usr/bin/dscl . list {{ d.dir.airflow.base }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
             {%- endif %}
         {%- endif %}
+    - require:
+      - group: airflow-config-users-install-user
+
+    {%- endif %}

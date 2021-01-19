@@ -30,5 +30,6 @@ airflow-service-running-{{ name }}:
       - sls: {{ sls_service_install }}
     - watch:
       - sls: {{ sls_config_file }}
+    - retry: {{ d.retry_option|json }}
 
     {%- endfor %}

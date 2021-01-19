@@ -16,6 +16,8 @@ airflow-config-clean:
     - require:
       - sls: {{ sls_service_clean }}
       - sls: {{ sls_package_clean }}
+
+    {%- if d.identity.airflow.skip_user_state == false %}
   user.absent:
     - name: {{ d.identity.airflow.user }}
       {%- if grains.os_family == 'MacOS' %}
@@ -23,7 +25,9 @@ airflow-config-clean:
       {%- endif %}
     - require:
       - file: airflow-config-clean
+    - onchanges_in:
+      - user: airflow-config-clean
+
   group.absent:
     - name: {{ d.identity.airflow.group }}
-    - require:
-      - user: airflow-config-clean
+    {%- endif %}

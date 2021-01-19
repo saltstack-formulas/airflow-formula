@@ -15,9 +15,9 @@ airflow:
     rootuser: root
     rootgroup: root
     airflow:
-      user: airflow
+      user: airflow    # user, where airflow is installed
       group: airflow
-      skip_user_state: false     # i.e. active directory
+      skip_user_state: false     # i.e. local user
   database:
     airflow:
       user: airflow
@@ -71,8 +71,17 @@ airflow:
         webserver:
           secret_key: {{ range(1,20000000000) | random }}
           auth_backend: airflow.contrib.auth.backends.password_auth
-      state_colors: {}
-      # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
+      state_colors:
+        # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
+        queued: 'darkgray'
+        running: '#01FF70'
+        success: '#2ECC40'
+        failed: 'firebrick'
+        up_for_retry: 'yellow'
+        up_for_reschedule: 'turquoise'
+        upstream_failed: 'orange'
+        skipped: 'darkorchid'
+        scheduled: 'tan'
 
   environ:
     airflow:
@@ -105,14 +114,9 @@ airflow:
       deps: []
       providers: {}
       extras:
-        ### These could be moved to pillar.example instead of being default
-        - celery
-        - postgres
-        - google
         - password
         - cncf.kerberos
-        - devel_ci
-        - devel_azure
+        - devel
       pips:
         ### These could be moved to pillar.example instead of being default
         # for functionality

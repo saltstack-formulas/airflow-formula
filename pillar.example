@@ -25,9 +25,9 @@ postgres:
 airflow:
   identity:
     airflow:
-      user: airflow
-      group: airflow
-      skip_user_state: false   # local user
+      user: airflow       # local or ldap username
+      group: airflow       # local or ldap groupname
+      skip_user_state: false   # false if local user; true if ldap user
   database:
     airflow:
       user: airflow
@@ -37,13 +37,18 @@ airflow:
     airflow:
       flask:
         auth_type: AUTH_DB # AUTH_LDAP, etc
-        auth_user_registration: False
-        auth_user_registration_role: Admin
+
         #### Active Directory Example ####
         auth_ldap_server: ldap://ldapserver.new
-        auth_ldap_search_filter: (memberOf=CN=myGrpRole,OU=myOrg,DC=example,DC=com)
-        # match multiple groups: (memberOf=(CN=myGrp*),OU=myOrg,DC=example,DC=com)
         auth_ldap_append_domain: example.com
+
+        ## see https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
+        # auth_ldap_search_filter: (&(objectCategory=Person)(sAMAccountName=*)(|(memberOf=cn=grpRole_myteam,OU=ouEngineers_myteam,dc=example,dc=com)(memberOf=cn=grpRole_yourteam,OU=ouEngineers_yourteam,dc=example,dc=com)))
+        auth_ldap_search_filter: (memberOf=CN=myGrpRole,OU=myOrg,DC=example,DC=com)
+
+        #### Admin is initially ok for 'admins', but change to Viewer for everyone else
+        auth_user_registration_role: Admin
+        auth_user_registration: True
 
       content:
         api: {}

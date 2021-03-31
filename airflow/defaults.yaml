@@ -115,7 +115,6 @@ airflow:
         options: '--strip-components=1'
       suffix: tar.gz
       deps: []
-      providers: {}
       extras:
         - password
         - cncf.kerberos

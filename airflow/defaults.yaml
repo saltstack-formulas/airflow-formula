@@ -23,7 +23,7 @@ airflow:
       user: airflow
       pass: airflow
       email: airflow@localhost
-      script: {{ range(1,200000) | random }}.py
+      script: {{ range(1,20000) | random }}.py
   config:
     airflow:
       file: airflow.cfg
@@ -104,7 +104,7 @@ airflow:
         - airflow-celery-worker
   pkg:
     airflow:
-      version: 2.0.0  # 1.10.14
+      version: 2.0.1  # 1.10.14
       use_upstream: pip
       name: apache-airflow
       commands:
@@ -172,7 +172,6 @@ airflow:
         - lazy_object_proxy
         - markdown
         - marshmallow-sqlalchemy
-        - marshmallow-sqlalchemy
         - packaging
         - pandas
         - pendulum
@@ -185,8 +184,7 @@ airflow:
         - python-slugify
         - requests
         - setproctitle
-        - sqlalchemy
-        - sqlalchemy_jsonfield
+        - sqlalchemy< 1.4.0
         - sqlalchemy_jsonfield
         - tabulate
         - tenacity

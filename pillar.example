@@ -116,13 +116,22 @@ airflow:
         - apache.druid      # Druid related operators & hooks
         - apache.hdfs       # HDFS hooks and operators
         - apache.hive       # All Hive related operators
+        - apache.kylin
+        - apache.livy
+        - apache.pig
         - apache.pinot         # Pinot DB hook
+        - apache.spark
+        - apache.sqoop
         - webhdfs           # HDFS hooks and operators
         - amazon               # aws
         - microsoft.azure      # azure
+        - microsoft.mssql
         - databricks           # Databricks hooks and operators
         - datadog              # Datadog hooks and sensors
+        - dingding
+        - discord
         - google               # Google Cloud
+        - ftp
         - google_auth          # Google auth backend
         - github_enterprise    # GitHub Enterprise auth backend
         - hashicorp            # Hashicorp Services (Vault)
@@ -142,6 +151,8 @@ airflow:
         - dask                 # DaskExecutor
         - docker               # Docker hooks and operators
         - elasticsearch        # Elasticsearch hooks and Log Handler
+        - exasol
+        - facebook
         - cncf.kubernetes      # Kubernetes Executor and operator
         - mongo                # Mongo hooks and operators
         - mysql                # MySQL operators and hook, support as Airflow backend (mysql 5.6.4+)
@@ -157,72 +168,26 @@ airflow:
         - kerberos             # Kerberos integration
         - ldap                 # LDAP authentication for users
         - imap                 # IMAP hooks and sensors
+        - jdbc
+        - odbc
+        - openfaas
+        - opsgenie
+        - oracle
+        - presto
+        - jenkins
+        - jira
         - papermill            # Papermill hooks and operators
+        - plexus
         - ssh                  # SSH hooks and Operator
+        - sftp
+        - singularity
         - pagerduty            # PagerDuty ..
         - microsoft.winrm      # WinRM hooks and operators
-
-      providers:
-        - apache-airflow-providers-apache-cassandra
-        - apache-airflow-providers-apache-druid
-        - apache-airflow-providers-apache-hdfs
-        - apache-airflow-providers-apache-hive
-        - apache-airflow-providers-apache-kylin
-        - apache-airflow-providers-apache-livy
-        - apache-airflow-providers-apache-pig
-        - apache-airflow-providers-apache-pinot
-        - apache-airflow-providers-apache-spark
-        - apache-airflow-providers-apache-sqoop
-        - apache-airflow-providers-celery
-        - apache-airflow-providers-cloudant
-        - apache-airflow-providers-cncf-kubernetes
-        - apache-airflow-providers-databricks
-        - apache-airflow-providers-datadog
-        - apache-airflow-providers-dingding
-        - apache-airflow-providers-discord
-        - apache-airflow-providers-docker
-        - apache-airflow-providers-elasticsearch
-        - apache-airflow-providers-exasol
-        - apache-airflow-providers-facebook
-        - apache-airflow-providers-ftp
-        - apache-airflow-providers-google
-        - apache-airflow-providers-grpc
-        - apache-airflow-providers-hashicorp
-        - apache-airflow-providers-imap
-        - apache-airflow-providers-jdbc
-        - apache-airflow-providers-jenkins
-        - apache-airflow-providers-jira
-        - apache-airflow-providers-microsoft-azure
-        - apache-airflow-providers-microsoft-mssql
-        - apache-airflow-providers-microsoft-winrm
-        - apache-airflow-providers-mongo
-        - apache-airflow-providers-mysql
-        - apache-airflow-providers-odbc
-        - apache-airflow-providers-openfaas
-        - apache-airflow-providers-opsgenie
-        - apache-airflow-providers-oracle
-        - apache-airflow-providers-pagerduty
-        - apache-airflow-providers-papermill
-        - apache-airflow-providers-plexus
-        - apache-airflow-providers-postgres
-        - apache-airflow-providers-presto
-        - apache-airflow-providers-qubole
-        - apache-airflow-providers-redis
-        - apache-airflow-providers-salesforce
-        - apache-airflow-providers-samba
-        - apache-airflow-providers-segment
-        - apache-airflow-providers-sendgrid
-        - apache-airflow-providers-sftp
-        - apache-airflow-providers-singularity
-        - apache-airflow-providers-slack
-        - apache-airflow-providers-snowflake
-        - apache-airflow-providers-sqlite
-        - apache-airflow-providers-ssh
-        - apache-airflow-providers-telegram
-        - apache-airflow-providers-vertica
-        - apache-airflow-providers-yandex
-        - apache-airflow-providers-zendesk
-        - apache-airflow-providers-amazon
+        - snowflake
+        - sqlite
+        - telegram
+        - yandex
+        - zendesk
 
   linux:
     altpriority: 0   # zero disables alternatives

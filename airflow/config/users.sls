@@ -22,6 +22,6 @@ airflow-config-users-install-user:
             {%- endif %}
         {%- endif %}
     - require:
-      - group: airflow-config-users-install-user
+      - group: airflow-config-users-install-group
 
     {%- endif %}

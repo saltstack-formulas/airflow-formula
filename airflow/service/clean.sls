@@ -3,7 +3,6 @@
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import airflow as d with context %}
-{%- set sls_config_clean = tplroot ~ '.config.clean' %}
 {%- set sls_archive_clean = tplroot ~ '.archive.clean' %}
 {%- set sls_package_clean = tplroot ~ '.package.clean' %}
 

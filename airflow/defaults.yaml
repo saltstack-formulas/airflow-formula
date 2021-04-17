@@ -50,7 +50,7 @@ airflow:
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           broker_url: redis://127.0.0.1:6379/0
-          result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
+          # result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
         cli: {}
         core:
           dags_folder: /home/airflow/dags
@@ -104,7 +104,7 @@ airflow:
         - airflow-celery-worker
   pkg:
     airflow:
-      version: 2.0.1  # 1.10.14
+      version: 2.0.1
       use_upstream: pip
       name: apache-airflow
       commands:
@@ -145,7 +145,7 @@ airflow:
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
-        - celery[redis,sqs]==4.4.7
+        - celery[rabbitmq,redis,sqs]==4.4.7
         - colorlog
         - configparser
         - croniter
@@ -243,5 +243,6 @@ airflow:
   wanted:
     - airflow
   depends:
-    - postgresql
+    - postgres
+    - rabbitmq
     - redis

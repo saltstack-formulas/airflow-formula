@@ -73,6 +73,7 @@ Everybody: The following `top.sls` works using Saltstack-formulas community::
   '*':
     - mysql        # .clean
     - postgres     # .clean
+    - rabbitmq     # .clean
     - redis        # .clean
     - airflow      # .clean
 

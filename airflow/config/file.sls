@@ -5,10 +5,10 @@
 {%- from tplroot ~ "/map.jinja" import airflow as d with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
-    {%- if d.config.airflow.content %}
-        {%- set sls_archive_install = tplroot ~ '.archive.install' %}
-        {%- set sls_package_install = tplroot ~ '.package.install' %}
-        {%- set airflow_cfg_jinja = 'airflow' ~ d.pkg.airflow.version.split('.')[0]|int ~ '.cfg.jinja' %}
+  {%- if d.config.airflow.content %}
+      {%- set sls_archive_install = tplroot ~ '.archive.install' %}
+      {%- set sls_package_install = tplroot ~ '.package.install' %}
+      {%- set airflow_cfg_jinja = 'airflowV' ~ d.pkg.airflow.version.split('.')[0]|int ~ '.cfg.jinja' %}
 
 include:
   - {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
@@ -80,11 +80,11 @@ airflow-config-dags-directory:
         - mode
         {%- endif %}
 
-    {%- else %}
+  {%- else %}
 
 airflow-config-install-none:
   test.show_notification:
     - text: |
         No configuration was provided for {{ salt['grains.get']('finger', grains.os_family) }}
 
-    {%- endif %}
+  {%- endif %}

@@ -88,6 +88,12 @@ Debian:
         - libsasl2-dev
 
 RedHat:
+  config:
+    airflow:
+      content:
+        celery:
+          default_queue: /airflow
+          broker_url: amqp://rabbit:rabbit@127.0.0.1:5672/airflow
   pkg:
     airflow:
       deps:

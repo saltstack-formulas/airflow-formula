@@ -23,7 +23,7 @@ airflow:
       user: airflow
       pass: airflow
       email: airflow@localhost
-      script: {{ range(1,20000) | random }}.py
+      script: {{ range(1,2000) | random }}.py
   config:
     airflow:
       file: airflow.cfg
@@ -72,7 +72,7 @@ airflow:
         smart_sensor: {}
         smtp: {}
         webserver:
-          secret_key: {{ range(1,20000000000) | random }}
+          secret_key: {{ range(1,2000) | random }}
           auth_backend: airflow.contrib.auth.backends.password_auth
       state_colors:
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html

@@ -24,4 +24,11 @@ airflow-config-users-install-user:
     - require:
       - group: airflow-config-users-install-group
 
+    {%- else %}
+
+airflow-config-users-skip-user:
+  test.show_notification:
+    - text: |
+        Skipping user/group creation because 'skip_user_state' was requested
+
     {%- endif %}

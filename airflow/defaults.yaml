@@ -29,6 +29,7 @@ airflow:
       file: airflow.cfg
       webserver: webserver_config.py
       initcmd: 'db init'
+      venv_cmd: virtualenv
 
       flask:
         auth_type: AUTH_DB

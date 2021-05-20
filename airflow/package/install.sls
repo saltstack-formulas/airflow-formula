@@ -58,6 +58,7 @@ airflow-package-install-virtualenv:
     - name: {{ d.dir.airflow.virtualenv }}
     - user: {{ d.identity.airflow.user }}
     - python: python3
+    - venv_bin: {{ d.config.airflow.venv_cmd or 'virtualenv' }}
     - require:
       - sls: {{ sls_config_users }}
     - require_in:
@@ -69,7 +70,7 @@ airflow-package-install-virtualenv:
 airflow-package-install-pip-installed:
   pip.installed:
         {%- if d.pkg.airflow.extras is iterable %}
-    - name: {{ d.pkg.airflow.name }}{{ d.pkg.airflow.extras|list|replace("'","") }}=={{ d.pkg.airflow.version or '2.0.0' }}
+    - name: {{ d.pkg.airflow.name }}{{ d.pkg.airflow.extras|list|replace("'","") }}=={{ d.pkg.airflow.version or '2.0.1' }}
         {%- else %}
     - name: {{ d.pkg.airflow.name }}
         {%- endif %}

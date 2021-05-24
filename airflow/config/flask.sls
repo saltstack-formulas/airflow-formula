@@ -22,7 +22,8 @@ airflow-webserver-file-managed:
     - group: {{ d.identity.airflow.group }}
         {%- endif %}
     - context:
-        cfg: {{ d.config.airflow.flask|json }}
+        flask: {{ d.config.airflow.flask|json }}
+        content: {{ d.config.airflow.content|json }}
 
     {%- else %}
 

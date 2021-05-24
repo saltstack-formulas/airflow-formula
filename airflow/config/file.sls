@@ -30,7 +30,8 @@ airflow-config-file-managed:
     - context:
         airflow_home: {{ d.dir.airflow.airhome }}
         airversion: {{ d.pkg.airflow.version.split('.')[0]|int }}
-        cfg: {{ d.config.airflow.content|json }}
+        flask: {{ d.config.airflow.flask|json }}
+        content: {{ d.config.airflow.content|json }}
     - require:
       - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
 

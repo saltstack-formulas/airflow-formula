@@ -46,6 +46,9 @@ airflow-service-install-managed-{{ svcname }}:
         start: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}{{ svcname|replace('-',' ') }}
         stop: ''
         name: {{ svcname }}
+    - watch_in:
+      - cmd: airflow-service-install-daemon-reload
+      - service: airflow-service-running-{{ svcname }}
     - require_in:
       - cmd: airflow-service-install-daemon-reload
       - service: airflow-service-running-{{ svcname }}

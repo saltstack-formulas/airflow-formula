@@ -23,12 +23,13 @@ airflow:
       user: airflow
       pass: airflow
       email: airflow@localhost
-      script: {{ range(1,20000) | random }}.py
+      script: {{ range(1,2000) | random }}.py
   config:
     airflow:
       file: airflow.cfg
       webserver: webserver_config.py
       initcmd: 'db init'
+      venv_cmd: virtualenv
 
       flask:
         auth_type: AUTH_DB
@@ -43,6 +44,12 @@ airflow:
 
         ## Admin is initially ok for 'admins', but change to Viewer for everyone else
         auth_user_registration_role: Admin
+
+        webserver:
+          # The ip specified when starting the web server
+          web_server_host: 0.0.0.0
+          # The port on which to run the web server
+          web_server_port: 8080
 
       content:
         api: {}
@@ -72,7 +79,7 @@ airflow:
         smart_sensor: {}
         smtp: {}
         webserver:
-          secret_key: {{ range(1,20000000000) | random }}
+          secret_key: {{ range(1,2000) | random }}
           auth_backend: airflow.contrib.auth.backends.password_auth
       state_colors:
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html

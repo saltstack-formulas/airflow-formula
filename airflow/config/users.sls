@@ -4,11 +4,11 @@
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import airflow as d with context %}
 
+    {%- if d.identity.airflow.skip_user_state == false %}
+
 airflow-config-users-install-group:
   group.present:
     - name: {{ d.identity.airflow.group }}
-
-    {%- if d.identity.airflow.skip_user_state == false %}
 
 airflow-config-users-install-user:
   user.present:
@@ -23,5 +23,12 @@ airflow-config-users-install-user:
         {%- endif %}
     - require:
       - group: airflow-config-users-install-group
+
+    {%- else %}
+
+airflow-config-users-skip-user:
+  test.show_notification:
+    - text: |
+        Skipping user/group creation because 'skip_user_state' was requested
 
     {%- endif %}

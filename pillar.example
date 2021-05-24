@@ -144,7 +144,13 @@ airflow:
         - airflow-celery-worker
   pkg:
     airflow:
-      version: 2.0.1
+      version: 2.1.0
+          {%- if grains.osfinger == 'CentOS Linux-7' %}
+          # because centos7 defaults to python2, need to be explicit
+      uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-3.6.txt
+      deps:
+        - python2-pip   # needed if salt was installed with python2
+          {%- endif %}
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages
         # https://airflow.apache.org/docs/apache-airflow/stable/extra-packages-ref.html

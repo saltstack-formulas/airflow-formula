@@ -152,7 +152,7 @@ airflow:
 
         # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
-        - celery[rabbitmq,redis,sqs]==4.4.7
+        - celery[rabbitmq,redis]==4.4.7
         - colorlog
         - configparser
         - croniter

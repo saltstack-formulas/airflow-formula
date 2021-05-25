@@ -27,6 +27,8 @@ CentOS Linux-7:
     deps:
       - selinux-policy-minimum
       - yum-plugin-versionlock
+      - krb5-devel        # for pykerberos pip
+      - openldap-devel    # for python-ldap pip
       # python36-flask
       # python36-future
       # python36-gunicorn

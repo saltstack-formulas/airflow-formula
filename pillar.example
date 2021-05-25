@@ -155,6 +155,7 @@ airflow:
       uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-3.6.txt
       deps:
         - python2-pip   # needed if salt was installed with python2
+        - python36-virtualenv
           {%- endif %}
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages

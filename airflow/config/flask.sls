@@ -30,6 +30,6 @@ airflow-webserver-file-managed:
 airflow-webserver-install-none:
   test.show_notification:
     - text: |
-        No custom configuration was provided for flask-appbuilder webserver, so airflow defaults user (that's okay btw)
+        No custom configuration was provided for flask-appbuilder webserver, so airflow uses defaults.
 
     {%- endif %}

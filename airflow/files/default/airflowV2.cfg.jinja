@@ -8,7 +8,7 @@
 {%- set f = flask %}
 {%- set basehost = '0.0.0.0' if 'web_server_host' not in f.webserver else f.webserver.web_server_host %}
 {%- set baseport = '18080' if 'web_server_port' not in f.webserver else f.webserver.web_server_port %}
-{%- set baseurl = basehost ~ ':' ~ baseport %}
+{%- set baseurl = 'http://' ~ basehost ~ ':' ~ baseport %}
 
 [core]
 # The folder where your airflow pipelines live, most likely a
@@ -349,7 +349,7 @@ api_client = {{ 'airflow.api.client.local_client' if 'api_client' not in c.cli e
 # If you set web_server_url_prefix, do NOT forget to append it here, ex:
 # ``endpoint_url = http://localhost:18080/myroot``
 # So api will look like: ``http://localhost:18080/myroot/api/experimental/...``
-endpoint_url = http://{{ baseurl|string }}/myroot
+endpoint_url = {{ baseurl|string }}/myroot
 
 [debug]
 # Used only with ``DebugExecutor``. If set to ``True`` DAG will fail with first

@@ -23,13 +23,12 @@ airflow-webserver-file-managed:
         {%- endif %}
     - context:
         flask: {{ d.config.airflow.flask|json }}
-        content: {{ d.config.airflow.content|json }}
 
     {%- else %}
 
 airflow-webserver-install-none:
   test.show_notification:
     - text: |
-        No custom configuration was provided for flask-appbuilder webserver, so airflow defaults user (that's okay btw)
+        No custom configuration was provided for flask-appbuilder webserver, so airflow uses defaults.
 
     {%- endif %}

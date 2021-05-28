@@ -23,7 +23,6 @@ airflow-webserver-file-managed:
         {%- endif %}
     - context:
         flask: {{ d.config.airflow.flask|json }}
-        content: {{ d.config.airflow.content|json }}
 
     {%- else %}
 

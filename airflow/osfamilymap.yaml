@@ -93,7 +93,7 @@ RedHat:
       content:
         celery:
           default_queue: /airflow
-          broker_url: amqp://rabbit:rabbit@127.0.0.1:5672/airflow
+          broker_url: amqp://rabbit:rabbit@127.0.0.1:15672/airflow
   pkg:
     airflow:
       deps:

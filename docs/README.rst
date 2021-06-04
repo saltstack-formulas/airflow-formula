@@ -67,17 +67,39 @@ Archlinux: You need Salt python3 installed::
 
     pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
 
-Everybody: The following `top.sls` works using Saltstack-formulas community::
+The following `top.sls` has been verified::
 
   base:
   '*':
-    - mysql        # .clean
+    # mysql        # .clean
     - postgres     # .clean
     - rabbitmq     # .clean
     - redis        # .clean
     - airflow      # .clean
 
 Apache-Airflow (most extras) is verified on Ubuntu, CentOS7, OpenSUSE15; (Archlinux, k8s, MacOS/Windows is planned).
+
+## Debugging LDAP logins using Airflow (Flask-Appbuilder) UI
+
+If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@GBECORP.GBE.global/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
+
+$ sudo systemctl stop airflow-webserver
+$ export AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=DEBUG
+$ export PATH="/home/_username@domain/.local/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+
+Start Airflow UI service [repeatable]
+
+$ /home/_username@GBECORP.GBE.global/.local/bin/airflow webserver >bob 2>&1
+
+Test login in Airflow UI. When finished, press CTRL+C in terminal and view the debug logfile relevant entries.
+
+$ vi bob
+
+If futher testing is needed (tweaking configuration) just update webserver_config.py and follow [repeatable] procedure again until you are satisfied. Once complete, restart Airflow UI daemon:
+
+$ unset AIRFLOW__LOGGING__FAB_LOGGING_LEVEL
+$ sudo systemctl start airflow-webserver
+
 
 Available states
 ----------------

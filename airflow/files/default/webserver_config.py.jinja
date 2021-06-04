@@ -107,6 +107,9 @@ AUTH_LDAP_SEARCH = '{{ "DC=example,DC=com" if "auth_ldap_search" not in f else f
 AUTH_LDAP_USE_TLS = {{ "False" if "auth_ldap_use_tls" not in f else f.auth_ldap_use_tls }}
 AUTH_LDAP_TLS_CACERTFILE = '{{ "/etc/pki/ca-trust/source/anchors/$root_CA.crt" if "auth_ldap_tls_cacertfile" not in f else f.auth_ldap_tls_cacertfile }}'
 
+# AUTH_ROLES_SYNC_AT_LOGIN = True
+# AUTH_LDAP_GROUP_FIELD = "memberOf"
+# PERMANENT_SESSION_LIFETIME = 1800
 
 # When using OpenID Auth, uncomment to setup OpenID providers.
 # example for OpenID authentication

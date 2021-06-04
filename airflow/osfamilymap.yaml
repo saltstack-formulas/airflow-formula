@@ -100,7 +100,7 @@ RedHat:
         - epel-release
         - centos-release-scl
         - python3
-        - python36-virtualenv
+        # python36-virtualenv   # needs to be verified on centos ci/cd
         - python3-devel
         - gcc-c++
         - python3-pip

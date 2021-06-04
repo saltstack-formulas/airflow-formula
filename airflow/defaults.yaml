@@ -37,14 +37,15 @@ airflow:
 
         ##### These are verifed with Active Directory ####
         auth_ldap_server: ldap://ldapserver.new
-        auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
         auth_ldap_append_domain: example.com
+        auth_ldap_uid_field: uid
+        auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
         auth_ldap_search: DC=example,DC=com
-        auth_user_registration: True
-
-        ## Admin is initially ok for 'admins', but change to Viewer for everyone else
+        auth_ldap_group_field: memberOf
         auth_user_registration_role: Admin
-
+        auth_user_registration: True
+        # auth_roles_sync_at_login: True
+        # permanent_session_lifetime: 1800
         webserver:
           # The ip specified when starting the web server
           web_server_host: 0.0.0.0

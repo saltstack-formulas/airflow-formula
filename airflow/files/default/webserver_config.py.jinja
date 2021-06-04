@@ -2,7 +2,6 @@
 # File managed by Salt at <'{{ source }}'>.
 # Your changes may be overwritten.
 ########################################################################
-{%- set c = content %}
 {%- set f = flask %}
 #
 # Licensed to the Apache Software Foundation (ASF) under one
@@ -35,7 +34,7 @@ from flask_appbuilder.security.manager import {{ "AUTH_DB" if "auth_type" not in
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Flask-WTF flag for CSRF
-WTF_CSRF_ENABLED = {{ "True" if "wtf_csrf_enabled" not in c else c.wtf_csrf_enabled }}
+WTF_CSRF_ENABLED = {{ "True" if "wtf_csrf_enabled" not in f else f.wtf_csrf_enabled }}
 
 # ----------------------------------------------------
 # AUTHENTICATION CONFIG
@@ -53,16 +52,16 @@ WTF_CSRF_ENABLED = {{ "True" if "wtf_csrf_enabled" not in c else c.wtf_csrf_enab
 AUTH_TYPE = {{ "AUTH_DB" if "auth_type" not in f else f.auth_type }}
 
 # Uncomment to setup Full admin role name
-AUTH_ROLE_ADMIN = '{{ "Admin" if "auth_role_admin" not in c else c.auth_role_admin }}'
+AUTH_ROLE_ADMIN = '{{ "Admin" if "auth_role_admin" not in f else f.auth_role_admin }}'
 
 # Uncomment to setup Public role name, no authentication needed
-# AUTH_ROLE_PUBLIC = '{{ "Public" if "auth_role_public" not in c else c.auth_role_public }}'
+# AUTH_ROLE_PUBLIC = '{{ "Public" if "auth_role_public" not in f else f.auth_role_public }}'
 
 # Will allow user self registration
-AUTH_USER_REGISTRATION = {{ "True" if "auth_user_registration" not in c else c.auth_user_registration }}
+AUTH_USER_REGISTRATION = {{ "True" if "auth_user_registration" not in f else f.auth_user_registration }}
 
 # The default user self registration role
-AUTH_USER_REGISTRATION_ROLE = '{{ "Public" if "auth_user_registration_role" not in c else c.auth_user_registration_role }}'
+AUTH_USER_REGISTRATION_ROLE = '{{ "Public" if "auth_user_registration_role" not in f else f.auth_user_registration_role }}'
 
 # ----------------------------------------------------
 # AUTHENTICATION PROVIDERS
@@ -87,27 +86,30 @@ AUTH_USER_REGISTRATION_ROLE = '{{ "Public" if "auth_user_registration_role" not 
 # }]
 
 # When using LDAP Auth, setup the ldap server
-AUTH_LDAP_SERVER = '{{ "ldap://ldapserver.new" if "auth_ldap_server" not in c else c.auth_ldap_server }}'
+AUTH_LDAP_SERVER = '{{ "ldap://ldapserver.new" if "auth_ldap_server" not in f else f.auth_ldap_server }}'
 
 # Ldap and Active Directory
-AUTH_LDAP_SEARCH_FILTER = '{{ "(memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)" if "auth_ldap_search_filter" not in c else c.auth_ldap_search_filter }}'
-AUTH_LDAP_APPEND_DOMAIN = '{{ "example.com" if "auth_ldap_append_domain" not in c else c.auth_ldap_append_domain }}'
-AUTH_LDAP_ALLOW_SELF_SIGNED = {{ "False" if "auth_ldap_allow_self_signed" not in c else c.auth_ldap_allow_self_signed }}
+AUTH_LDAP_SEARCH_FILTER = '{{ "(memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)" if "auth_ldap_search_filter" not in f else f.auth_ldap_search_filter }}'
+AUTH_LDAP_APPEND_DOMAIN = '{{ "example.com" if "auth_ldap_append_domain" not in f else f.auth_ldap_append_domain }}'
+AUTH_LDAP_ALLOW_SELF_SIGNED = {{ "False" if "auth_ldap_allow_self_signed" not in f else f.auth_ldap_allow_self_signed }}
 
 # For self user registration
-AUTH_LDAP_UID_FIELD = '{{ "userPrincipalName" if "auth_ldap_uid_field" not in c else c.auth_ldap_uid_field }}'  # or sAMAccountName
-AUTH_LDAP_FIRSTNAME_FIELD = '{{ "givenName" if "auth_ldap_firstname_field" not in c else c.auth_ldap_firstname_field }}'
-AUTH_LDAP_LASTTNAME_FIELD = '{{ "sn" if "auth_ldap_lastname_field" not in c else c.auth_ldap_lastname_field }}'
-AUTH_LDAP_EMAIL_FIELD = '{{ "mail" if "auth_ldap_email_field" not in c else c.auth_ldap_email_field }}'
+AUTH_LDAP_UID_FIELD = '{{ "userPrincipalName" if "auth_ldap_uid_field" not in f else f.auth_ldap_uid_field }}'  # or sAMAccountName
+AUTH_LDAP_FIRSTNAME_FIELD = '{{ "givenName" if "auth_ldap_firstname_field" not in f else f.auth_ldap_firstname_field }}'
+AUTH_LDAP_LASTTNAME_FIELD = '{{ "sn" if "auth_ldap_lastname_field" not in f else f.auth_ldap_lastname_field }}'
+AUTH_LDAP_EMAIL_FIELD = '{{ "mail" if "auth_ldap_email_field" not in f else f.auth_ldap_email_field }}'
 
 # For OpenLDAP
-AUTH_LDAP_SEARCH = '{{ "DC=example,DC=com" if "auth_ldap_search" not in c else c.auth_ldap_search }}'
-# AUTH_LDAP_BIND_USER = '{{ "(CN=Query User,OU=myOrg,DC=example,DC=com)" if "auth_ldap_bind_user" not in c else c.auth_ldap_bind_user }}'
-# AUTH_LDAP_BIND_PASSWORD = '{{ "password" if "auth_ldap_bind_password" not in c else c.auth_ldap_bind_password }}'
+AUTH_LDAP_SEARCH = '{{ "DC=example,DC=com" if "auth_ldap_search" not in f else f.auth_ldap_search }}'
+# AUTH_LDAP_BIND_USER = '{{ "(CN=Query User,OU=myOrg,DC=example,DC=com)" if "auth_ldap_bind_user" not in f else f.auth_ldap_bind_user }}'
+# AUTH_LDAP_BIND_PASSWORD = '{{ "password" if "auth_ldap_bind_password" not in f else f.auth_ldap_bind_password }}'
 
-AUTH_LDAP_USE_TLS = {{ "False" if "auth_ldap_use_tls" not in c else c.auth_ldap_use_tls }}
-AUTH_LDAP_TLS_CACERTFILE = '{{ "/etc/pki/ca-trust/source/anchors/$root_CA.crt" if "auth_ldap_tls_cacertfile" not in c else c.auth_ldap_tls_cacertfile }}'
+AUTH_LDAP_USE_TLS = {{ "False" if "auth_ldap_use_tls" not in f else f.auth_ldap_use_tls }}
+AUTH_LDAP_TLS_CACERTFILE = '{{ "/etc/pki/ca-trust/source/anchors/$root_CA.crt" if "auth_ldap_tls_cacertfile" not in f else f.auth_ldap_tls_cacertfile }}'
 
+# AUTH_ROLES_SYNC_AT_LOGIN = True
+# AUTH_LDAP_GROUP_FIELD = "memberOf"
+# PERMANENT_SESSION_LIFETIME = 1800
 
 # When using OpenID Auth, uncomment to setup OpenID providers.
 # example for OpenID authentication
@@ -125,7 +127,7 @@ AUTH_LDAP_TLS_CACERTFILE = '{{ "/etc/pki/ca-trust/source/anchors/$root_CA.crt" i
 # http://flask-appbuilder.readthedocs.io/en/latest/customizing.html#changing-themes
 # Please make sure to remove "navbar_color" configuration from airflow.c
 # in order to fully utilize the theme. (or use that property in conjunction with theme)
-APP_THEME = "{{ 'bootstrap-theme.css' if 'app_theme' not in c else c.app_theme }}"
+APP_THEME = "{{ 'bootstrap-theme.css' if 'app_theme' not in f else f.app_theme }}"
 # APP_THEME = "amelia.css"
 # APP_THEME = "cerulean.css"
 # APP_THEME = "cosmo.css"

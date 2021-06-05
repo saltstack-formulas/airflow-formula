@@ -125,7 +125,7 @@ airflow:
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           default_queue: /airflow
-          broker_url: amqp://airflow:airflow@127.0.0.1:5672/airflow
+          broker_url: amqp://airflow:airflow@127.0.0.1:5672/airflow   # port 5672 here
           # broker_url: redis://127.0.0.1:6379/0
           result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
 

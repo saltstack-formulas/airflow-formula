@@ -2,19 +2,19 @@
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import airflow as d with context %}
+{%- from tplroot ~ "/map.jinja" import airflow as a with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
-    {%- if d.environ.airflow.content %}
+    {%- if a.environ.airflow.content %}
         {%- set sls_archive_install = tplroot ~ '.archive.install' %}
         {%- set sls_package_install = tplroot ~ '.package.install' %}
 
 include:
-  - {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
+  - {{ sls_archive_install if a.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
 
 airflow-config-install-environ_file:
   file.managed:
-    - name: {{ d.dir.airflow.environ }}{{ d.div }}{{ d.environ.airflow.file }}
+    - name: {{ a.dir.airflow.environ }}{{ a.div }}{{ a.environ.airflow.file }}
     - source: {{ files_switch(['environ.sh.jinja'],
                               lookup='airflow-config-install-environ_file'
                  )
@@ -22,18 +22,18 @@ airflow-config-install-environ_file:
     - makedirs: True
     - template: jinja
     - context:
-        environ: {{ d.environ.airflow.content|json }}
+        environ: {{ a.environ.airflow.content|json }}
     - watch_in:
-        {%- for svcname in d.service.airflow.enabled %}
+        {%- for svcname in a.service.airflow.enabled %}
       - service: airflow-service-running-{{ svcname }}
         {%- endfor %}
         {%- if grains.os != 'Windows' %}
     - mode: '0640'
-    - user: {{ d.identity.airflow.user }}
-    - group: {{ d.identity.airflow.group }}
+    - user: {{ a.identity.airflow.user }}
+    - group: {{ a.identity.airflow.group }}
         {%- endif %}
     - require:
-      - sls: {{ sls_archive_install if d.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
+      - sls: {{ sls_archive_install if a.pkg.airflow.use_upstream|lower == 'archive' else sls_package_install }}
 
     {%- else %}
 

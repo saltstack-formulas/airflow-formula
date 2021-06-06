@@ -1,51 +1,55 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
-
+---
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import airflow as d with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
-{%- set sls_service_running = tplroot ~ '.service.running' %}
+{%- from tplroot ~ "/map.jinja" import airflow as a with context %}
+
+    {%- if a.identity.airflow.role|lower == 'primary' %}
+
+        {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+        {%- set sls_service_running = tplroot ~ '.service.running' %}
 
 include:
   - {{ sls_service_running }}
 
 airflow-config-database-managed:
-    {%- if d.pkg.airflow.version.split('.')[0]|int == 1 %}
+        {%- if a.pkg.airflow.version.split('.')[0]|int == 1 %}
   file.managed:
-    - name: {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.database.airflow.script }}
+    - name: {{ a.dir.airflow.tmp }}{{ a.div }}{{ a.database.airflow.script }}
     - source: {{ files_switch(['security.py.jinja'],
                               lookup='airflow-config-database-managed'
                  )
               }}
     - makedirs: True
     - template: jinja
-        {%- if grains.os != 'Windows' %}
+            {%- if grains.os != 'Windows' %}
     - mode: '0700'
-    - user: {{ d.identity.airflow.user }}
-        {%- endif %}
+    - user: {{ a.identity.airflow.user }}
+            {%- endif %}
     - context:
-        python: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}python
-        user: {{ d.database.airflow.user }}
-        email: {{ d.database.airflow.email }}
-        pass: {{ d.database.airflow.pass }}
+        python: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}python
+        user: {{ a.database.airflow.user }}
+        email: {{ a.database.airflow.email }}
+        pass: {{ a.database.airflow.pass }}
     - require:
       - sls: {{ sls_service_running }}
   cmd.run:
     - names:
-      - {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.database.airflow.script }}
-      - rm {{ d.dir.airflow.tmp }}{{ d.div }}{{ d.database.airflow.script }}
-        {%- if grains.os != 'Windows' %}
-    - runas: {{ d.identity.airflow.user }}
-        {%- endif %}
+      - {{ a.dir.airflow.tmp }}{{ a.div }}{{ a.database.airflow.script }}
+      - rm {{ a.dir.airflow.tmp }}{{ a.div }}{{ a.database.airflow.script }}
+            {%- if grains.os != 'Windows' %}
+    - runas: {{ a.identity.airflow.user }}
+            {%- endif %}
     - require:
       - file: airflow-config-database-managed
 
-    {%- else %}
+        {%- else %}
 
   cmd.run:
-    - name: {{ d.dir.airflow.virtualenv }}{{ d.div }}bin{{ d.div }}airflow users create --username {{ d.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ d.database.airflow.email }} --password {{ d.database.airflow.pass }}
-        {%- if grains.os != 'Windows' %}
-    - runas: {{ d.identity.airflow.user }}
-        {%- endif %}
+    - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow users create --username {{ a.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ a.database.airflow.email }} --password {{ a.database.airflow.pass }}
+            {%- if grains.os != 'Windows' %}
+    - runas: {{ a.identity.airflow.user }}
+            {%- endif %}
 
+        {%- endif %}
     {%- endif %}

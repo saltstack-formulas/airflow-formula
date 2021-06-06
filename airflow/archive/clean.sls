@@ -2,7 +2,7 @@
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import airflow as d with context %}
+{%- from tplroot ~ "/map.jinja" import airflow as a with context %}
 
     {%- if grains.kernel|lower in ('linux',) %}
         {%- set sls_alternatives_clean = tplroot ~ '.alternatives.clean' %}
@@ -17,17 +17,17 @@ include:
 airflow-airflow-archive-absent:
   file.absent:
     - names:
-      - {{ d.dir.airflow.tmp }}
-      - {{ d.dir.airflow.lib }}
-      - {{ d.dir.airflow.virtualenv }}
-        {%- if d.linux.altpriority|int == 0 or grains.os_family in ('Arch', 'MacOS') %}
-            {%- for cmd in d.pkg.airflow.commands|unique %}
+      - {{ a.dir.airflow.tmp }}
+      - {{ a.dir.airflow.lib }}
+      - {{ a.dir.airflow.virtualenv }}
+        {%- if a.linux.altpriority|int == 0 or grains.os_family in ('Arch', 'MacOS') %}
+            {%- for cmd in a.pkg.airflow.commands|unique %}
       - /usr/local/bin/{{ cmd }}
             {%- endfor %}
         {%- endif %}
-        {%- if 'service' in d.pkg and 'airflow' in d.pkg.service and d.pkg.service.airflow is mapping %}
-            {%- for svcname in d.service.airflow.names %}
-      - {{ d.dir.airflow.service }}/{{ svcname }}.service
+        {%- if 'service' in a.pkg and 'airflow' in a.pkg.service and a.pkg.service.airflow is mapping %}
+            {%- for svcname in a.service.airflow.names %}
+      - {{ a.dir.airflow.service }}/{{ svcname }}.service
             {%- endfor %}
         {%- endif %}
     - require:

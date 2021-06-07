@@ -103,12 +103,10 @@ Airflow / Messaging Clusters are configured via pillar data. The key Airflow pil
       - postgres.dropped
       - postgres
         {%- endif %}
-
         {%- if salt['pillar.get']('airflow:config:airflow:content:core:executor', False) == 'CeleryExecutor' %}
       - rabbitmq.clean    # does not delete /var/lib/rabbitmq
       - rabbitmq
       - rabbitmq.config.cluster
-
         {%- endif %}
       - airflow
 

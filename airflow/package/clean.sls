@@ -2,7 +2,7 @@
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import airflow as d with context %}
+{%- from tplroot ~ "/map.jinja" import airflow as a with context %}
 {%- set sls_service_clean = tplroot ~ '.service.clean' %}
 
 include:
@@ -10,13 +10,13 @@ include:
 
 airflow-package-clean-pip:
   pip.removed:
-        {%- if d.pkg.airflow.extras is iterable %}
-    - name: {{ d.pkg.airflow.name }} {{ d.pkg.airflow.extras|list|replace("'","") }}
+        {%- if a.pkg.airflow.extras is iterable %}
+    - name: {{ a.pkg.airflow.name }} {{ a.pkg.airflow.extras|list|replace("'","") }}
         {%- else %}
-    - name: {{ d.pkg.airflow.name }}
+    - name: {{ a.pkg.airflow.name }}
         {%- endif %}
-    - user: {{ d.identity.airflow.user }}
+    - user: {{ a.identity.airflow.user }}
     - require:
       - sls: {{ sls_service_clean }}
   file.absent:
-    - name: {{ d.dir.airflow.virtualenv }}
+    - name: {{ a.dir.airflow.virtualenv }}

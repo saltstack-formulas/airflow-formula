@@ -2,7 +2,7 @@
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import airflow as d with context %}
+{%- from tplroot ~ "/map.jinja" import airflow as a with context %}
 {%- set sls_config_users = tplroot ~ '.config.users' %}
 {%- set sls_service_running = tplroot ~ '.service.install' %}
 {%- set sls_alternatives_install = tplroot ~ '.alternatives.install' %}
@@ -16,15 +16,15 @@ include:
 airflow-package-install-base-devel:
   pkg.group_installed:
     - name: base-devel
-    - refresh: {{ d.misc.refresh }}
+    - refresh: {{ a.misc.refresh }}
 
     {%- endif %}
-    {%- if d.pkg.airflow.deps %}
+    {%- if a.pkg.airflow.deps %}
 
 airflow-package-install-pkg-deps:
   pkg.installed:
-    - names: {{ d.pkg.airflow.deps|json }}
-    - refresh: {{ d.misc.refresh }}
+    - names: {{ a.pkg.airflow.deps|json }}
+    - refresh: {{ a.misc.refresh }}
     - require_in:
       - file: airflow-package-install-virtualenv-clean
 
@@ -32,19 +32,19 @@ airflow-package-install-pkg-deps:
 
 airflow-package-install-virtualenv-clean:
   file.absent:
-    - name: {{ d.dir.airflow.virtualenv }}
+    - name: {{ a.dir.airflow.virtualenv }}
     - force: True
-    - retry: {{ d.retry_option|json }}   # weird; removal (root rm -fr) fails intermittently?
-    - onlyif: test -d {{ d.dir.airflow.virtualenv }}
+    - retry: {{ a.retry_option|json }}   # weird; removal (root rm -fr) fails intermittently?
+    - onlyif: test -d {{ a.dir.airflow.virtualenv }}
     - require_in:
       - file: airflow-package-install-virtualenv
 
 airflow-package-install-virtualenv:
   file.directory:
-    - name: {{ d.dir.airflow.virtualenv }}
+    - name: {{ a.dir.airflow.virtualenv }}
             {%- if grains.os|lower != 'windows' %}
-    - user: {{ d.identity.airflow.user }}
-    - group: {{ d.identity.airflow.group }}
+    - user: {{ a.identity.airflow.user }}
+    - group: {{ a.identity.airflow.group }}
     - mode: '0755'
     - recurse:
         - user
@@ -55,32 +55,32 @@ airflow-package-install-virtualenv:
       - virtualenv: airflow-package-install-virtualenv
       - pip: airflow-package-install-pip-installed
   virtualenv.managed:
-    - name: {{ d.dir.airflow.virtualenv }}
-    - user: {{ d.identity.airflow.user }}
+    - name: {{ a.dir.airflow.virtualenv }}
+    - user: {{ a.identity.airflow.user }}
     - python: python3
-    - venv_bin: {{ d.config.airflow.venv_cmd or 'virtualenv' }}
+    - venv_bin: {{ a.config.airflow.venv_cmd or 'virtualenv' }}
     - require:
       - sls: {{ sls_config_users }}
     - require_in:
       - pip: airflow-package-install-pip-installed
-        {%- if d.pkg.airflow.pips %}
-    - pip_pkgs: {{ d.pkg.airflow.pips|json }}
+        {%- if a.pkg.airflow.pips %}
+    - pip_pkgs: {{ a.pkg.airflow.pips|json }}
         {%- endif %}
 
 airflow-package-install-pip-installed:
   pip.installed:
-        {%- if d.pkg.airflow.extras is iterable %}
-    - name: {{ d.pkg.airflow.name }}{{ d.pkg.airflow.extras|list|replace("'","") }}=={{ d.pkg.airflow.version or '2.1.0' }}
+        {%- if a.pkg.airflow.extras is iterable %}
+    - name: {{ a.pkg.airflow.name }}{{ a.pkg.airflow.extras|list|replace("'","") }}=={{ a.pkg.airflow.version or '2.1.0' }}
         {%- else %}
-    - name: {{ d.pkg.airflow.name }}
+    - name: {{ a.pkg.airflow.name }}
         {%- endif %}
-    - bin_env: {{ d.dir.airflow.virtualenv }}
+    - bin_env: {{ a.dir.airflow.virtualenv }}
     - env_vars:
       AIRFLOW_GPL_UNIDECODE: 'yes'
-    - reload_modules: {{ d.misc.reload }}
-    - user: {{ d.identity.airflow.user }}
-        {%- if d.pkg.airflow.pips %}
-    - constraint: {{ d.pkg.airflow.constraint_file }}
+    - reload_modules: {{ a.misc.reload }}
+    - user: {{ a.identity.airflow.user }}
+        {%- if a.pkg.airflow.pips %}
+    - constraint: {{ a.pkg.airflow.constraint_file }}
         {%- endif %}
     - require_in:
       - sls: {{ sls_service_running }}

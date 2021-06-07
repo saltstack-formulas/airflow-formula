@@ -15,6 +15,7 @@ airflow:
     rootuser: root
     rootgroup: root
     airflow:
+      role: primary    # primary singleton or cluster host
       user: airflow    # user, where airflow is installed
       group: airflow
       skip_user_state: false     # i.e. local user

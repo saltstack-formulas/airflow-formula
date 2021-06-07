@@ -2,23 +2,23 @@
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import airflow as d with context %}
+{%- from tplroot ~ "/map.jinja" import airflow as a with context %}
 
-    {%- if d.identity.airflow.skip_user_state == false %}
+    {%- if a.identity.airflow.skip_user_state == false %}
 
 airflow-config-users-install-group:
   group.present:
-    - name: {{ d.identity.airflow.group }}
+    - name: {{ a.identity.airflow.group }}
 
 airflow-config-users-install-user:
   user.present:
-    - name: {{ d.identity.airflow.user }}
+    - name: {{ a.identity.airflow.user }}
     - groups:
-      - {{ d.identity.airflow.group }}
+      - {{ a.identity.airflow.group }}
         {%- if grains.os != 'Windows' %}
     - shell: /bin/bash
             {%- if grains.os_family == 'MacOS' %}
-    - unless: /usr/bin/dscl . list {{ d.dir.airflow.base }} | grep {{ d.identity.airflow.user }} >/dev/null 2>&1
+    - unless: /usr/bin/dscl . list {{ a.dir.airflow.base }} | grep {{ a.identity.airflow.user }} >/dev/null 2>&1
             {%- endif %}
         {%- endif %}
     - require:

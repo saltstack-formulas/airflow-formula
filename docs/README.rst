@@ -71,11 +71,16 @@ The following `top.sls` has been verified::
 
   base:
   '*':
-    # mysql        # .clean
-    - postgres     # .clean
-    - rabbitmq     # .clean
-    - redis        # .clean
-    - airflow      # .clean
+        {%- if salt['pillar.get']('airflow:identity:airflow:role', False) == 'primary' %}
+    - postgres.dropped
+    - postgres
+        {%- endif %}
+        {%- if salt['pillar.get']('airflow:config:airflow:content:core:executor', False) == 'CeleryExecutor' %}
+    - rabbitmq.clean    # does not delete /var/lib/rabbitmq
+    - rabbitmq
+    - rabbitmq.config.cluster
+        {%- endif %}
+    - airflow
 
 Apache-Airflow (most extras) is verified on Ubuntu, CentOS7, OpenSUSE15; (Archlinux, k8s, MacOS/Windows is planned).
 

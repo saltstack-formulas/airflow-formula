@@ -67,6 +67,9 @@ Archlinux: You need Salt python3 installed::
 
     pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
 
+Airflow Clusters
+----------------
+
 Airflow / Messaging Clusters are configured via pillar data. The key Airflow pillar/attribute is `airflow:identity:role:` which must be `'primary'` on primary host (scheduler, ui), and `'secondary'` on all worker hosts (no scheduler). See the `pillar.example` file. The following highstate (`top.sls`) can deploy an Airflow Cluster:
 
   base:

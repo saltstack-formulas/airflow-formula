@@ -18,7 +18,7 @@ airflow-formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-A SaltStack formula to manage Apache Airflow 1.0 and 2.0 (https://airflow.apache.org) on GNU/Linux.
+A SaltStack formula to manage Apache Airflow 1.0 and 2.0 (https://airflow.apache.org) on GNU/Linux. Airflow Clusters are supported by saltstack-formulas community. Supported platforms are Ubuntu, CentOS7, OpenSUSE15.
 
 .. contents:: **Table of Contents**
    :depth: 1
@@ -63,9 +63,29 @@ now ``pre-commit`` will run automatically on each ``git commit``. ::
 Special notes
 -------------
 
-Archlinux: You need Salt python3 installed::
+ARCHLINUX: You need Salt python3 installed::
 
     pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
+
+
+MICROSOFT ACTIVE DIRECTORY/LDAP: If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@example.com/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
+
+    $ sudo systemctl stop airflow-webserver
+    $ export AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=DEBUG
+    $ export PATH="/home/_username@example.com/.local/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+
+Start Airflow UI service [repeatable]
+
+    $ /home/_username@example.com/.local/bin/airflow webserver >bob 2>&1
+
+Test login in Airflow UI. When finished, press CTRL+C in terminal and view the debug logfile relevant entries.
+
+    $ vi bob
+
+If futher testing is needed (tweaking configuration) just update webserver_config.py and follow [repeatable] procedure again until you are satisfied. Once complete, restart Airflow UI daemon:
+
+    $ unset AIRFLOW__LOGGING__FAB_LOGGING_LEVEL
+    $ sudo systemctl start airflow-webserver
 
 Airflow Clusters
 ----------------
@@ -84,30 +104,6 @@ Airflow / Messaging Clusters are configured via pillar data. The key Airflow pil
       - rabbitmq.config.cluster
         {%- endif %}
       - airflow
-
-Apache-Airflow (most extras) is verified on Ubuntu, CentOS7, OpenSUSE15; (Archlinux, k8s is planned).
-
-## Debugging LDAP logins using Airflow (Flask-Appbuilder) UI
-
-If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@example.com/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
-
-$ sudo systemctl stop airflow-webserver
-$ export AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=DEBUG
-$ export PATH="/home/_username@example.com/.local/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
-
-Start Airflow UI service [repeatable]
-
-$ /home/_username@example.com/.local/bin/airflow webserver >bob 2>&1
-
-Test login in Airflow UI. When finished, press CTRL+C in terminal and view the debug logfile relevant entries.
-
-$ vi bob
-
-If futher testing is needed (tweaking configuration) just update webserver_config.py and follow [repeatable] procedure again until you are satisfied. Once complete, restart Airflow UI daemon:
-
-$ unset AIRFLOW__LOGGING__FAB_LOGGING_LEVEL
-$ sudo systemctl start airflow-webserver
-
 
 Available states
 ----------------

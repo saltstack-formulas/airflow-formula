@@ -63,12 +63,16 @@ now ``pre-commit`` will run automatically on each ``git commit``. ::
 Special notes
 -------------
 
-ARCHLINUX: You need Salt python3 installed::
+ARCHLINUX
+^^^^^^^^^
+You need Salt python3 installed::
 
     pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
 
 
-MICROSOFT ACTIVE DIRECTORY/LDAP: If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@example.com/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
+LDAP and AD Login troubleshooting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@example.com/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
 
     $ sudo systemctl stop airflow-webserver
     $ export AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=DEBUG
@@ -87,8 +91,9 @@ If futher testing is needed (tweaking configuration) just update webserver_confi
     $ unset AIRFLOW__LOGGING__FAB_LOGGING_LEVEL
     $ sudo systemctl start airflow-webserver
 
+
 Airflow Clusters
-----------------
+^^^^^^^^^^^^^^^^
 
 Airflow / Messaging Clusters are configured via pillar data. The key Airflow pillar/attribute is `airflow:identity:role:` which must be `'primary'` on primary host (scheduler, ui), and `'secondary'` on all worker hosts (no scheduler). See the `pillar.example` file. The following highstate (`top.sls`) can deploy an Airflow Cluster:
 

@@ -67,34 +67,34 @@ Archlinux: You need Salt python3 installed::
 
     pacman -Sy base-devel curl; curl -sSL https://aur.archlinux.org/cgit/aur.git/snapshot/salt-py3.tar.gz | tar xz; cd salt-py3; makepkg -Crsf; sudo -s;pacman -U salt-py3-*.pkg.tar*
 
-The following `top.sls` has been verified::
+Airflow / Messaging Clusters are configured via pillar data. The key Airflow pillar/attribute is `airflow:identity:role:` which must be `'primary'` on primary host (scheduler, ui), and `'secondary'` on all worker hosts (no scheduler). See the `pillar.example` file. The following highstate (`top.sls`) can deploy an Airflow Cluster:
 
   base:
-  '*':
+    '*':
         {%- if salt['pillar.get']('airflow:identity:airflow:role', False) == 'primary' %}
-    - postgres.dropped
-    - postgres
+      - postgres.dropped
+      - postgres
         {%- endif %}
         {%- if salt['pillar.get']('airflow:config:airflow:content:core:executor', False) == 'CeleryExecutor' %}
-    - rabbitmq.clean    # does not delete /var/lib/rabbitmq
-    - rabbitmq
-    - rabbitmq.config.cluster
+      - rabbitmq.clean    # does not delete /var/lib/rabbitmq
+      - rabbitmq
+      - rabbitmq.config.cluster
         {%- endif %}
-    - airflow
+      - airflow
 
-Apache-Airflow (most extras) is verified on Ubuntu, CentOS7, OpenSUSE15; (Archlinux, k8s, MacOS/Windows is planned).
+Apache-Airflow (most extras) is verified on Ubuntu, CentOS7, OpenSUSE15; (Archlinux, k8s is planned).
 
 ## Debugging LDAP logins using Airflow (Flask-Appbuilder) UI
 
-If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@GBECORP.GBE.global/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
+If Airflow UI uses Microsoft Active Directory (AD) sometimes troubleshooting is required. Authentication configuration is read from /home/_username@example.com/airflow/webserver_config.py file. Know your site configuration - for LDAP use SOFTERRA LDAP BROWSER.  The following procedure is way to debug UI logins.
 
 $ sudo systemctl stop airflow-webserver
 $ export AIRFLOW__LOGGING__FAB_LOGGING_LEVEL=DEBUG
-$ export PATH="/home/_username@domain/.local/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+$ export PATH="/home/_username@example.com/.local/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 
 Start Airflow UI service [repeatable]
 
-$ /home/_username@GBECORP.GBE.global/.local/bin/airflow webserver >bob 2>&1
+$ /home/_username@example.com/.local/bin/airflow webserver >bob 2>&1
 
 Test login in Airflow UI. When finished, press CTRL+C in terminal and view the debug logfile relevant entries.
 

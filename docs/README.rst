@@ -95,11 +95,11 @@ If futher testing is needed (tweaking configuration) just update webserver_confi
 Airflow Clusters
 ^^^^^^^^^^^^^^^^
 
-Airflow / Messaging Clusters are configured via pillar data. The key Airflow pillar/attribute is `airflow:identity:role:` which must be `'primary'` on primary host (scheduler, ui), and `'secondary'` on all worker hosts (no scheduler). See the `pillar.example` file. The following highstate (`top.sls`) can deploy an Airflow Cluster:
+Airflow / Messaging Clusters are configured via pillar data. The key Airflow pillar/attribute is `airflow:identity:role:` which must be `'scheduler'` on primary host (scheduler, ui), and `'secondary'` on all worker hosts (no scheduler). See the `pillar.example` file. The following highstate (`top.sls`) can deploy an Airflow Cluster:
 
   base:
     '*':
-        {%- if salt['pillar.get']('airflow:identity:airflow:role', False) == 'primary' %}
+        {%- if salt['pillar.get']('airflow:identity:airflow:role', False) == 'scheduler' %}
       - postgres.dropped
       - postgres
         {%- endif %}

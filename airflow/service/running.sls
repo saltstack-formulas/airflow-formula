@@ -16,7 +16,7 @@ include:
 
     {%- for name in a.service.airflow.enabled %}
 
-        {%- if name == 'airflow-scheduler' and a.database.airflow.initd == true %}
+        {%- if name == 'airflow-scheduler' and a.database.airflow.initdb == true %}
 airflow-service-install-database:
   cmd.run:
     - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow {{ a.config.airflow.initdbcmd }}

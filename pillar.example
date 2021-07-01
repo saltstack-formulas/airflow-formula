@@ -23,7 +23,7 @@ airflow:
       pip_cmd: pip3
       flask:
         # https://flask-appbuilder.readthedocs.io/en/latest/security.html#authentication-ldap
-        auth_type: AUTH_LDAP
+        auth_type: AUTH_DB  # AUTH_LDAP
         auth_ldap_server: ldap://ldapserver.new    # must include protocol (ldap or ldaps)
         auth_ldap_append_domain: example.com
         auth_ldap_uid_field: 'sAMAccountName'  # or 'userPrincipalName'

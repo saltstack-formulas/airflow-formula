@@ -15,12 +15,12 @@ airflow:
     rootuser: root
     rootgroup: root
     airflow:
-      role: scheduler  # primary singleton or cluster primary host
       user: airflow    # user, where airflow is installed
       group: airflow
       skip_user_state: false     # i.e. local user
   database:
     airflow:
+      initdb: true
       user: airflow
       pass: airflow
       email: airflow@localhost
@@ -29,7 +29,7 @@ airflow:
     airflow:
       file: airflow.cfg
       webserver: webserver_config.py
-      initcmd: 'db init'
+      initdbcmd: 'db init'
       venv_cmd: virtualenv
 
       flask:

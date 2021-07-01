@@ -6,15 +6,15 @@
 airflow:
   identity:
     airflow:
-      role: scheduler   # only for host running scheduler
       user: airflow
       group: airflow
       skip_user_state: true  # _airflow already exists
   database:
     airflow:
+      install: true        # see docs/README
       user: airflow
       pass: airflow
-      email: airflow@primaryhost
+      email: airflow@127.0.0.1
   config:
     airflow:
           {%- if grains.osfinger == 'CentOS Linux-7' %}
@@ -45,7 +45,8 @@ airflow:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
           default_queue: /airflow
           broker_url: amqp://airflow:airflow@127.0.0.1:5672/airflow  # redis://127.0.0.1:6379/0
-          result_backend: db+postgresql://airflow:airflow@primaryhost/airflow
+          ## result backend is usually primary airflow host
+          result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
         cli: {}
         core:
           dags_folder: /home/airflow/dags
@@ -54,7 +55,8 @@ airflow:
           default_timezone: utc
           load_examples: True
           # https://stackoverflow.com/questions/45455342
-          sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@primaryhost/airflow
+          # this is your database host
+          sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''
         webserver:
           secret_key: {{ range(1,2000) | random }}
@@ -152,7 +154,7 @@ rabbitmq:
   cluster:
     rabbit@locahost:
       user: rabbit       # user is confusing keyname; should be 'node: rabbit'
-      host: primaryhost  # host of node to join to
+      host: 127.0.0.1    # host of (primary rabbitmq cluster) node to join to
       ram_node: None
       runas: rabbitmq
       erlang_cookie:

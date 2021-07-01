@@ -38,7 +38,7 @@
 {%- do data.pkg.airflow.update({'constraint_file': url}) %}
 
 {%- if p.version.split('.')[0]|int == 1 %}
-    {% do data.config.airflow.update({ 'initcmd': 'initdb'}) %}
+    {% do data.config.airflow.update({ 'initdbcmd': 'initdb'}) %}
 {%- endif %}
 
 {# directories #}

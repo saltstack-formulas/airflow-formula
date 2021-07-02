@@ -40,13 +40,16 @@ airflow:
         auth_ldap_server: ldap://ldapserver.new  # must include protocol (ldap or ldaps)
         auth_ldap_append_domain: example.com
         auth_ldap_uid_field: uid
+        auth_ldap_search: OU=myOrg,DC=example,DC=com
         auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
-        auth_ldap_search: DC=example,DC=com
         auth_ldap_group_field: memberOf
         auth_ldap_allow_self_signed: True
-        auth_user_registration_role: Admin
+        auth_user_registration_role: User
         auth_user_registration: True
-        # auth_roles_sync_at_login: True
+        # auth_role_admin: Admin
+        # auth_role_public: Public
+        # auth_roles_mapping: null
+        # auth_roles_sync_at_login: False
         # permanent_session_lifetime: 1800
         webserver:
           # The ip specified when starting the web server
@@ -67,6 +70,7 @@ airflow:
           plugins_folder: /home/airflow/plugins
           executor: CeleryExecutor
           default_timezone: utc
+          load_examples: True
           # https://stackoverflow.com/questions/45455342
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''
@@ -77,6 +81,8 @@ airflow:
         ldap: {}   # gone in v2
         logging: {}
         metrics: {}
+        operators:
+          default_queue: airflow
         secrets: {}
         sentry: {}
         smart_sensor: {}
@@ -187,10 +193,10 @@ airflow:
         - pep562
         - psutil
         - pygments
-        - python-daemon
-        - python-dateutil
-        - python-nvd3
-        - python-slugify
+        # python-daemon
+        # python-dateutil
+        # python-nvd3
+        # python-slugify
         - requests
         - setproctitle
         - sqlalchemy< 1.4.0
@@ -224,7 +230,7 @@ airflow:
         - azure-storage-blob
         - paramiko
         # authentication
-        - python-ldap
+        # python-ldap
         - requests-kerberos
         - requests-credssp
         - requests_ntlm

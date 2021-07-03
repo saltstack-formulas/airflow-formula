@@ -17,9 +17,6 @@ airflow:
       email: airflow@127.0.0.1
   config:
     airflow:
-          {%- if grains.osfinger == 'CentOS Linux-7' %}
-      venv_cmd: virtualenv-3
-          {%- endif %}
       pip_cmd: pip3
       flask:
         # https://flask-appbuilder.readthedocs.io/en/latest/security.html#authentication-ldap
@@ -28,12 +25,17 @@ airflow:
         auth_ldap_append_domain: example.com
         auth_ldap_uid_field: 'sAMAccountName'  # or 'userPrincipalName'
 
+        auth_ldap_search: OU=myOrg,DC=example,DC=com
         ## https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
         auth_ldap_search_filter: (&(objectCategory=Person)(sAMAccountName=*)(|memberOf=CN=myGrpRole,OU=myOrg,DC=example,DC=com)
 
         # auth_ldap_search: 'OU=ouEngineers_myteam,dc=example,dc=com'
         auth_user_registration_role: "Admin" # role, in addition to any AUTH_ROLES_MAPPING
         auth_user_registration: True   # allow users who are not already in the FAB DB
+        auth_roles_mapping:
+          cn=fab_users,ou=groups,dc=example,dc=com: User
+          cn=fab_admins,ou=groups,dc=example,dc=com: Admin
+        auth_roles_sync_at_login: True
         webserver:
           web_server_host: 0.0.0.0
           web_server_port: 18080
@@ -43,7 +45,6 @@ airflow:
         celery_kubernetes_executor: {}
         celery:
           # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
-          default_queue: /airflow
           broker_url: amqp://airflow:airflow@127.0.0.1:5672/airflow  # redis://127.0.0.1:6379/0
           ## result backend is usually primary airflow host
           result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
@@ -58,6 +59,8 @@ airflow:
           # this is your database host
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''
+        operators:
+          default_queue: airflow
         webserver:
           secret_key: {{ range(1,2000) | random }}
       state_colors:
@@ -81,10 +84,6 @@ airflow:
   pkg:
     airflow:
       version: 2.1.0
-          {%- if grains.osfinger == 'CentOS Linux-7' %}
-          # because centos7 defaults to python2, need to be explicit
-      uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-3.6.txt
-          {%- endif %}
       extras:
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages
         # https://airflow.apache.org/docs/apache-airflow/stable/extra-packages-ref.html

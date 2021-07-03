@@ -51,17 +51,15 @@ WTF_CSRF_ENABLED = {{ "True" if "wtf_csrf_enabled" not in f else f.wtf_csrf_enab
 # AUTH_OAUTH : Is for OAuth
 AUTH_TYPE = {{ "AUTH_DB" if "auth_type" not in f else f.auth_type }}
 
-# Uncomment to setup Full admin role name
-AUTH_ROLE_ADMIN = '{{ "Admin" if "auth_role_admin" not in f else f.auth_role_admin }}'
-
-# Uncomment to setup Public role name, no authentication needed
+# customize the name of the builtin roles for Admin and Public accesses
+# AUTH_ROLE_ADMIN = '{{ "Admin" if "auth_role_admin" not in f else f.auth_role_admin }}'
 # AUTH_ROLE_PUBLIC = '{{ "Public" if "auth_role_public" not in f else f.auth_role_public }}'
 
 # Will allow user self registration
 AUTH_USER_REGISTRATION = {{ "True" if "auth_user_registration" not in f else f.auth_user_registration }}
 
 # The default user self registration role
-AUTH_USER_REGISTRATION_ROLE = '{{ "Public" if "auth_user_registration_role" not in f else f.auth_user_registration_role }}'
+AUTH_USER_REGISTRATION_ROLE = '{{ "User" if "auth_user_registration_role" not in f else f.auth_user_registration_role }}'
 
 # ----------------------------------------------------
 # AUTHENTICATION PROVIDERS
@@ -89,6 +87,7 @@ AUTH_USER_REGISTRATION_ROLE = '{{ "Public" if "auth_user_registration_role" not 
 AUTH_LDAP_SERVER = '{{ "ldap://ldapserver.new" if "auth_ldap_server" not in f else f.auth_ldap_server }}'
 
 # Ldap and Active Directory
+AUTH_LDAP_SEARCH = '{{ "OU=myOrg,DC=example,DC=com" if "auth_ldap_search" not in f else f.auth_ldap_search }}'
 AUTH_LDAP_SEARCH_FILTER = '{{ "(memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)" if "auth_ldap_search_filter" not in f else f.auth_ldap_search_filter }}'
 AUTH_LDAP_APPEND_DOMAIN = '{{ "example.com" if "auth_ldap_append_domain" not in f else f.auth_ldap_append_domain }}'
 AUTH_LDAP_ALLOW_SELF_SIGNED = {{ "False" if "auth_ldap_allow_self_signed" not in f else f.auth_ldap_allow_self_signed }}
@@ -107,9 +106,17 @@ AUTH_LDAP_SEARCH = '{{ "DC=example,DC=com" if "auth_ldap_search" not in f else f
 AUTH_LDAP_USE_TLS = {{ "False" if "auth_ldap_use_tls" not in f else f.auth_ldap_use_tls }}
 AUTH_LDAP_TLS_CACERTFILE = '{{ "/etc/pki/ca-trust/source/anchors/$root_CA.crt" if "auth_ldap_tls_cacertfile" not in f else f.auth_ldap_tls_cacertfile }}'
 
-# AUTH_ROLES_SYNC_AT_LOGIN = True
-# AUTH_LDAP_GROUP_FIELD = "memberOf"
-# PERMANENT_SESSION_LIFETIME = 1800
+{%- if 'auth_roles_mapping' in f and f.auth_roles_mapping is mapping %}
+AUTH_ROLES_MAPPING = {
+    {%- for k,v in f.auth_roles_mapping.items() %}
+        "{{ k }}": ["{{ v }}"],
+    {%- endfor %}
+}
+{%- endif %}
+
+AUTH_ROLES_SYNC_AT_LOGIN = {{ "False" if "auth_roles_sync_at_login" not in f else f.auth_roles_sync_at_login }}
+AUTH_LDAP_GROUP_FIELD = '{{ "memberOf" if "auth_ldap_group_field" not in f else f.auth_ldap_group_field }}'
+PERMANENT_SESSION_LIFETIME = {{ "1800" if "permanent_session_lifetime" not in f else f.permanent_session_lifetime }}
 
 # When using OpenID Auth, uncomment to setup OpenID providers.
 # example for OpenID authentication

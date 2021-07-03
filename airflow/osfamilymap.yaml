@@ -92,7 +92,6 @@ RedHat:
     airflow:
       content:
         celery:
-          default_queue: /airflow
           broker_url: amqp://rabbit:rabbit@127.0.0.1:15672/airflow
   pkg:
     airflow:
@@ -100,7 +99,7 @@ RedHat:
         - epel-release
         - centos-release-scl
         - python3
-        # python36-virtualenv   # needs to be verified on centos ci/cd
+        - python36-virtualenv   # needs to be verified on centos ci/cd
         - python3-devel
         - gcc-c++
         - python3-pip

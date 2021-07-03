@@ -564,7 +564,7 @@ flower_port = {{ '5555' if 'flower_port' not in c.celery else c.celery.flower_po
 flower_basic_auth = {{ '' if 'flower_basic_auth' not in c.celery else c.celery.flower_basic_auth }}
 
 # Default queue that tasks get assigned to and that worker listen on.
-default_queue = {{ 'default' if 'default_queue' not in c.clery else c.celery.default_queue }}
+default_queue = {{ 'default' if 'default_queue' not in c.operators else c.operators.default_queue }}
 
 # How many processes CeleryExecutor uses to sync task state.
 # 0 means to use max(1, number of cores - 1) processes.

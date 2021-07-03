@@ -25,6 +25,7 @@ Debian:
         - libpq-dev
         - libcurl4-openssl-dev
         - libssl-dev
+        - libldap2-dev
         - python3-pip
         - python3-distutils-extra
         - python3-dev

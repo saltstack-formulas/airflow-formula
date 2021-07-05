@@ -20,8 +20,20 @@ CentOS Linux-8:
     airflow:
       deps:
         # selinux-policy
-        - selinux-policy-minimum
         - python3-dnf-plugin-versionlock
+        - python3-virtualenv
+        - python3-pip
+        - mariadb-devel
+        - unixODBC-devel
+        - cyrus-sasl-devel
+        - gcc
+        - selinux-policy-minimum
+        - krb5-devel        # for pykerberos pip
+        - openldap-devel    # for python-ldap pip
+        - gcc-c++
+        - libcurl-devel
+        # for funtionality
+        - graphviz   # save dag structure as image
 
 CentOS Linux-7:
   config:
@@ -30,21 +42,27 @@ CentOS Linux-7:
   pkg:
     airflow:
       # because centos7 defaults to python2, need to be explicit
+      # yamllint disable-line rule:line-length
       uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-3.6.txt
       deps:
+        - gcc
         - selinux-policy-minimum
         - yum-plugin-versionlock
         - krb5-devel        # for pykerberos pip
         - openldap-devel    # for python-ldap pip
         - python36-virtualenv
-        # python36-flask
-        # python36-werkzeug
-        # python36-jinja2
-        # python36-cached_property
-        # python36-markdown
-        # python36-pygments
-        # python36-sqlalchemy
-        # python36-mysql
+        - epel-release
+        - centos-release-scl
+        - python3
+        - python36-virtualenv   # needs to be verified on centos ci/cd
+        - gcc-c++
+        - python3-pip
+        - libcurl-devel
+        # for funtionality
+        - mariadb-devel
+        - graphviz   # save dag structure as image
+        - unixODBC-devel
+        - cyrus-sasl-devel
 
 CentOS-6:
   pkg:

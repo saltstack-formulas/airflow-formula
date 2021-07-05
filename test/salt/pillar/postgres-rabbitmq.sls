@@ -3,90 +3,14 @@
 ---
 # This file includes rabbitmq and postgres pillar data examples
 
+# postgres-rabbitmq
+
 airflow:
-  identity:
-    airflow:
-      user: airflow
-      group: airflow
-      # skip_user_state: true  # if airflow user already exists
-  database:
-    airflow:
-      install: true        # see docs/README
-      user: airflow
-      pass: airflow
-      email: airflow@127.0.0.1
   config:
     airflow:
-      pip_cmd: pip3
-      flask:
-        # yamllint disable-line rule:line-length
-        # https://flask-appbuilder.readthedocs.io/en/latest/security.html#authentication-ldap
-        auth_type: AUTH_DB  # AUTH_LDAP
-        auth_ldap_server: ldap://ldapserver.new  # include protocol (ldap or ldaps)
-        auth_ldap_append_domain: example.com
-        auth_ldap_uid_field: 'sAMAccountName'  # or 'userPrincipalName'
-
-        auth_ldap_search: OU=myOrg,DC=example,DC=com
-        # yamllint disable rule:line-length
-        ## https://confluence.atlassian.com/kb/how-to-write-ldap-search-filters-792496933.html
-        auth_ldap_search_filter: (&(objectCategory=Person)(sAMAccountName=*)(|memberOf=CN=myGrpRole,OU=myOrg,DC=example,DC=com)
-        # yamllint enable rule:line-length
-
-        # auth_ldap_search: 'OU=ouEngineers_myteam,dc=example,dc=com'
-        auth_user_registration_role: "Admin"  # in addition to any AUTH_ROLES_MAPPING
-        auth_user_registration: true   # allow users who are not already in the FAB DB
-        auth_roles_mapping:
-          cn=fab_users,ou=groups,dc=example,dc=com: User
-          cn=fab_admins,ou=groups,dc=example,dc=com: Admin
-        auth_roles_sync_at_login: true
-        webserver:
-          web_server_host: 0.0.0.0
-          web_server_port: 18080
-
       content:
-        api: {}
-        celery_kubernetes_executor: {}
         celery:
-          # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
-          # yamllint disable-line rule:line-length
-          broker_url: amqp://airflow:airflow@127.0.0.1:5672/airflow  # redis://127.0.0.1:6379/0
-          ## result backend is usually primary airflow host
-          result_backend: db+postgresql://airflow:airflow@127.0.0.1/airflow
-        cli: {}
-        core:
-          dags_folder: /home/airflow/dags
-          plugins_folder: /home/airflow/plugins
-          executor: CeleryExecutor
-          default_timezone: utc
-          load_examples: true
-          # https://stackoverflow.com/questions/45455342
-          # this is your database host
-          sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
-          security: ''
-        operators:
-          default_queue: airflow
-        webserver:
-          # yamllint disable-line rule:braces
-          secret_key: {{ range(1, 2000)|random }}
-      state_colors:
-        # yamllint disable-line rule:line-length
-        # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
-        queued: 'darkgray'
-        running: '#01FF70'
-        success: '#2ECC40'
-        failed: 'firebrick'
-        up_for_retry: 'yellow'
-        up_for_reschedule: 'turquoise'
-        upstream_failed: 'orange'
-        skipped: 'darkorchid'
-        scheduled: 'tan'
-  service:
-    airflow:
-      enabled:
-        - airflow-celery-flower
-        - airflow-scheduler
-        - airflow-webserver
-        - airflow-celery-worker
+          broker_url: amqp://airflow:airflow@127.0.0.1:5672/airflow
   pkg:
     airflow:
       version: 2.1.0
@@ -126,10 +50,15 @@ airflow:
         - sqlite
         - ssh               # SSH hooks and Operator
         - microsoft.winrm   # WinRM hooks and operators
-  linux:
-    altpriority: 0   # zero disables alternatives
 
 postgres:
+  # yamllint disable rule:syntax
+  {%- if grains.os_family != 'Debian' %}
+  use_upstream_repo: False
+  {%- else %}
+  use_upstream_repo: True
+  {%- endif %}
+  # yamllint enable rule:syntax
   version: 13
   postgresconf: |-
     listen_addresses = '*'  # or localhost,192.168.1.1'
@@ -155,6 +84,13 @@ postgres:
     - ['local', 'replication', 'all', 'peer']
     - ['host', 'replication', 'all', '127.0.0.1/32', 'md5']
     - ['host', 'replication', 'all', '::1/128', 'md5']
+
+locale:
+  present:
+    - 'en_US.UTF-8 UTF-8'
+  default:
+    name: 'en_US.UTF-8'
+    requires: 'en_US.UTF-8 UTF-8'
 
 rabbitmq:
   cluster:
@@ -183,7 +119,7 @@ rabbitmq:
       - runas: rabbitmq
   queue:
     airflow:
-      # note dict format
+      # note: dict format
       user: airflow
       passwd: airflow
       durable: true

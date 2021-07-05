@@ -43,7 +43,7 @@ airflow-config-database-managed:
     {%- else %}
 
   cmd.run:
-    - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow users create --username {{ a.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ a.database.airflow.email }} --password {{ a.database.airflow.pass }}
+    - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow users create --username {{ a.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ a.database.airflow.email }} --password {{ a.database.airflow.pass }}  # noqa 204
         {%- if grains.os != 'Windows' %}
     - runas: {{ a.identity.airflow.user }}
         {%- endif %}

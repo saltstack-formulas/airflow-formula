@@ -208,100 +208,60 @@ verifier:
     - cli
 
 suites:
-  - name: default
-    excludes:
-      - centos-6-2019-2-py2
-      - amazonlinux-1-2019-2-py2
-      - gentoo-stage3-latest-master-py3
-      - gentoo-stage3-systemd-master-py3
-      - gentoo-stage3-latest-3001-py3
-      - gentoo-stage3-systemd-3001-py3
-      - gentoo-stage3-latest-3000-3-py3
-      - gentoo-stage3-systemd-3000-3-py3
+  - name: postgres-rabbitmq
     provisioner:
+      dependencies:
+        - name: postgres
+          repo: git
+          source: https://github.com/saltstack-formulas/postgres-formula.git
+        - name: rabbitmq
+          repo: git
+          source: https://github.com/saltstack-formulas/rabbitmq-formula.git
+        - name: locale
+          repo: git
+          source: https://github.com/saltstack-formulas/locale-formula.git
       state_top:
         base:
           '*':
-            - airflow._mapdata
+            # airflow._mapdata
+            - postgres
+            - locale
+            - rabbitmq
             - airflow
       pillars:
         top.sls:
           base:
             '*':
-              - airflow
-              - define_roles
+              - postgres-rabbitmq
       pillars_from_files:
-        airflow.sls: pillar.example
-        define_roles.sls: test/salt/pillar/define_roles.sls
+        postgres-rabbitmq.sls: test/salt/pillar/postgres-rabbitmq.sls
     verifier:
       inspec_tests:
-        - path: test/integration/default
-  - name: upstart
-    includes:
-      - centos-6-2019-2-py2
-      - amazonlinux-1-2019-2-py2
+        - path: test/integration/postgres-rabbitmq
+
+  - name: postgres-redis
     provisioner:
+      dependencies:
+        - name: postgres
+          repo: git
+          source: https://github.com/saltstack-formulas/postgres-formula.git
+        - name: redis
+          repo: git
+          source: https://github.com/saltstack-formulas/redis-formula.git
       state_top:
         base:
           '*':
-            - airflow._mapdata
+            # airflow._mapdata
+            - postgres
+            - redis
             - airflow
       pillars:
         top.sls:
           base:
             '*':
-              - airflow
-              - define_roles
+              - postgres-redis
       pillars_from_files:
-        airflow.sls: test/salt/pillar/upstart.sls
-        define_roles.sls: test/salt/pillar/define_roles.sls
+        postgres-redis.sls: test/salt/pillar/postgres-redis.sls
     verifier:
       inspec_tests:
-        - path: test/integration/default
-  - name: gentoo
-    includes:
-      - gentoo-stage3-latest-master-py3
-      - gentoo-stage3-systemd-master-py3
-      - gentoo-stage3-latest-3001-py3
-      - gentoo-stage3-systemd-3001-py3
-      - gentoo-stage3-latest-3000-3-py3
-      - gentoo-stage3-systemd-3000-3-py3
-    provisioner:
-      state_top:
-        base:
-          '*':
-            - airflow._mapdata
-            - airflow
-      pillars:
-        top.sls:
-          base:
-            '*':
-              - airflow
-              - gentoo
-              - define_roles
-      pillars_from_files:
-        airflow.sls: pillar.example
-        gentoo.sls: test/salt/pillar/gentoo.sls
-        define_roles.sls: test/salt/pillar/define_roles.sls
-    verifier:
-      inspec_tests:
-        - path: test/integration/default
-  - name: archive
-    provisioner:
-      state_top:
-        base:
-          '*':
-            - airflow._mapdata
-            - airflow
-      pillars:
-        top.sls:
-          base:
-            '*':
-              - archive
-              - define_roles
-      pillars_from_files:
-        archive.sls: test/salt/pillar/archive.sls
-        define_roles.sls: test/salt/pillar/define_roles.sls
-    verifier:
-      inspec_tests:
-        - path: test/integration/archive
+        - path: test/integration/postgres-redis

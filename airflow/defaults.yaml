@@ -17,14 +17,15 @@ airflow:
     airflow:
       user: airflow    # user, where airflow is installed
       group: airflow
-      skip_user_state: false     # i.e. local user
+      skip_user_state: false     # create local user
   database:
     airflow:
       initdb: true
       user: airflow
       pass: airflow
       email: airflow@localhost
-      script: {{ range(1,2000) | random }}.py
+      # yamllint disable-line rule:braces rule:syntax
+      script: '{{ range(1, 2000)|random }}.py'
   config:
     airflow:
       file: airflow.cfg
@@ -34,7 +35,7 @@ airflow:
 
       flask:
         auth_type: AUTH_DB
-        app_theme: null # use default
+        app_theme: null  # use default
 
         ##### These are verifed with Active Directory ####
         auth_ldap_server: ldap://ldapserver.new  # must include protocol (ldap or ldaps)
@@ -43,13 +44,13 @@ airflow:
         auth_ldap_search: OU=myOrg,DC=example,DC=com
         auth_ldap_search_filter: (memberOf=CN=myGrp,OU=myOrg,DC=example,DC=com)
         auth_ldap_group_field: memberOf
-        auth_ldap_allow_self_signed: True
+        auth_ldap_allow_self_signed: true
         auth_user_registration_role: User
-        auth_user_registration: True
+        auth_user_registration: true
         # auth_role_admin: Admin
         # auth_role_public: Public
         # auth_roles_mapping: null
-        # auth_roles_sync_at_login: False
+        # auth_roles_sync_at_login: false
         # permanent_session_lifetime: 1800
         webserver:
           # The ip specified when starting the web server
@@ -70,7 +71,7 @@ airflow:
           plugins_folder: /home/airflow/plugins
           executor: CeleryExecutor
           default_timezone: utc
-          load_examples: True
+          load_examples: true
           # https://stackoverflow.com/questions/45455342
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''
@@ -88,7 +89,8 @@ airflow:
         smart_sensor: {}
         smtp: {}
         webserver:
-          secret_key: {{ range(1,2000) | random }}
+          # yamllint disable-line rule:braces rule:syntax
+          secret_key: {{ range(1, 2000)|random }}
           auth_backend: airflow.contrib.auth.backends.password_auth
       state_colors:
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html
@@ -120,12 +122,13 @@ airflow:
         - airflow-celery-worker
   pkg:
     airflow:
-      version: 2.0.1
+      version: 2.1.0
       use_upstream: pip
       name: apache-airflow
       commands:
         - airflow
       uri_a: https://github.com/apache/airflow/releases/download
+      # yamllint disable-line rule:line-length
       uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-PYVER.txt
       archive:
         options: '--strip-components=1'
@@ -133,18 +136,12 @@ airflow:
       deps: []
       extras:
         - password
-        - cncf.kerberos
+        - kerberos
         - devel
       pips:
         ### These could be moved to pillar.example instead of being default
         # for functionality
         - cryptography
-            {%- if grains.os_family == 'RedHat' %}
-        - psycopg2-binary
-            {%- else %}
-        - psycopg2
-        - mysqlclient
-            {%- endif %}
         - password
         - mysql-connector
         - attr
@@ -156,7 +153,7 @@ airflow:
         - argcomplete
         - attrs
         - cached_property
-        - cattrs==1.0.0
+        - cattrs
         - pywinrm[kerberos]
 
         # https://github.com/mher/flower/issues/1029
@@ -193,13 +190,9 @@ airflow:
         - pep562
         - psutil
         - pygments
-        # python-daemon
-        # python-dateutil
-        # python-nvd3
-        # python-slugify
         - requests
         - setproctitle
-        - sqlalchemy< 1.4.0
+        - sqlalchemy
         - sqlalchemy_jsonfield
         - tabulate
         - tenacity
@@ -215,7 +208,7 @@ airflow:
         - rfc3987
         - strict-rfc3339
         - webcolors
-        - pyarrow<0.18.0,>=0.17.0    # snowflake wants this version?
+        - pyarrow<0.18.0,>=0.17.0  # snowflake wants this version?
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
         # Ecosystem

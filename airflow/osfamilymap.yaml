@@ -10,18 +10,20 @@
 # you will need to provide at least an empty dict in this file, e.g.
 # osfamilymap: {}
 ---
+# yamllint disable rule:syntax
 {%- if grains.os == 'MacOS' %}
     {%- set rootuser = salt['cmd.run']("stat -f '%Su' /dev/console") %}
     {%- set rootgroup = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
 {%- elif grains.os == 'Windows' %}
     {%- set rootuser = salt['cmd.run']("id -un") %}
 {%- endif %}
-
+# yamllint enable rule:syntax
 
 Debian:
   pkg:
     airflow:
       deps:
+        - gcc
         - libpq-dev
         - libcurl4-openssl-dev
         - libssl-dev
@@ -35,7 +37,7 @@ Debian:
         - freetds-bin
         - krb5-user
         - ldap-utils
-        - libffi6
+        # libffi6  not in ubuntu20
         - libsasl2-2
         - libsasl2-modules
         - libssl1.1
@@ -44,45 +46,8 @@ Debian:
         - sasl2-bin
         - sqlite3
         - unixodbc
-        # from airflow/setup.py
-        - python3-alembic
-        - python3-argcomplete
-        - python3-attr
-        # python3-celery   # https://stackoverflow.com/questions/64180054
-        - python3-colorlog
-        - python3-croniter
-        - python3-dill
-        - python3-flask-api
-        - python3-flask-security
-        - python3-flask-sqlalchemy
-        - python3-funcsigs
-        - python3-future
-        - python3-graphviz
-        - python3-gunicorn
-        - python3-iso8601
-        - python3-jinja2
-        - python3-jsonschema
-        - python3-markdown
-        - python3-packaging
-        - python3-pandas
-        - python3-psutil
-        - python3-pygments
-        - python3-daemon
-        - python3-dateutil
-        - python3-slugify
-        - python3-requests
-        - python3-setproctitle
-        - python3-sqlalchemy
-        - python3-tabulate
-        - python3-tenacity
-        - python3-tzlocal
-        - python3-unicodecsv
-        - python3-werkzeug
-        - python3-zope.deprecation
         # for functionality
-        - python3-cryptography
         - python3-mysqldb
-        - libmysqlclient-dev
         - default-libmysqlclient-dev
         - libkrb5-dev
         - unixodbc-dev
@@ -97,6 +62,7 @@ RedHat:
   pkg:
     airflow:
       deps:
+        - gcc
         - epel-release
         - centos-release-scl
         - python3
@@ -112,12 +78,12 @@ RedHat:
         - unixODBC-devel
         - cyrus-sasl-devel
         - openldap-devel
-        # openldap-clients
 
 Suse:
   pkg:
     airflow:
       deps:
+        - gcc
         - python3
         - python3-devel
         - python3-virtualenv
@@ -132,13 +98,14 @@ Suse:
         - python3-mysqlclient
         - libmariadb-devel
         - krb5-devel
-        - unixodbc-dev
+        - unixODBC-devel
         - cyrus-sasl
 
 Arch:
   pkg:
     airflow:
       deps:
+        - gcc
         - python-virtualenv
         - python-pip
         - python-alembic
@@ -146,8 +113,8 @@ Arch:
         - python-cached-property
         - python-wtforms
         # for functionality
-        - python-cryptography
-        - python-mysqlclient
+        # python-cryptography
+        # python-mysqlclient
         - krb5
         - unixodbc
         - libiodbc

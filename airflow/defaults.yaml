@@ -71,7 +71,7 @@ airflow:
           plugins_folder: /home/airflow/plugins
           executor: CeleryExecutor
           default_timezone: utc
-          load_examples: true
+          load_examples: false
           # https://stackoverflow.com/questions/45455342
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''

@@ -149,6 +149,7 @@ airflow:
         - flask_oauthlib
         - great_expectations
         - flask-bcrypt
+        - psycopg2-binary
         # from airflow's setup.py
         - alembic
         - argcomplete

@@ -29,8 +29,6 @@ airflow-service-install-managed-{{ svcname }}:
     - template: jinja
     - context:
         desc: {{ svcname|replace('.',' ') }} service
-        wants: ''
-        after: ''
         doc: 'https://airflow.apache.org/docs/stable/installation.html'
         type: simple
         user: {{ a.identity.airflow.user }}

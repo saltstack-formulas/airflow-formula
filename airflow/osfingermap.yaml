@@ -60,7 +60,7 @@ CentOS Linux-7:
         - python3-pip
         - libcurl-devel
         # for funtionality
-        # mariadb-devel
+        - mariadb-devel
         - graphviz   # save dag structure as image
         - unixODBC-devel
         - cyrus-sasl-devel

@@ -138,6 +138,7 @@ airflow:
         - password
         - kerberos
         - devel
+      no_pips_deps: false    # default salt.virtualenv.managed.no_deps flag
       pips:
         ### These could be moved to pillar.example instead of being default
         # for functionality

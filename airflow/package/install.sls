@@ -59,7 +59,7 @@ airflow-package-install-virtualenv:
     - user: {{ a.identity.airflow.user }}
     - python: python3
     - venv_bin: {{ a.config.airflow.venv_cmd or 'virtualenv' }}
-    - constraint: {{ a.pkg.airflow.constraint_file }}
+    - no_deps: {{ a.pkg.airflow.no_pips_deps }}
     - require:
       - sls: {{ sls_config_users }}
     - require_in:

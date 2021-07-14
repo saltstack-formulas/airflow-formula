@@ -59,6 +59,7 @@ airflow-package-install-virtualenv:
     - user: {{ a.identity.airflow.user }}
     - python: python3
     - venv_bin: {{ a.config.airflow.venv_cmd or 'virtualenv' }}
+    - constraint: {{ a.pkg.airflow.constraint_file }}
     - require:
       - sls: {{ sls_config_users }}
     - require_in:
@@ -79,9 +80,7 @@ airflow-package-install-pip-installed:
       AIRFLOW_GPL_UNIDECODE: 'yes'
     - reload_modules: {{ a.misc.reload }}
     - user: {{ a.identity.airflow.user }}
-        {%- if a.pkg.airflow.pips %}
     - constraint: {{ a.pkg.airflow.constraint_file }}
-        {%- endif %}
     - require_in:
       - sls: {{ sls_service_running }}
       - sls: {{ sls_alternatives_install }}

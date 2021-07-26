@@ -90,7 +90,9 @@ airflow:
   pkg:
     airflow:
       version: 2.1.0
-      # no_pips_deps: true  # for salt.virtualenv.managed.no_deps flag
+      # https://github.com/pypa/pip/issues/9187
+      # https://pip.pypa.io/en/latest/user_guide/#dependency-resolution-backtracking
+      no_pips_deps: true  # for salt.virtualenv.managed.no_deps flag
       extras:
         # yamllint disable rule:line-length
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages
@@ -121,7 +123,6 @@ airflow:
         - http              # http hooks and providers
         - kerberos          # Kerberos integration
         - sftp
-        - snowflake
         - sqlite
         - ssh               # SSH hooks and Operator
         - microsoft.winrm   # WinRM hooks and operators

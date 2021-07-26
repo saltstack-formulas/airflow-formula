@@ -138,7 +138,9 @@ airflow:
         - password
         - kerberos
         - devel
-      no_pips_deps: false    # default salt.virtualenv.managed.no_deps flag
+      # https://github.com/pypa/pip/issues/9187
+      # https://pip.pypa.io/en/latest/user_guide/#dependency-resolution-backtracking
+      no_pips_deps: true  # for salt.virtualenv.managed.no_deps flag
       pips:
         ### These could be moved to pillar.example instead of being default
         # for functionality
@@ -158,9 +160,9 @@ airflow:
         - cattrs
         - pywinrm[kerberos]
 
-        # https://github.com/mher/flower/issues/1029
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
-        - celery[rabbitmq,redis]==4.4.7
+        - celery[librabbitmq,redis,sqs]
+
         - colorlog
         - configparser
         - croniter
@@ -173,7 +175,8 @@ airflow:
         - flask-login
         - flask-swagger
         - flask-wtf
-        - flower
+        # https://github.com/mher/flower/issues/1029
+        - flower>=1.0.0
         - funcsigs
         - future
         - graphviz
@@ -210,7 +213,7 @@ airflow:
         - rfc3987
         - strict-rfc3339
         - webcolors
-        - pyarrow<0.18.0,>=0.17.0  # snowflake wants this version?
+        - pyarrow<=0.18.0,>=0.17.0  # snowflake wants this version?
         # bug: https://github.com/apache/airflow/issues/12881
         - apache-airflow-providers-snowflake==1.0.0
         # Ecosystem

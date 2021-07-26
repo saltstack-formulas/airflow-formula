@@ -213,9 +213,8 @@ airflow:
         - rfc3987
         - strict-rfc3339
         - webcolors
-        - pyarrow<=0.18.0,>=0.17.0  # snowflake wants this version?
+        - pyarrow
         # bug: https://github.com/apache/airflow/issues/12881
-        - apache-airflow-providers-snowflake==1.0.0
         # Ecosystem
         - pylint-airflow
         - dag-factory

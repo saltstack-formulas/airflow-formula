@@ -4,7 +4,9 @@ source 'https://rubygems.org'
 
 # Use the latest version of `inspec` prior to `4.23.4`, which introduces a
 # regression where the diff isn't displayed when comparing using `eq`.
-gem 'inspec',      '~> 4.22.22'
+gem 'inspec', '~> 4.22.22'
+# Unlike rspec, this doesn't need to be included in development group
+gem 'rspec-retry'
 # Install the `kitchen-docker` gem from GitHub because the latest version
 # currently available (`2.10.0`) doesn't include a recent fix for Gentoo.
 gem 'kitchen-docker', github: 'test-kitchen/kitchen-docker', ref: '41e80fe'

@@ -40,5 +40,7 @@ airflow-service-running-{{ name }}:
     - watch:
       - sls: {{ sls_config_file }}
     - retry: {{ a.retry_option|json }}
+  cmd.run:
+    - name: sleep 1 && systemctl status {{ name }}
 
     {%- endfor %}

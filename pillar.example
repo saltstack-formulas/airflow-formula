@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 ---
-# This file includes rabbitmq and postgres pillar data examples
+# This file includes postgres pillar data example
 
 airflow:
   identity:

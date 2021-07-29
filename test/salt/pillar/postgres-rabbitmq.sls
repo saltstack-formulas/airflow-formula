@@ -92,64 +92,49 @@ locale:
     requires: 'en_US.UTF-8 UTF-8'
 
 rabbitmq:
-  cluster:
-    rabbit@locahost:
-      user: rabbit       # user is confusing keyname; should be 'node: rabbit'
-      host: 127.0.0.1    # host of (primary rabbitmq cluster) node to join to
-      ram_node: None
-      runas: rabbitmq
-      erlang_cookie:
-        name: /var/lib/rabbitmq/.erlang.cookie
-        value: shared-value-for-all-cluster-members
-  vhost:
-    - airflow
-  user:
-    airflow:
-      - password: 'airflow'
-      - force: true
-      - tags:
-          - management
-          - administrator
-      - perms:
-          - 'airflow':
+  erlang_cookie: shared-secret
+  nodes:
+    rabbit:  # default node name
+      config:
+        auth_backends.1: internal   # default
+        listeners.tcp.1: 0.0.0.0:5672
+        # https://www.rabbitmq.com/ldap.html
+        # auth_backends.2: ldap
+        # auth_ldap.servers.1: ldapserver.new
+        # auth_ldap.servers.2: ldapserver.old
+        # auth_ldap.user_dn_pattern: cn=${username},OU=myOrg,DC=example,DC=com
+        # auth_ldap.log: false
+        # auth_ldap.dn_lookup_attribute: sAMAccountName  # or userPrincipalName
+        # auth_ldap.dn_lookup_base: OU=myOrg,DC=example,DC=com
+      vhosts:
+        - default_vhost
+      queue:
+        my-new-queue:
+          ## note : dict format
+          user: airflow_mq
+          passwd: password
+          durable: true
+          auto_delete: false
+          vhost: default_vhost
+          arguments:
+            - x-message-ttl: 8640000
+            - x-expires: 8640000
+            - x-dead-letter-exchange: my-new-exchange
+      users:
+        airflow_mq:
+          password: password
+          force: false
+          tags:
+            - administrator
+            - management
+          perms:
+            default_vhost:
               - '.*'
               - '.*'
               - '.*'
-      - runas: rabbitmq
-  queue:
-    airflow:
-      # note: dict format
-      user: airflow
-      passwd: airflow
-      durable: true
-      auto_delete: false
-      vhost: airflow
-      arguments:
-        - 'x-message-ttl': 8640000
-        - 'x-expires': 8640000
-        - 'x-dead-letter-exchange': 'airflow'
-  binding:
-    airflow:
-      - destination_type: queue
-      - destination: airflow
-      - routing_key: airflow_routing_key
-      - user: airflow
-      - passwd: password
-      - vhost: airflow
-      - arguments:
-          - 'x-message-ttl': 8640000
-  exchange:
-    airflow:
-      - user: airflow
-      - passwd: airflow
-      - type: fanout
-      - durable: true
-      - internal: false
-      - auto_delete: false
-      - vhost: airflow
-      - arguments:
-          - 'alternate-**exchange': 'amq.fanout'
-          - 'test-header': 'testing'
-  policy: {}
-  upstream: {}
+      policy:
+        my-new-rabbitmq-policy:
+          - name: HA
+          - pattern: '.*'
+          - definition: '{"ha-mode": "all"}'
 ...

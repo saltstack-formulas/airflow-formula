@@ -14,16 +14,17 @@ include:
   - {{ sls_config_environ }}
   - {{ sls_service_install }}
 
-    {%- for name in a.service.airflow.enabled %}
+    {%- for name in a.service.airflow.names %}
+        {%- if name in a.service.airflow.enabled %}
 
-        {%- if name == 'airflow-scheduler' and a.database.airflow.initdb == true %}
+            {%- if name == 'airflow-scheduler' and a.database.airflow.initdb == true %}
 airflow-service-install-database:
   cmd.run:
     - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow {{ a.config.airflow.initdbcmd }}
     - runas: {{ a.identity.airflow.user }}
     - env:
         - PATH: '{{ a.dir.airflow.virtualenv }}{{ a.div }}bin:${PATH}'
-        {%- endif %}
+            {%- endif %}
 
 airflow-service-running-{{ name }}:
   service.running:
@@ -43,4 +44,12 @@ airflow-service-running-{{ name }}:
   cmd.run:
     - name: sleep 1 && systemctl status {{ name }}
 
+        {%- else %}
+
+airflow-service-running-{{ name }}-disable:
+  service.dead:
+    - name: {{ name }}
+    - enable: False
+
+        {%- endif %}
     {%- endfor %}

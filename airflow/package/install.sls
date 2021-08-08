@@ -46,6 +46,7 @@ airflow-package-install-virtualenv:
     - user: {{ a.identity.airflow.user }}
     - group: {{ a.identity.airflow.group }}
     - mode: '0755'
+    - makedirs: True
     - recurse:
         - user
         - group

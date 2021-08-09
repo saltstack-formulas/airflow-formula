@@ -158,7 +158,7 @@ airflow:
         - attrs
         - cached_property
         - cattrs
-        - pywinrm[kerberos]
+        - pywinrm[kerberos,credssp]
 
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
         - celery[librabbitmq,redis,sqs]

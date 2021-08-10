@@ -37,6 +37,7 @@ airflow-service-install-managed-{{ svcname }}:
         start: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}
         stop: ''
         name: {{ svcname }}
+        queues: '{{ a.service.airflow.queues|join(',') }}'
     - watch_in:
       - cmd: airflow-service-install-daemon-reload
     - require_in:

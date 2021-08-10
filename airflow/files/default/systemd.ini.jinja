@@ -12,7 +12,7 @@ Type={{ type }}
 User={{ user }}
 Group={{ group }}
 WorkingDirectory={{ workdir }}
-ExecStart={{ start }}
+ExecStart={{ start }} {{ '' if not queues else '-q ' + queues }}
 ExecStop={{ stop }}
 PIDFile=/var/run/{{ name }}.pid
 Environment="PATH={{ workdir }}/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"

@@ -120,6 +120,7 @@ airflow:
         - airflow-scheduler
         - airflow-webserver
         - airflow-celery-worker
+      queues: []
   pkg:
     airflow:
       version: 2.1.0

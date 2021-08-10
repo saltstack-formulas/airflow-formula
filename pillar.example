@@ -87,6 +87,8 @@ airflow:
         - airflow-scheduler
         - airflow-webserver
         - airflow-celery-worker
+      # https://airflow.apache.org/docs/apache-airflow/stable/executor/celery.html
+      queues: []
   pkg:
     airflow:
       version: 2.1.0

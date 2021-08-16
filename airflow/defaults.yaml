@@ -231,6 +231,8 @@ airflow:
         # python-ldap
         - requests-kerberos
         - requests-credssp
+        # pyOpenSSL # might be issue on cent7
+        - pyspnego
         - requests_ntlm
 
   misc:

@@ -63,6 +63,7 @@ airflow:
           # this is your database host
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''
+          sensitive_var_conn_names: 'treadstone,myfetish'
         operators:
           default_queue: airflow
         webserver:
@@ -89,6 +90,9 @@ airflow:
         - airflow-celery-worker
       # https://airflow.apache.org/docs/apache-airflow/stable/executor/celery.html
       queues: []
+      # http://airflow.apache.org/docs/apache-airflow/stable/security/workload.html#impersonation
+      impersonation: []
+      # airflow-celery-worker
   pkg:
     airflow:
       version: 2.1.0

@@ -35,7 +35,7 @@ airflow-service-install-managed-{{ svcname }}:
         group: {{ a.identity.airflow.group }}
         workdir: {{ a.dir.airflow.virtualenv }}
            {%- if svcname in a.service.airflow.impersonation %}
-        start: sudo {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}
+        start: sudo -u {{ a.identity.airflow.user }} {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}  # noqa 204
            {%- else %}
         start: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}
            {%- endif %}

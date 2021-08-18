@@ -218,8 +218,19 @@ lazy_discover_providers = True
 # Currently it is only used in ``DagFileProcessor.process_file`` to retry ``dagbag.sync_to_db``.
 max_db_retries = 3
 
-# UI to hide sensitive variable fields when set to True
+# Hide sensitive Variables or Connection extra json keys from UI and task logs when set to True
+#
+# (Connection passwords are always hidden in logs)
 hide_sensitive_var_conn_fields = True
+
+# A comma-separated list of extra sensitive keywords to look for in variables names or connection's
+# extra JSON.
+sensitive_var_conn_names = {{ '' if 'sensitive_var_conn_names' not in c.core else c.core.sensitive_var_conn_names }}
+
+# Task Slot counts for ``default_pool``. This setting would not have any effect in an existing
+# deployment where the ``default_pool`` is already created. For existing deployments, users can
+# change the number of slots using Webserver, API or the CLI
+default_pool_task_slot_count = 128
 
 [logging]
 # The folder where airflow should store its log files
@@ -892,10 +903,6 @@ keytab = {{ 'airflow.keytab' if 'keytab' not in c.kerberos else c.kerberos.keyta
 
 [github_enterprise]
 api_rev = v3
-
-[admin]
-# A comma-separated list of sensitive keywords to look for in variables names.
-sensitive_variable_fields =
 
 [elasticsearch]
 # Elasticsearch host

@@ -18,7 +18,9 @@ airflow-formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-A SaltStack formula to manage Apache Airflow 1.0 and 2.0 (https://airflow.apache.org) on GNU/Linux. Airflow Clusters are supported by saltstack-formulas community. Supported platforms are Ubuntu, CentOS7, OpenSUSE15.
+A SaltStack formula to manage Apache Airflow 1.0 and 2.0 (https://airflow.apache.org) on GNU/Linux. Airflow, RabbitMQ, Redis, and Postgres/MySQL is supported by saltstack-formulas community. 
+
+Supported platforms are Ubuntu, CentOS7, and OpenSUSE15. Arch may work.
 
 .. contents:: **Table of Contents**
    :depth: 1

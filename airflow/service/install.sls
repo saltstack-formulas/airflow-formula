@@ -34,11 +34,7 @@ airflow-service-install-managed-{{ svcname }}:
         user: {{ a.identity.airflow.user }}
         group: {{ a.identity.airflow.group }}
         workdir: {{ a.dir.airflow.virtualenv }}
-           {%- if svcname in a.service.airflow.impersonation %}
-        start: sudo {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}
-           {%- else %}
         start: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}
-           {%- endif %}
         stop: ''
         name: {{ svcname }}
         queues: '{{ a.service.airflow.queues|join(',') }}'

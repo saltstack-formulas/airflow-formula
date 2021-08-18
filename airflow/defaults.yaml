@@ -121,6 +121,7 @@ airflow:
         - airflow-webserver
         - airflow-celery-worker
       queues: []
+      impersonation: []
   pkg:
     airflow:
       version: 2.1.0

@@ -89,6 +89,9 @@ airflow:
         - airflow-celery-worker
       # https://airflow.apache.org/docs/apache-airflow/stable/executor/celery.html
       queues: []
+      # http://airflow.apache.org/docs/apache-airflow/stable/security/workload.html#impersonation
+      impersonation: []
+      # airflow-celery-worker
   pkg:
     airflow:
       version: 2.1.0

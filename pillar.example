@@ -64,6 +64,8 @@ airflow:
           sql_alchemy_conn: postgresql+psycopg2://airflow:airflow@127.0.0.1/airflow
           security: ''
           sensitive_var_conn_names: 'treadstone,myfetish'
+        logging:
+          log_file_template: dagid/hh/ts_tid_trynumber.log
         operators:
           default_queue: airflow
         webserver:

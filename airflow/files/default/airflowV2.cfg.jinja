@@ -291,17 +291,26 @@ simple_log_format = %%(asctime)s %%(levelname)s - %%(message)s
 # Specify prefix pattern like mentioned below with stream handler TaskHandlerWithCustomFormatter
 # Example: task_log_prefix_template = {ti.dag_id}-{ti.task_id}-{execution_date}-{try_number}
 task_log_prefix_template =
+{% endraw %}
 
 # Formatting for how airflow generates file names/paths for each task run.
+    {%- if 'log_file_template' in c.logging and c.logging.log_file_template == 'dagid/hh/ts_tid_trynumber.log' %}
+        {% raw %}
+    log_filename_template = {{ ti.dag_id }}/{{ ts.split('T')[1].split(':')[0] }}/{{ ts }}_{{ ti.task_id }}_{{ try_number }}.log
+        {% endraw %}
+    {%- else %}
+        {% raw %}
 log_filename_template = {{ ti.dag_id }}/{{ ti.task_id }}/{{ ts }}/{{ try_number }}.log
+        {% endraw %}
+    {%- endif %}
 
 # Formatting for how airflow generates file names for log
+{% raw %}
 log_processor_filename_template = {{ filename }}.log
-
-{% endraw %}
 
 # full path of dag_processor_manager logfile
 dag_processor_manager_log_location = {{ logs }}/dag_processor_manager/dag_processor_manager.log
+{% endraw %}
 
 # Name of handler to read task instance logs.
 # Defaults to use ``task`` handler.

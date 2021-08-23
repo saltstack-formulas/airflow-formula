@@ -16,6 +16,8 @@ ExecStart={{ start }}{{ ' -q ' + queues if 'celery-worker' in name and queues el
 ExecStop={{ stop }}
 PIDFile=/var/run/{{ name }}.pid
 Environment="PATH={{ workdir }}/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+Restart=always
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target

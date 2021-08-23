@@ -70,7 +70,7 @@ airflow:
           default_queue: airflow
         webserver:
           # yamllint disable-line rule:braces
-          secret_key: {{ range(1, 2000)|random }}
+          secret_key: thisMUSTbeSAMEacrossALLhosts
       state_colors:
         # yamllint disable-line rule:line-length
         # https://airflow.apache.org/docs/apache-airflow/stable/howto/customize-state-colors-ui.html

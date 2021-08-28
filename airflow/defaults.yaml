@@ -15,9 +15,9 @@ airflow:
     rootuser: root
     rootgroup: root
     airflow:
-      user: airflow    # user, where airflow is installed
+      user: airflow    # airflow software/service owner
       group: airflow
-      skip_user_state: false     # create local user
+      create_user_group: true  # create user/group?
   database:
     airflow:
       initdb: true

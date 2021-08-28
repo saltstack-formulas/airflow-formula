@@ -8,7 +8,7 @@ airflow:
     airflow:
       user: airflow
       group: airflow
-      # skip_user_state: true  # if airflow user already exists
+      create_user_group: true  # false if ldap/oauth/etc
   database:
     airflow:
       install: true        # see docs/README

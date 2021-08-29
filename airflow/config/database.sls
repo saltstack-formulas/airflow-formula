@@ -47,6 +47,8 @@ airflow-config-database-managed:
         {%- if grains.os != 'Windows' %}
     - runas: {{ a.identity.airflow.user }}
     - retry: {{ a.retry_option|json }}
+    - env:
+        - PGPASSWORD: '{{ a.database.airflow.pass }}'
         {%- endif %}
 
     {%- endif %}

@@ -38,6 +38,7 @@ airflow-service-install-managed-{{ svcname }}:
         stop: ''
         name: {{ svcname }}
         queues: '{{ a.service.airflow.queues|join(',') }}'
+        pgpass: '{{ a.database.airflow.pass }}'
     - watch_in:
       - cmd: airflow-service-install-daemon-reload
     - require_in:

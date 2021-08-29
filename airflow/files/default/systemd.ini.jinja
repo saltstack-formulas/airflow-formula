@@ -16,6 +16,9 @@ ExecStart={{ start }}{{ ' -q ' + queues if 'celery-worker' in name and queues el
 ExecStop={{ stop }}
 PIDFile=/var/run/{{ name }}.pid
 Environment="PATH={{ workdir }}/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+    {%- if 'webserver' in svcname and pgpass %}
+Environment="PGPASSWORD={{ pgpass }}"
+    {%- endif %}
 Restart=always
 RestartSec=3
 

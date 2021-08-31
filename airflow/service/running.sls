@@ -24,6 +24,7 @@ airflow-service-install-database:
     - runas: {{ a.identity.airflow.user }}
     - env:
         - PATH: '{{ a.dir.airflow.virtualenv }}{{ a.div }}bin:${PATH}'
+        - PGPASSWORD: '{{ a.database.airflow.pass }}'
             {%- endif %}
 
 airflow-service-running-{{ name }}:

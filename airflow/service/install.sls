@@ -23,8 +23,8 @@ airflow-service-install-managed-{{ svcname }}:
                  )
               }}
     - mode: '0644'
-    - user: {{ a.identity.airflow.user }}
-    - group: {{ a.identity.airflow.group }}
+    - user: {{ a.identity.rootuser }}
+    - group: {{ a.identity.rootgroup }}
     - makedirs: True
     - template: jinja
     - context:

@@ -22,6 +22,8 @@ A SaltStack formula to manage Apache Airflow 1.0 and 2.0 (https://airflow.apache
 
 Supported platforms are Ubuntu, CentOS7, and OpenSUSE15. Arch may work.
 
+For installer see https://github.com/noelmcloughlin/airflow-component 
+
 .. contents:: **Table of Contents**
    :depth: 1
 

@@ -4,7 +4,7 @@ control 'airflow systemd files' do
   impact 0.5
   title 'should be configured correctly'
 
-  describe file('/lib/systemd/system/airflow-scheduler.service') do
+  describe file('/usr/lib/systemd/system/airflow-scheduler.service') do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -17,7 +17,7 @@ control 'airflow systemd files' do
     # rubocop:enable Layout/LineLength
   end
 
-  describe file('/lib/systemd/system/airflow-webserver.service') do
+  describe file('/usr/lib/systemd/system/airflow-webserver.service') do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -30,7 +30,7 @@ control 'airflow systemd files' do
     # rubocop:enable Layout/LineLength
   end
 
-  describe file('/lib/systemd/system/airflow-celery-flower.service') do
+  describe file('/usr/lib/systemd/system/airflow-celery-flower.service') do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -43,7 +43,7 @@ control 'airflow systemd files' do
     # rubocop:enable Layout/LineLength
   end
 
-  describe file('/lib/systemd/system/airflow-celery-worker.service') do
+  describe file('/usr/lib/systemd/system/airflow-celery-worker.service') do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }

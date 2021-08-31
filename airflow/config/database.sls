@@ -12,7 +12,7 @@ include:
 airflow-config-database-managed:
     {%- if a.pkg.airflow.version.split('.')[0]|int == 1 %}
   file.managed:
-    - name: {{ a.dir.airflow.tmp }}{{ a.div }}{{ a.database.airflow.script }}
+    - name: {{ a.dir.airflow.tmp }}/{{ a.database.airflow.script }}
     - source: {{ files_switch(['security.py.jinja'],
                               lookup='airflow-config-database-managed'
                  )
@@ -24,7 +24,7 @@ airflow-config-database-managed:
     - user: {{ a.identity.airflow.user }}
         {%- endif %}
     - context:
-        python: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}python
+        python: {{ a.dir.airflow.virtualenv }}/bin/python
         user: {{ a.database.airflow.user }}
         email: {{ a.database.airflow.email }}
         pass: {{ a.database.airflow.pass }}
@@ -32,8 +32,8 @@ airflow-config-database-managed:
       - sls: {{ sls_service_running }}
   cmd.run:
     - names:
-      - {{ a.dir.airflow.tmp }}{{ a.div }}{{ a.database.airflow.script }}
-      - rm {{ a.dir.airflow.tmp }}{{ a.div }}{{ a.database.airflow.script }}
+      - {{ a.dir.airflow.tmp }}/{{ a.database.airflow.script }}
+      - rm {{ a.dir.airflow.tmp }}/{{ a.database.airflow.script }}
         {%- if grains.os != 'Windows' %}
     - runas: {{ a.identity.airflow.user }}
         {%- endif %}
@@ -43,7 +43,7 @@ airflow-config-database-managed:
     {%- else %}
 
   cmd.run:
-    - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow users create --username {{ a.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ a.database.airflow.email }} --password {{ a.database.airflow.pass }}  # noqa 204
+    - name: {{ a.dir.airflow.virtualenv }}/bin/airflow users create --username {{ a.database.airflow.user }} --firstname first --lastname last --role Admin --email {{ a.database.airflow.email }} --password {{ a.database.airflow.pass }}  # noqa 204
         {%- if grains.os != 'Windows' %}
     - runas: {{ a.identity.airflow.user }}
     - retry: {{ a.retry_option|json }}

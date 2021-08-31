@@ -6,6 +6,8 @@
 # postgres-rabbitmq
 
 airflow:
+  linux:
+    selinux: false
   config:
     airflow:
       content:

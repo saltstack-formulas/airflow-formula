@@ -9,7 +9,7 @@
 
 airflow-webserver-file-managed:
   file.managed:
-    - name: {{  a.dir.airflow.airhome }}{{ a.div }}{{ a.config.airflow.webserver }}
+    - name: {{  a.dir.airflow.airhome }}/{{ a.config.airflow.webserver }}
     - source: {{ files_switch(['webserver_config.py.jinja'],
                               lookup='airflow-webserver-file-managed'
                  )

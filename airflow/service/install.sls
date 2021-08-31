@@ -17,7 +17,7 @@ include:
 
 airflow-service-install-managed-{{ svcname }}:
   file.managed:
-    - name: {{ a.dir.airflow.service }}{{ a.div }}{{ svcname }}.service
+    - name: {{ a.dir.airflow.service }}/{{ svcname }}.service
     - source: {{ files_switch(['systemd.ini.jinja'],
                               lookup='airflow-service-install-managed-' ~ svcname
                  )
@@ -34,7 +34,7 @@ airflow-service-install-managed-{{ svcname }}:
         user: {{ a.identity.airflow.user }}
         group: {{ a.identity.airflow.group }}
         workdir: {{ a.dir.airflow.virtualenv }}
-        start: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}{{ svcname|replace('-',' ') }}
+        start: {{ a.dir.airflow.virtualenv }}/bin/{{ svcname|replace('-',' ') }}
         stop: ''
         name: {{ svcname }}
         queues: '{{ a.service.airflow.queues|join(',') }}'
@@ -43,6 +43,11 @@ airflow-service-install-managed-{{ svcname }}:
       - cmd: airflow-service-install-daemon-reload
     - require_in:
       - cmd: airflow-service-install-daemon-reload
+    - onchanges_in:
+      - cmd: airflow-service-install-daemon-reload
+            {%- if a.linux.selinux %}
+      - selinux: airflow-service-install-selinux-fcontext-systemd-present
+            {%- endif %}
 
         {%- endfor %}
 
@@ -50,4 +55,43 @@ airflow-service-install-daemon-reload:
   cmd.run:
     - name: systemctl daemon-reload
 
+        {%- if a.linux.selinux %}
+
+airflow-service-install-selinux-fcontext-home-present:
+  file.managed:
+    - name: '/tmp/homedir_service_t.cil'
+    - source: {{ files_switch(['homedir_service_t.cil'],
+                              lookup='airflow-service-install-selinux-fcontext-home-present'
+                 )
+              }}
+    - mode: '0644'
+    - user: {{ a.identity.airflow.user }}
+    - group: {{ a.identity.airflow.group }}
+  cmd.run:
+    - name: semodule --store targeted --priority 400 -i /tmp/homedir_service_t.cil
+    - onlyif: test -x /usr/sbin/semodule
+    - require:
+      - file: airflow-service-install-selinux-fcontext-home-present
+  selinux.fcontext_policy_present:
+    - name: '/home/{{ a.identity.airflow.user }}/.local/bin(/.*)?'
+    - sel_type: homedir_service_t
+    - require:
+      - cmd: airflow-service-install-selinux-fcontext-home-present
+
+airflow-service-install-selinux-fcontext-home-applied:
+  selinux.fcontext_policy_applied:
+    - name: '/home/{{ a.identity.airflow.user }}/.local/bin/*'
+
+airflow-service-install-selinux-fcontext-systemd-present:
+  selinux.fcontext_policy_present:
+    - name: '{{ a.dir.airflow.service }}(/airflow.*)?'
+    - sel_user: system_u
+    - sel_type: systemd_unit_file_t
+    - onlyif: test -x /usr/sbin/semanage
+
+airflow-service-install-selinux-fcontext-systemd-applied:
+  selinux.fcontext_policy_applied:
+    - name: '{{ a.dir.airflow.service }}/airflow*'
+
+        {%- endif %}
     {%- endif %}

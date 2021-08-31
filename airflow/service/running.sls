@@ -20,10 +20,10 @@ include:
             {%- if name == 'airflow-scheduler' and a.database.airflow.initdb == true %}
 airflow-service-install-database:
   cmd.run:
-    - name: {{ a.dir.airflow.virtualenv }}{{ a.div }}bin{{ a.div }}airflow {{ a.config.airflow.initdbcmd }}
+    - name: {{ a.dir.airflow.virtualenv }}/bin/airflow {{ a.config.airflow.initdbcmd }}
     - runas: {{ a.identity.airflow.user }}
     - env:
-        - PATH: '{{ a.dir.airflow.virtualenv }}{{ a.div }}bin:${PATH}'
+        - PATH: '{{ a.dir.airflow.virtualenv }}/bin:${PATH}'
         - PGPASSWORD: '{{ a.database.airflow.pass }}'
             {%- endif %}
 

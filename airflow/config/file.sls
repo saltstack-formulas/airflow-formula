@@ -15,7 +15,7 @@ include:
 
 airflow-config-file-managed:
   file.managed:
-    - name: {{  a.dir.airflow.airhome }}{{ a.div }}{{ a.config.airflow.file }}
+    - name: {{  a.dir.airflow.airhome }}/{{ a.config.airflow.file }}
     - source: {{ files_switch([ airflow_cfg_jinja ],
                               lookup='airflow-config-file-managed'
                  )
@@ -37,7 +37,7 @@ airflow-config-file-managed:
 
 airflow-config-config-managed:
   file.managed:
-    - name: {{ a.dir.airflow.airhome }}{{ a.div }}config{{ a.div }}airflow_local_settings.py
+    - name: {{ a.dir.airflow.airhome }}/config/airflow_local_settings.py
     - source: {{ files_switch(['local_settings.py.jinja'],
                               lookup='airflow-config-config-managed'
                  )
@@ -69,7 +69,7 @@ airflow-config-dags-directory:
         {%- if 'dags_folder' in a.config.airflow.content.core %}
     - name: {{ a.config.airflow.content.core.dags_folder }}
         {%- else %}
-    - name: {{ a.dir.airflow.userhome ~ a.div ~ 'dags' }}
+    - name: {{ a.dir.airflow.userhome ~ '/dags' }}
         {%- endif %}
         {%- if grains.os != 'Windows' %}
     - mode: '0775'

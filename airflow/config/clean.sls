@@ -9,10 +9,10 @@ include:
 airflow-config-clean:
   file.absent:
     - names:
-      - {{ a.dir.airflow.environ ~ a.div ~ a.environ.airflow.file }}
-      - {{ a.dir.airflow.airhome }}{{ a.div }}{{ a.config.airflow.file }}
-      - {{ a.dir.airflow.airhome }}{{ a.div }}{{ a.config.airflow.webserver }}
-      - {{ a.dir.airflow.airhome }}{{ a.div }}config{{ a.div }}airflow_local_settings.py
+      - {{ a.dir.airflow.environ ~ '/' ~ a.environ.airflow.file }}
+      - {{ a.dir.airflow.airhome }}/{{ a.config.airflow.file }}
+      - {{ a.dir.airflow.airhome }}/{{ a.config.airflow.webserver }}
+      - {{ a.dir.airflow.airhome }}/config/airflow_local_settings.py
     - require:
       - sls: {{ sls_service_clean }}
       - sls: {{ sls_package_clean }}

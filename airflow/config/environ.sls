@@ -14,7 +14,7 @@ include:
 
 airflow-config-install-environ_file:
   file.managed:
-    - name: {{ a.dir.airflow.environ }}{{ a.div }}{{ a.environ.airflow.file }}
+    - name: {{ a.dir.airflow.environ }}/{{ a.environ.airflow.file }}
     - source: {{ files_switch(['environ.sh.jinja'],
                               lookup='airflow-config-install-environ_file'
                  )

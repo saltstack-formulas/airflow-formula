@@ -20,7 +20,7 @@ airflow-service-clean-{{ name }}:
         {%- if grains.kernel|lower == 'linux' %}
     - onlyif: systemctl list-units | grep {{ name }} >/dev/null 2>&1
   file.absent:
-    - name: {{ a.dir.airflow.service }}{{ a.div }}{{ name }}.service
+    - name: {{ a.dir.airflow.service }}/{{ name }}.service
     - require:
       - service: airflow-service-clean-{{ name }}
   cmd.run:

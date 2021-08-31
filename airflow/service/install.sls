@@ -38,11 +38,7 @@ airflow-service-install-managed-{{ svcname }}:
         stop: ''
         name: {{ svcname }}
         queues: '{{ a.service.airflow.queues|join(',') }}'
-            {%- if svcname in ('airflow-webserver', 'airflow-scheduler') %}
         pgpass_string: 'PGPASSWORD={{ a.database.airflow.pass }}'
-            {%- else %}
-        pgpass_string: ''
-            {%- endif %}
     - watch_in:
       - cmd: airflow-service-install-daemon-reload
     - require_in:

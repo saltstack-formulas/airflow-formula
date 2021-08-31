@@ -1,5 +1,54 @@
 # frozen_string_literal: true
 
+control 'airflow systemd files' do
+  impact 0.5
+  title 'should be configured correctly'
+
+  describe file('/lib/systemd/system/airflow-scheduler.service') do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    its('mode') { should cmp '0644' }
+    its('content') { should include 'User=airflow' }
+    its('content') { should include 'Description=airflow-scheduler service' }
+    its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow scheduler' }
+  end
+
+  describe file('/lib/systemd/system/airflow-webserver.service') do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    its('mode') { should cmp '0644' }
+    its('content') { should include 'User=airflow' }
+    its('content') { should include 'Description=airflow-webserver service' }
+    its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow webserver' }
+  end
+
+  describe file('/lib/systemd/system/airflow-celery-flower.service') do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    its('mode') { should cmp '0644' }
+    its('content') { should include 'User=airflow' }
+    its('content') { should include 'Description=airflow-celery-flower service' }
+    its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow celery flower' }
+  end
+
+  describe file('/lib/systemd/system/airflow-celery-worker.service') do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    its('mode') { should cmp '0644' }
+    its('content') { should include 'User=airflow' }
+    its('content') { should include 'Description=airflow-celery-worker service' }
+    its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow celery worker' }
+  end
+end
+
 control 'airflow services' do
   impact 0.5
   title 'should be running and enabled'

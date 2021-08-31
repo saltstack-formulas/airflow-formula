@@ -12,7 +12,9 @@ control 'airflow systemd files' do
     its('mode') { should cmp '0644' }
     its('content') { should include 'User=airflow' }
     its('content') { should include 'Description=airflow-scheduler service' }
+    # rubocop:disable Layout/LineLength
     its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow scheduler' }
+    # rubocop:enable Layout/LineLength
   end
 
   describe file('/lib/systemd/system/airflow-webserver.service') do
@@ -23,7 +25,9 @@ control 'airflow systemd files' do
     its('mode') { should cmp '0644' }
     its('content') { should include 'User=airflow' }
     its('content') { should include 'Description=airflow-webserver service' }
+    # rubocop:disable Layout/LineLength
     its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow webserver' }
+    # rubocop:enable Layout/LineLength
   end
 
   describe file('/lib/systemd/system/airflow-celery-flower.service') do
@@ -34,7 +38,9 @@ control 'airflow systemd files' do
     its('mode') { should cmp '0644' }
     its('content') { should include 'User=airflow' }
     its('content') { should include 'Description=airflow-celery-flower service' }
+    # rubocop:disable Layout/LineLength
     its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow celery flower' }
+    # rubocop:enable Layout/LineLength
   end
 
   describe file('/lib/systemd/system/airflow-celery-worker.service') do
@@ -45,10 +51,11 @@ control 'airflow systemd files' do
     its('mode') { should cmp '0644' }
     its('content') { should include 'User=airflow' }
     its('content') { should include 'Description=airflow-celery-worker service' }
+    # rubocop:disable Layout/LineLength
     its('content') { should include 'ExecStart=/home/airflow/.local/bin/airflow celery worker' }
+    # rubocop:enable Layout/LineLength
   end
 end
-
 
 control 'airflow services' do
   impact 0.5

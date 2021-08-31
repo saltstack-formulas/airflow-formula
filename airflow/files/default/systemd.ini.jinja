@@ -17,7 +17,7 @@ ExecStop={{ stop }}
 PIDFile=/var/run/{{ name }}.pid
 Environment="PATH={{ workdir }}/bin:$PATH:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
 Environment="{{ pgpass_string }}"
-Restart=always
+Restart=on-failure
 RestartSec=3
 
 [Install]

@@ -55,6 +55,30 @@ airflow-service-install-daemon-reload:
   cmd.run:
     - name: systemctl daemon-reload
 
+        {%- if a.linux.firewall %}
+
+airflow-service-install-firewall-running:
+  pkg.installed:
+    - name: firewalld
+    - reload_modules: true
+  service.running:
+    - name: firewalld
+    - enable: True
+    - require:
+      - pkg: airflow-service-install-firewall-running
+
+            {%- if a.service.airflow.ports and a.service.airflow.ports is iterable %}
+
+airflow-service-install-firewall-present:
+  firewalld.present:
+    - name: public
+    - ports: {{ a.service.airflow.ports|json }}
+    - require:
+      - pkg: airflow-service-install-firewall-running
+      - service: airflow-service-install-firewall-running
+
+            {%- endif %}
+        {%- endif %}
         {%- if a.linux.selinux %}
 
 airflow-service-install-selinux-fcontext-home-present:

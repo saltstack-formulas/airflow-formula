@@ -122,6 +122,10 @@ airflow:
         - airflow-webserver
         - airflow-celery-worker
       queues: []
+      ports:
+        - 5555/tcp
+        - 15672/tcp
+        - 18080/tcp
   pkg:
     airflow:
       version: 2.1.0
@@ -243,6 +247,7 @@ airflow:
   linux:
     altpriority: 0   # zero disables alternatives
     selinux: true
+    firewall: true
   retry_option:
     # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
     attempts: 3

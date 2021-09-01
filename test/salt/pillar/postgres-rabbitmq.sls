@@ -8,6 +8,7 @@
 airflow:
   linux:
     selinux: false
+    firewall: false
   config:
     airflow:
       content:

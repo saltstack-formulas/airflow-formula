@@ -92,6 +92,15 @@ airflow:
         - airflow-celery-worker
       # https://airflow.apache.org/docs/apache-airflow/stable/executor/celery.html
       queues: []
+      ports:
+        - 5432/tcp
+        - 8793/tcp
+        - 5555/tcp
+        - 5672/tcp
+        - 25672/tcp
+        - 4369/tcp
+        - 15672/tcp
+        - 18080/tcp
   pkg:
     airflow:
       version: 2.1.0

@@ -55,7 +55,7 @@ airflow-service-install-daemon-reload:
   cmd.run:
     - name: systemctl daemon-reload
 
-        {%- if a.linux.firewall %}
+        {%- if a.linux.firewall == true %}
 
 airflow-service-install-firewall-running:
   pkg.installed:
@@ -79,7 +79,7 @@ airflow-service-install-firewall-present:
 
             {%- endif %}
         {%- endif %}
-        {%- if a.linux.selinux %}
+        {%- if a.linux.selinux == true %}
 
 airflow-service-install-selinux-fcontext-home-present:
   file.managed:

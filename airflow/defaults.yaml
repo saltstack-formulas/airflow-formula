@@ -6,7 +6,7 @@ airflow:
     airflow:
       lib: /var/lib/airflow
       tmp: /tmp/airflow
-      service: /lib/systemd/system
+      service: /usr/lib/systemd/system
       environ: /etc/sysconfig
       base: /home   # os sensitive user homedir
       userhome: null    # AIRFLOW_HOME is set by pillar data, otherwise map.jinja
@@ -122,6 +122,10 @@ airflow:
         - airflow-webserver
         - airflow-celery-worker
       queues: []
+      ports:
+        - 5555/tcp
+        - 15672/tcp
+        - 18080/tcp
   pkg:
     airflow:
       version: 2.1.0
@@ -242,19 +246,20 @@ airflow:
     clean: false
   linux:
     altpriority: 0   # zero disables alternatives
+    selinux: true
+    firewall: true
   retry_option:
     # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
     attempts: 3
     until: true
     interval: 60
     splay: 10
-  div: '/'
 
   # Just here for testing
   added_in_defaults: defaults_value
   winner: defaults
 
-  # Just here as experiemnt/documentation
+  # Just here as experiment/documentation
   supported:
     - airflow
   wanted:

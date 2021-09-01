@@ -1,0 +1,8 @@
+( type homedir_service_t )
+( typeattributeset file_type homedir_service_t )
+( allow init_t unconfined_t (process (transition)) )
+( allow init_t homedir_service_t (dir      (ioctl read getattr lock search open)) )
+( allow init_t homedir_service_t (file     (ioctl read getattr lock execute execute_no_trans open)) )
+( allow init_t homedir_service_t (lnk_file (read getattr)) )
+( allow unconfined_t homedir_service_t (file (ioctl read getattr lock execute execute_no_trans entrypoint open)) )
+( typetransition init_t homedir_service_t process unconfined_t )

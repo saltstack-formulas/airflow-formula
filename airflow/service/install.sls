@@ -67,12 +67,12 @@ airflow-service-install-firewall-running:
     - require:
       - pkg: airflow-service-install-firewall-running
 
-            {%- if a.service.airflow.ports and a.service.airflow.ports is iterable %}
+            {%- if a.service.airflow.firewall.zone and a.service.airflow.firewall.ports is iterable %}
 
 airflow-service-install-firewall-present:
   firewalld.present:
-    - name: public
-    - ports: {{ a.service.airflow.ports|json }}
+    - name: {{ a.service.airflow.firewall.zone }}
+    - ports: {{ a.service.airflow.firewall.ports|json }}
     - require:
       - pkg: airflow-service-install-firewall-running
       - service: airflow-service-install-firewall-running

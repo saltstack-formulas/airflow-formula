@@ -107,7 +107,7 @@ control 'Rabbitmq service' do
 
   describe 'port(5672)' do
     it 'should be listening', retry: 60, retry_wait: 3 do
-      expect(port(8080).listening?).to eq true
+      expect(port(5672).listening?).to eq true
     end
   end
 end

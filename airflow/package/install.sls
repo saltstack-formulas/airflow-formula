@@ -58,6 +58,7 @@ airflow-package-install-virtualenv:
   virtualenv.managed:
     - name: {{ a.dir.airflow.virtualenv }}
     - user: {{ a.identity.airflow.user }}
+    - runas: {{ a.identity.airflow.user }}
     - python: python3
     - venv_bin: {{ a.config.airflow.venv_cmd or 'virtualenv' }}
     - no_deps: {{ a.pkg.airflow.no_pips_deps }}

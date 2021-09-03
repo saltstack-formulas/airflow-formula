@@ -52,6 +52,11 @@ Debian:
         - libkrb5-dev
         - unixodbc-dev
         - libsasl2-dev
+        # from https://github.com/celery/librabbitmq/issues/131
+        - autoconf
+        - automake
+        - pkg-config
+        - libtool
 
 RedHat:
   config:

@@ -157,7 +157,6 @@ airflow:
       pips:
         ### These could be moved to pillar.example instead of being default
         # for functionality
-        - cryptography
         - password
         - mysql-connector
         - attr
@@ -171,7 +170,21 @@ airflow:
         - attrs
         - cached_property
         - cattrs
+        ##########################################################################
+        # pywinrm[kerberos,credssp] installs requests-ntlm, requests, xmltodict
+        # six, requests-credssp, pykerberos, cryptography, pyspnego, pyOpenSSL
+        # I need feedback that actually happens (see issue #2)
+        # https://github.com/noelmcloughlin/airflow-component/issues/2
+        ##########################################################################
         - pywinrm[kerberos,credssp]
+        - requests-kerberos
+        - pyOpenSSL
+        - pyspnego
+        ##########################################################################
+        - authentication
+        - paramiko
+        - python-ldap
+        - requests
 
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
         - celery[librabbitmq,redis,sqs]
@@ -208,7 +221,6 @@ airflow:
         - pep562
         - psutil
         - pygments
-        - requests
         - setproctitle
         - sqlalchemy
         - sqlalchemy_jsonfield
@@ -238,14 +250,6 @@ airflow:
         - jupyter
         - tableauserverclient
         - azure-storage-blob
-        - paramiko
-        # authentication
-        # python-ldap
-        - requests-kerberos
-        - requests-credssp
-        # pyOpenSSL # might be issue on cent7
-        - pyspnego
-        - requests_ntlm
 
   misc:
     refresh: true

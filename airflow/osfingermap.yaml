@@ -44,7 +44,6 @@ CentOS Linux-7:
       # because centos7 defaults to python2, need to be explicit
       # yamllint disable-line rule:line-length
       uri_c: https://raw.githubusercontent.com/apache/airflow/constraints-VERSION/constraints-3.6.txt
-      no_pips_deps: true  # salt.virtualenv.managed.no_deps flag; runs too long
       deps:
         - gcc
         - selinux-policy-minimum

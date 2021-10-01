@@ -185,6 +185,7 @@ airflow:
         - paramiko
         - python-ldap
         - requests
+        - charset-normalizer
 
         # https://docs.celeryproject.org/en/v5.0.2/getting-started/brokers
         - celery[librabbitmq,redis,sqs]

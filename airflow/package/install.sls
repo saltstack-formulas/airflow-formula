@@ -55,6 +55,11 @@ airflow-package-install-virtualenv:
     - require_in:
       - virtualenv: airflow-package-install-virtualenv
       - pip: airflow-package-install-pip-installed
+    {%- if a.pkg.airflow.remove %}
+  pkg.absent:
+    - names: {{ a.pkg.airflow.remove|yaml }}
+    {%- endif %}
+  
   virtualenv.managed:
     - name: {{ a.dir.airflow.virtualenv }}
     - user: {{ a.identity.airflow.user }}

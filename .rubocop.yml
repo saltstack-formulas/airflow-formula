@@ -17,3 +17,7 @@ Security/YAMLLoad:
     - test/integration/**/_mapdata.rb
 
 # Any offenses that should be fixed, e.g. collected via. `rubocop --auto-gen-config`
+AllCops:
+  NewCops: enable
+Style/NumericLiterals:
+  Enabled: false

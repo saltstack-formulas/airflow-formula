@@ -135,7 +135,7 @@ airflow:
           - 18080/tcp  # airflow-ui
   pkg:
     airflow:
-      version: 2.1.2
+      version: 2.2.2
       use_upstream: pip
       name: apache-airflow
       commands:

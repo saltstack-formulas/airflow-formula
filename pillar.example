@@ -105,7 +105,7 @@ airflow:
           - 18080/tcp  # airflow-ui
   pkg:
     airflow:
-      version: 2.1.2
+      version: 2.2.2
       # https://github.com/pypa/pip/issues/9187
       # https://pip.pypa.io/en/latest/user_guide/#dependency-resolution-backtracking
       extras:

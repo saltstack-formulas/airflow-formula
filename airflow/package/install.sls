@@ -19,6 +19,13 @@ airflow-package-install-base-devel:
     - refresh: {{ a.misc.refresh }}
 
     {%- endif %}
+    {%- if a.pkg.airflow.remove %}
+
+airflow-package-install-pkg-removed:
+  pkg.removed:
+    - names: {{ a.pkg.airflow.remove|yaml }}
+
+    {%- endif %}
     {%- if a.pkg.airflow.deps %}
 
 airflow-package-install-pkg-deps:
@@ -55,6 +62,7 @@ airflow-package-install-virtualenv:
     - require_in:
       - virtualenv: airflow-package-install-virtualenv
       - pip: airflow-package-install-pip-installed
+
   virtualenv.managed:
     - name: {{ a.dir.airflow.virtualenv }}
     - user: {{ a.identity.airflow.user }}

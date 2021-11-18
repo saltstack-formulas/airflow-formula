@@ -22,6 +22,7 @@ ignore: |
   airflow/files/default/airflowV1.cfg.jinja
   airflow/files/default/airflowV2.cfg.jinja
   airflow/osfamilymap.yaml
+  airflow/defaults.yaml
 
 yaml-files:
   # Default settings

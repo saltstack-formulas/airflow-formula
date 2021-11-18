@@ -16,7 +16,7 @@ airflow:
           broker_url: redis://127.0.0.1:6379/0
   pkg:
     airflow:
-      version: 2.1.0
+      version: 2.2.2
       extras:
         # yamllint disable rule:line-length
         # https://airflow.apache.org/docs/apache-airflow/stable/installation.html#extra-packages

@@ -135,7 +135,7 @@ airflow:
           - 18080/tcp  # airflow-ui
   pkg:
     airflow:
-      version: 2.1.2
+      version: 2.2.2
       use_upstream: pip
       name: apache-airflow
       commands:
@@ -154,6 +154,8 @@ airflow:
       # https://github.com/pypa/pip/issues/9187
       # https://pip.pypa.io/en/latest/user_guide/#dependency-resolution-backtracking
       no_pips_deps: true  # for salt.virtualenv.managed.no_deps flag
+      remove:
+        - python3-importlib-metadata  # https://github.com/mkdocs/mkdocs/issues/2469
       pips:
         ### These could be moved to pillar.example instead of being default
         # for functionality
@@ -208,7 +210,7 @@ airflow:
         - future
         - graphviz
         - gunicorn
-        - importlib-metadata
+        - importlib-metadata>3.10
         - iso8601
         - jinja2
         - json-merge-patch
@@ -228,8 +230,6 @@ airflow:
         - tabulate
         - tenacity
         - thrift
-        - typing
-        - typing-extensions
         - tzlocal
         - unicodecsv
         - werkzeug
@@ -251,6 +251,13 @@ airflow:
         - jupyter
         - tableauserverclient
         - azure-storage-blob
+          # yamllint disable
+          {%- if grains.pythonversion[1]|int < 8 %}
+                {# https://github.com/pypa/pip/issues/8272 #}
+        - typing
+        - typing-extensions
+          {%- endif %}
+          # yamllint enable
 
   misc:
     refresh: true

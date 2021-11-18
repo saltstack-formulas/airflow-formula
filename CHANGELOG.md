@@ -1,5 +1,18 @@
 # Changelog
 
+# [2.3.0](https://github.com/saltstack-formulas/airflow-formula/compare/v2.2.0...v2.3.0) (2021-11-18)
+
+
+### Bug Fixes
+
+* **python38:** do not install typing via pip ([2f7bf7e](https://github.com/saltstack-formulas/airflow-formula/commit/2f7bf7e3681525821963424a1de675ded62e8a92))
+* **tests:** add rspec-retry gem ([679f410](https://github.com/saltstack-formulas/airflow-formula/commit/679f4104721adb4dcb9e9c18246d1ece8adb429c))
+
+
+### Features
+
+* **version:** upgrade to 2.2.2 default version ([b00eea7](https://github.com/saltstack-formulas/airflow-formula/commit/b00eea77c206675799d6b5b89910be1c2209a9a2))
+
 # [2.2.0](https://github.com/saltstack-formulas/airflow-formula/compare/v2.1.2...v2.2.0) (2021-10-02)
 
 

@@ -60,17 +60,14 @@ end
 control 'airflow services' do
   impact 0.5
   title 'should be running and enabled'
-  require 'rspec/retry'
 
   describe service('airflow-celery-worker') do
     it { should be_installed }
     it { should be_enabled }
     # it { should be_running }
   end
-  describe 'port(5555)' do
-    it 'should be listening', retry: 60, retry_wait: 3 do
-      expect(port(5555).listening?).to eq true
-    end
+  describe port(5555) do
+    it { should be_listening }
   end
   describe service('airflow-celery-flower') do
     it { should be_installed }
@@ -82,10 +79,8 @@ control 'airflow services' do
     it { should be_enabled }
     it { should be_running }
   end
-  describe 'port(8080)' do
-    it 'should be listening', retry: 60, retry_wait: 3 do
-      expect(port(8080).listening?).to eq true
-    end
+  describe port(8080) do
+    it { should be_listening }
   end
   describe service('airflow-scheduler') do
     it { should be_installed }
